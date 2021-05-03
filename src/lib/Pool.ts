@@ -81,10 +81,4 @@ export class Pool {
     })
   }
 
-
-  // liquidityQuote(from: string, to: string,  amount: number) {
-  //   const ratio = (this.k() / (amount + this.deposits[from] )) - this.deposits[to];
-  //   return ratio;
-  // }
-
 }

@@ -1,34 +1,48 @@
-export class Token {
+import { Emitter, once, ALL_EVENTS } from "@servie/events";
+
+interface TokenEvents {
+  Minted: [{to: string, amount: number}];
+  Transferred: [{from: string, to: string, amount: number}];
+  Burnt: [{from: string, amount: number}];
+}
+
+export class Token extends Emitter<TokenEvents> {
 
   balances: Record<string, number> = {};
 
   totalSupply = 0;
 
-  constructor(public symbol: string, public name: string) {}
-
-  mint(amt: number, to: string) {
-    this.totalSupply += amt;
-    if (!this.balances[to]) {
-      this.balances[to] = amt;
-    } else {
-      this.balances[to] += amt;
-    }
+  constructor(public symbol: string, public name: string) {
+    super();
   }
 
-  transfer(from: string, to: string, amt: number) {
+  mint(amount: number, to: string) {
+    this.totalSupply += amount;
+    if (!this.balances[to]) {
+      this.balances[to] = amount;
+    } else {
+      this.balances[to] += amount;
+    }
+    this.emit("Minted", {to, amount});
+  }
+
+  transfer(from: string, to: string, amount: number) {
     if (!this.balances[to]) {
       this.balances[to] = 0;
     }
-    if (this.balanceOf(from) < amt) {
+    if (this.balanceOf(from) < amount) {
       throw new Error("no sufficient funds");
     }
-    this.balances[from] -= amt;
-    this.balances[to] += amt;
+    this.balances[from] -= amount;
+    this.balances[to] += amount;
+    console.log("tranfs")
+    this.emit("Transferred", {from, to, amount});
   }
 
-  burn(from: string, amt: number) {
-    this.balances[from] -= amt;
-    this.totalSupply -= amt;
+  burn(from: string, amount: number) {
+    this.balances[from] -= amount;
+    this.totalSupply -= amount;
+    this.emit("Burnt", {from, amount});
   }
 
   balanceOf(from: string) {
