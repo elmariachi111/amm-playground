@@ -1,16 +1,16 @@
-import { ChakraProvider, Container } from "@chakra-ui/react";
+import { ChakraProvider } from "@chakra-ui/react";
 import React from "react";
 import ReactDOM from "react-dom";
+
 import App from "./App";
 
 const AmmDemo = () => {
-
   return (
-    <ChakraProvider>    
+    <ChakraProvider>
       <App />
     </ChakraProvider>
-  )
-}
+  );
+};
 
 let $app = document.getElementById("app");
 

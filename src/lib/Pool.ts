@@ -1,84 +1,95 @@
-import {Token} from './Token'
+import { Emitter } from "@servie/events";
 
-export class Pool {
+import { Token } from "./Token";
 
+interface PoolEvents {
+  LiquidityChanged: [{ token1amt: number; token2amt: number }];
+}
+
+export interface PoolInfo {
+  k: number;
+  liqTokenSupply: number;
+  reserves: number[];
+  prices: number[];
+}
+
+export class Pool extends Emitter<PoolEvents> {
   public token1: Token;
   public token2: Token;
 
-  public account = "0xpool";
+  public account: string;
 
   public poolToken: Token;
 
-  constructor(token1: Token, token2: Token) {
+  constructor(address: string, token1: Token, token2: Token) {
+    super();
     this.token1 = token1;
     this.token2 = token2;
-    this.poolToken = new Token(`${token1}|${token2}`, `${token1} ${token2} Pool Shares`);
+    this.account = address;
+    this.poolToken = new Token(
+      `${token1.symbol}|${token2.symbol}`,
+      `${token1.symbol} ${token2.symbol} Pool Shares`
+    );
   }
 
   addLiquidity(sender: string, amt1: number, amt2: number) {
     this.token1.transfer(sender, this.account, amt1);
     this.token2.transfer(sender, this.account, amt2);
     this.poolToken.mint(Math.sqrt(amt1 * amt2), sender);
+    this.emit("LiquidityChanged", { token1amt: amt1, token2amt: amt2 });
   }
 
   withdrawLiquidity(sender: string, liquidity: number) {
     const share = liquidity / this.poolToken.totalSupply;
-    const withdraw1 = (share * this.token1.balanceOf(this.account));
-    const withdraw2 = (share * this.token2.balanceOf(this.account));
+    const withdraw1 = share * this.token1.balanceOf(this.account);
+    const withdraw2 = share * this.token2.balanceOf(this.account);
 
-    this.poolToken.transfer(sender, this.account, liquidity)
+    this.poolToken.transfer(sender, this.account, liquidity);
     this.token1.transfer(this.account, sender, withdraw1);
     this.token2.transfer(this.account, sender, withdraw2);
-    
+    this.emit("LiquidityChanged", {
+      token1amt: withdraw1,
+      token2amt: withdraw2,
+    });
+
     this.poolToken.burn(this.account, liquidity);
   }
 
-  poolBalance() {
-    return [this.token1.balanceOf(this.account), this.token2.balanceOf(this.account)];
-  }
-
   k() {
-    const pBalance = this.poolBalance();
-    return pBalance[0] * pBalance[1];
+    return this.reserves()[0] * this.reserves()[1];
   }
 
   quote(from: Token, to: Token, amount: number): number {
     const fromReserve = from.balanceOf(this.account);
-    const toReserve = to.balanceOf(this.account); 
-    return toReserve - this.k() / (amount + fromReserve)
+    const toReserve = to.balanceOf(this.account);
+    return toReserve - this.k() / (amount + fromReserve);
   }
 
-  buy(
-    sender: string,
-    from: Token, 
-    to: Token,
-    amount: number, 
-  ) {
+  buy(sender: string, from: Token, to: Token, amount: number) {
     const q = this.quote(from, to, amount);
     from.transfer(sender, this.account, amount);
     to.transfer(this.account, sender, q);
     return q;
   }
 
-  balance() {
+  reserves(): number[] {
+    return [
+      this.token1.balanceOf(this.account),
+      this.token2.balanceOf(this.account),
+    ];
+  }
+  poolInfo(): PoolInfo {
     return {
-      [this.token1.symbol]: this.token1.balanceOf(this.account),
-      [this.token2.symbol]: this.token2.balanceOf(this.account),
+      reserves: this.reserves(),
       k: this.k(),
       liqTokenSupply: this.poolToken.totalSupply,
-      ...this.prices()
-    }
+      prices: this.prices(),
+    };
   }
 
   prices() {
-    const k1 = `${this.token1.symbol}/${this.token2.symbol}`;
-    const k2 = `${this.token2.symbol}/${this.token1.symbol}`
     const bal1 = this.token1.balanceOf(this.account);
     const bal2 = this.token2.balanceOf(this.account);
-    return ({
-      [k1]: bal1/bal2,
-      [k2]: bal2/bal1,
-    })
+    return [bal1 / bal2, bal2 / bal1];
   }
-
 }

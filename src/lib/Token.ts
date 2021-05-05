@@ -1,13 +1,12 @@
-import { Emitter, once, ALL_EVENTS } from "@servie/events";
+import { ALL_EVENTS, Emitter, once } from "@servie/events";
 
 interface TokenEvents {
-  Minted: [{to: string, amount: number}];
-  Transferred: [{from: string, to: string, amount: number}];
-  Burnt: [{from: string, amount: number}];
+  Minted: [{ to: string; amount: number }];
+  Transferred: [{ from: string; to: string; amount: number }];
+  Burnt: [{ from: string; amount: number }];
 }
 
 export class Token extends Emitter<TokenEvents> {
-
   balances: Record<string, number> = {};
 
   totalSupply = 0;
@@ -23,7 +22,7 @@ export class Token extends Emitter<TokenEvents> {
     } else {
       this.balances[to] += amount;
     }
-    this.emit("Minted", {to, amount});
+    this.emit("Minted", { to, amount });
   }
 
   transfer(from: string, to: string, amount: number) {
@@ -35,17 +34,17 @@ export class Token extends Emitter<TokenEvents> {
     }
     this.balances[from] -= amount;
     this.balances[to] += amount;
-    console.log("tranfs")
-    this.emit("Transferred", {from, to, amount});
+
+    this.emit("Transferred", { from, to, amount });
   }
 
   burn(from: string, amount: number) {
     this.balances[from] -= amount;
     this.totalSupply -= amount;
-    this.emit("Burnt", {from, amount});
+    this.emit("Burnt", { from, amount });
   }
 
   balanceOf(from: string) {
     return this.balances[from] || 0;
-  } 
+  }
 }
