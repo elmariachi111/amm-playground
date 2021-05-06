@@ -26,18 +26,18 @@ export default function App() {
 
   useEffect(() => {
     setTokens([]);
-    const adi = new Token('ADI', 'Addi');
-    const bdy = new Token('BDY', 'Baddy');
-    adi.mint(10000, 'stadolf');
-    bdy.mint(10000, 'stadolf');
-    addToken(adi);
-    addToken(bdy);
-    setAccounts(['stadolf', 'badolf']);
+    const dai = new Token('DAI', 'Dai');
+    const eth = new Token('ETH', 'Eth');
+    dai.mint(15000, 'stadolf');
+    eth.mint(10, 'stadolf');
+    addToken(dai);
+    addToken(eth);
 
-    const pool = new Pool('0xabcdefabcdef', adi, bdy);
+    const pool = new Pool('0xabcdefabcdef', dai, eth);
     addPool(pool);
 
-    pool.addLiquidity('stadolf', 1000, 500);
+    pool.addLiquidity('stadolf', 9000, 3);
+    setAccounts(['stadolf', pool.account]);
   }, []);
 
   const includeAccount = (acc: string) => {
@@ -62,7 +62,7 @@ export default function App() {
     <>
       <Header />
       <Container maxW="container.lg" mt={5}>
-        <SimpleGrid columns={3} spacing={5} mt={5}>
+        <SimpleGrid minChildWidth="250px" spacing={5} mt={5}>
           {tokens.map((t) => (
             <TokenView token={t} key={`token-${t.symbol}`} />
           ))}

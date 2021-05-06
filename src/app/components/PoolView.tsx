@@ -1,17 +1,21 @@
-import { Box, Heading, Text } from "@chakra-ui/layout";
-import React, { useEffect, useState } from "react";
+import { Box, Heading, Text } from '@chakra-ui/layout';
+import React, { useEffect, useState } from 'react';
 
-import { Pool, PoolInfo } from "../../lib/Pool";
+import { Pool, PoolInfo } from '../../lib/Pool';
 
 const PoolView = ({ pool }: { pool: Pool }) => {
   const [poolInfo, setPoolInfo] = useState<PoolInfo>(pool.poolInfo());
 
   useEffect(() => {
-    const off = pool.on("LiquidityChanged", (args) => {
+    const off1 = pool.on('LiquidityChanged', (args) => {
+      setPoolInfo(pool.poolInfo());
+    });
+    const off2 = pool.on('ReservesChanged', (args) => {
       setPoolInfo(pool.poolInfo());
     });
     return () => {
-      off();
+      off1();
+      off2();
     };
   }, [pool]);
 
@@ -22,10 +26,10 @@ const PoolView = ({ pool }: { pool: Pool }) => {
       <Text>k: {poolInfo.k}</Text>
       <Text>Reserves</Text>
       <Text>
-        {pool.token1.symbol}: {poolInfo.reserves[0]}{" "}
+        {pool.token1.symbol}: {poolInfo.reserves[0]}{' '}
       </Text>
       <Text>
-        {pool.token2.symbol}: {poolInfo.reserves[1]}{" "}
+        {pool.token2.symbol}: {poolInfo.reserves[1]}{' '}
       </Text>
       <Text>Prices</Text>
       <Text>

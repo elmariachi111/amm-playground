@@ -4,6 +4,7 @@ import { Token } from './Token';
 
 interface PoolEvents {
   LiquidityChanged: [{ token1amt: number; token2amt: number }];
+  ReservesChanged: [{ token1bal: number; token2bal: number }];
 }
 
 export interface PoolInfo {
@@ -69,6 +70,10 @@ export class Pool extends Emitter<PoolEvents> {
     const q = this.quote(from, to, amount);
     from.transfer(sender, this.account, amount);
     to.transfer(this.account, sender, q);
+    this.emit('ReservesChanged', {
+      token1bal: this.token1.balanceOf(this.account),
+      token2bal: this.token2.balanceOf(this.account),
+    });
     return q;
   }
 

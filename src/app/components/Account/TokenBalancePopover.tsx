@@ -15,7 +15,7 @@ import { Token } from '../../../lib/Token';
 import TokenSymbol from '../TokenSymbol';
 import TransferForm from './TransferForm';
 
-export default function TokenBalance({
+export default function TokenBalancePopover({
   address,
   token,
 }: {
@@ -41,9 +41,7 @@ export default function TokenBalance({
       isOpen={popover.isOpen}
       onOpen={popover.onOpen}
       onClose={popover.onClose}
-      placement="bottom"
-      matchWidth={false}
-      closeOnBlur={false}>
+      placement="bottom">
       <PopoverTrigger>
         <Flex alignItems="center" ml={5}>
           <TokenSymbol symbol={token.symbol} mr={2} title={`${balance} ${token.name}`} />

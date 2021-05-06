@@ -2,7 +2,7 @@ import { Button } from '@chakra-ui/button';
 import { FormControl } from '@chakra-ui/form-control';
 import { Input, InputGroup, InputRightAddon } from '@chakra-ui/input';
 import { Box, HStack, Text } from '@chakra-ui/layout';
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 
 import { Pool } from '../../../lib/Pool';
 import { Token } from '../../../lib/Token';
@@ -19,11 +19,24 @@ export default function SwapControl({
   from: Token;
   to: Token;
 }) {
-  const [amount, setAmount] = useState<number>(0);
+  const [amount, setAmount] = useState<number>();
+  const [quote, setQuote] = useState<number>(0);
+
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
+    if (!amount) return;
     pool.buy(sender, from, to, amount);
   };
+  useEffect(() => {
+    const off = pool.on('ReservesChanged', (e) => {
+      if (!amount) return;
+      setQuote(pool.quote(from, to, amount));
+    });
+    return () => {
+      off();
+    };
+  }, [pool, amount]);
+
   return (
     <Box my={3}>
       <form onSubmit={onSubmit}>
@@ -36,14 +49,16 @@ export default function SwapControl({
                 type="number"
                 name="amount"
                 onChange={setField((val: string) => {
-                  setAmount(parseInt(val));
+                  const newVal = parseInt(val) || 0;
+                  setAmount(newVal);
+                  setQuote(pool.quote(from, to, newVal));
                 })}
               />
               <InputRightAddon>{from.symbol} </InputRightAddon>
             </InputGroup>
           </FormControl>
           <Text whiteSpace="nowrap">to</Text>
-          <Text>{pool.quote(from, to, amount)} </Text>
+          <Text>{quote.toFixed(2)} </Text>
           <Text>{to.symbol}</Text>
           <Button size="sm" colorScheme="linkedin" px={10} type="submit">
             Swap
