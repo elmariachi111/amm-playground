@@ -1,6 +1,6 @@
-import { Emitter } from "@servie/events";
+import { Emitter } from '@servie/events';
 
-import { Token } from "./Token";
+import { Token } from './Token';
 
 interface PoolEvents {
   LiquidityChanged: [{ token1amt: number; token2amt: number }];
@@ -28,7 +28,7 @@ export class Pool extends Emitter<PoolEvents> {
     this.account = address;
     this.poolToken = new Token(
       `${token1.symbol}|${token2.symbol}`,
-      `${token1.symbol} ${token2.symbol} Pool Shares`
+      `${token1.symbol} ${token2.symbol} Pool Shares`,
     );
   }
 
@@ -36,7 +36,7 @@ export class Pool extends Emitter<PoolEvents> {
     this.token1.transfer(sender, this.account, amt1);
     this.token2.transfer(sender, this.account, amt2);
     this.poolToken.mint(Math.sqrt(amt1 * amt2), sender);
-    this.emit("LiquidityChanged", { token1amt: amt1, token2amt: amt2 });
+    this.emit('LiquidityChanged', { token1amt: amt1, token2amt: amt2 });
   }
 
   withdrawLiquidity(sender: string, liquidity: number) {
@@ -47,7 +47,7 @@ export class Pool extends Emitter<PoolEvents> {
     this.poolToken.transfer(sender, this.account, liquidity);
     this.token1.transfer(this.account, sender, withdraw1);
     this.token2.transfer(this.account, sender, withdraw2);
-    this.emit("LiquidityChanged", {
+    this.emit('LiquidityChanged', {
       token1amt: withdraw1,
       token2amt: withdraw2,
     });
@@ -73,10 +73,7 @@ export class Pool extends Emitter<PoolEvents> {
   }
 
   reserves(): number[] {
-    return [
-      this.token1.balanceOf(this.account),
-      this.token2.balanceOf(this.account),
-    ];
+    return [this.token1.balanceOf(this.account), this.token2.balanceOf(this.account)];
   }
   poolInfo(): PoolInfo {
     return {

@@ -1,4 +1,4 @@
-import { ALL_EVENTS, Emitter, once } from "@servie/events";
+import { Emitter } from '@servie/events';
 
 interface TokenEvents {
   Minted: [{ to: string; amount: number }];
@@ -22,7 +22,7 @@ export class Token extends Emitter<TokenEvents> {
     } else {
       this.balances[to] += amount;
     }
-    this.emit("Minted", { to, amount });
+    this.emit('Minted', { to, amount });
   }
 
   transfer(from: string, to: string, amount: number) {
@@ -30,18 +30,18 @@ export class Token extends Emitter<TokenEvents> {
       this.balances[to] = 0;
     }
     if (this.balanceOf(from) < amount) {
-      throw new Error("no sufficient funds");
+      throw new Error('no sufficient funds');
     }
     this.balances[from] -= amount;
     this.balances[to] += amount;
 
-    this.emit("Transferred", { from, to, amount });
+    this.emit('Transferred', { from, to, amount });
   }
 
   burn(from: string, amount: number) {
     this.balances[from] -= amount;
     this.totalSupply -= amount;
-    this.emit("Burnt", { from, amount });
+    this.emit('Burnt', { from, amount });
   }
 
   balanceOf(from: string) {
