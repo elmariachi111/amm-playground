@@ -1,6 +1,6 @@
 import { Emitter } from '@servie/events';
 
-import { Token } from './Token';
+import { Token, TokenFeature } from './Token';
 
 interface PoolEvents {
   LiquidityChanged: [{ token1amt: number; token2amt: number }];
@@ -30,6 +30,7 @@ export class Pool extends Emitter<PoolEvents> {
     this.poolToken = new Token(
       `${token1.symbol}|${token2.symbol}`,
       `${token1.symbol} ${token2.symbol} Pool Shares`,
+      TokenFeature.LiquidityToken,
     );
   }
 

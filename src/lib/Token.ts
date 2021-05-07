@@ -6,13 +6,24 @@ interface TokenEvents {
   Burnt: [{ from: string; amount: number }];
 }
 
+export enum TokenFeature {
+  ERC20,
+  LiquidityToken,
+}
+
 export class Token extends Emitter<TokenEvents> {
   balances: Record<string, number> = {};
-
   totalSupply = 0;
+  feature: TokenFeature = TokenFeature.ERC20;
 
-  constructor(public symbol: string, public name: string) {
+  public readonly symbol: string;
+  public readonly name: string;
+
+  constructor(symbol: string, name: string, feature = TokenFeature.ERC20) {
     super();
+    this.symbol = symbol;
+    this.name = name;
+    this.feature = feature;
   }
 
   mint(amount: number, to: string) {

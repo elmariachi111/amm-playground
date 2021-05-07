@@ -28,16 +28,16 @@ export default function App() {
     setTokens([]);
     const dai = new Token('DAI', 'Dai');
     const eth = new Token('ETH', 'Eth');
-    dai.mint(15000, 'stadolf');
-    eth.mint(10, 'stadolf');
+    dai.mint(1500000, 'stadolf');
+    eth.mint(1000, 'stadolf');
+    dai.mint(1500000, 'baddi');
+    eth.mint(1000, 'baddi');
     addToken(dai);
     addToken(eth);
-
     const pool = new Pool('0xabcdefabcdef', dai, eth);
     addPool(pool);
-
-    pool.addLiquidity('stadolf', 9000, 3);
-    setAccounts(['stadolf', pool.account]);
+    //pool.addLiquidity('stadolf', 9000, 3);
+    setAccounts(['stadolf', 'baddi', pool.account]);
   }, []);
 
   const includeAccount = (acc: string) => {
@@ -48,7 +48,6 @@ export default function App() {
 
   useEffect(() => {
     const off: Array<() => void> = [];
-
     for (const t of tokens) {
       off.push(t.on('Minted', (e) => includeAccount(e.to)));
       off.push(t.on('Transferred', (e) => includeAccount(e.to)));
@@ -66,8 +65,9 @@ export default function App() {
           {tokens.map((t) => (
             <TokenView token={t} key={`token-${t.symbol}`} />
           ))}
-          <NewToken onNew={addToken} />
+          {<NewToken onNew={addToken} />}
         </SimpleGrid>
+
         <Heading mt={5}>Accounts</Heading>
         <Box>
           {accounts.map((account) => (

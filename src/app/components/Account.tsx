@@ -60,7 +60,7 @@ export default function Account({
         ))}
       </Wrap>
 
-      <Flex my={5} alignItems="center" onClick={toggleSwap}>
+      <Flex my={5} alignItems="center" onClick={toggleSwap} style={{ cursor: 'pointer' }}>
         <Divider bgColor="gray.400"></Divider>
         <Text color={swapOpen ? 'gray.800' : 'gray.400'} whiteSpace="nowrap" mx={4}>
           Swap Tokens

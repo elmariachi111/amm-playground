@@ -46,10 +46,10 @@ export default function SwapControl({
             <InputGroup size="sm">
               <Input
                 size="sm"
-                type="number"
+                type="text"
                 name="amount"
                 onChange={setField((val: string) => {
-                  const newVal = parseInt(val) || 0;
+                  const newVal = parseFloat(val) || 0;
                   setAmount(newVal);
                   setQuote(pool.quote(from, to, newVal));
                 })}

@@ -1,13 +1,10 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
+    "target": "ES2017",
     "lib": [
       "DOM",
       "DOM.Iterable",
       "ESNext"
-    ],
-    "types": [
-      "vite/client"
     ],
     "allowJs": false,
     "skipLibCheck": false,
@@ -20,8 +17,8 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "preserve",
-    "sourceMap": true
+    "jsx": "react",
+    "sourceMap": false
   },
   "include": [
     "./src"

@@ -74,8 +74,9 @@ const TokenView = ({ token }: { token: Token }) => {
         p={2}
         borderTopRadius={10}>
         <Box ml={2}>
-          <Text fontSize={24}>{token.symbol}</Text>
-          <Text>{token.name}</Text>
+          <Text fontSize={24} title={token.name}>
+            {token.symbol}
+          </Text>
           <Text>Supply: {totalSupply.toFixed(4)}</Text>
         </Box>
         <TokenSymbol symbol={token.symbol} />
