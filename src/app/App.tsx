@@ -38,6 +38,7 @@ export default function App() {
     addPool(pool);
     //pool.addLiquidity('stadolf', 9000, 3);
     setAccounts(['stadolf', 'baddi', pool.account]);
+    pool.addLiquidity('stadolf', 30000, 10);
   }, []);
 
   const includeAccount = (acc: string) => {

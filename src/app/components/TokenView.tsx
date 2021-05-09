@@ -1,4 +1,5 @@
 import { Button } from '@chakra-ui/button';
+import { useColorModeValue } from '@chakra-ui/color-mode';
 import { FormControl, FormLabel } from '@chakra-ui/form-control';
 import { Input } from '@chakra-ui/input';
 import { Box, Flex, Heading, Text } from '@chakra-ui/layout';
@@ -16,6 +17,8 @@ const MintForm = ({ token }: { token: Token }) => {
     e.preventDefault();
     token.mint(toMint, recipient);
   };
+  const inputBg = useColorModeValue('white', 'gray.800');
+  const buttonColor = useColorModeValue('linkedin.200', 'linkedin.600');
 
   return (
     <Box p={3} alignItems="start">
@@ -27,7 +30,7 @@ const MintForm = ({ token }: { token: Token }) => {
             type="text"
             name="symbol"
             variant="outline"
-            bg="white"
+            bg={inputBg}
             onChange={setField((val: string) => {
               setToMint(parseInt(val));
             })}
@@ -39,12 +42,12 @@ const MintForm = ({ token }: { token: Token }) => {
             type="text"
             name="name"
             variant="outline"
-            bg="white"
+            bg={inputBg}
             onChange={setField(setRecipient)}
           />
         </FormControl>
         <Box mt={3}>
-          <Button type="submit" colorScheme="linkedin">
+          <Button type="submit" bg={buttonColor}>
             Mint {token.symbol}
           </Button>
         </Box>
@@ -65,12 +68,15 @@ const TokenView = ({ token }: { token: Token }) => {
     };
   }, [token]);
 
+  const bgColor = useColorModeValue('twitter.100', 'twitter.800');
+  const headerBg = useColorModeValue('linkedin.200', 'linkedin.600');
+
   return (
-    <Box borderRadius={10} bg="twitter.100">
+    <Box borderRadius={10} bg={bgColor}>
       <Flex
         alignItems="start"
         justify="space-between"
-        bg="linkedin.200"
+        bg={headerBg}
         p={2}
         borderTopRadius={10}>
         <Box ml={2}>

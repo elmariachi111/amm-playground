@@ -53,14 +53,7 @@ export default function TokenBalancePopover({
       placement="bottom">
       <PopoverTrigger>
         <Flex alignItems="center" ml={5}>
-          <TokenSymbol
-            symbol={token.symbol}
-            mr={2}
-            title={`${balance} ${token.name}`}
-            borderColor={
-              token.feature === TokenFeature.LiquidityToken ? 'green.400' : 'gray.200'
-            }
-          />
+          <TokenSymbol symbol={token.symbol} mr={2} title={`${balance} ${token.name}`} />
           <Box>
             <Text fontWeight="bold" fontSize="xl">
               {balance.toFixed(2)}
