@@ -1,5 +1,5 @@
 import { Button } from '@chakra-ui/button';
-import { Box, Heading } from '@chakra-ui/layout';
+import { Box, Flex, Heading } from '@chakra-ui/layout';
 import { Select } from '@chakra-ui/select';
 import React, { FormEvent, useState } from 'react';
 
@@ -38,29 +38,31 @@ export default function NewPool({
     <Box>
       <Heading size="md">Create a pool</Heading>
       <form onSubmit={onSubmit}>
-        <Select
-          placeholder="Select token 1"
-          onChange={(e) => onTokenSelected(0, e.currentTarget.value)}>
-          {tokens.map((t) => (
-            <option value={t.symbol} defaultValue={''} key={`o1-${t.symbol}`}>
-              {t.name}
-            </option>
-          ))}
-        </Select>
+        <Flex gridGap={3}>
+          <Select
+            placeholder="Select token 1"
+            onChange={(e) => onTokenSelected(0, e.currentTarget.value)}>
+            {tokens.map((t) => (
+              <option value={t.symbol} defaultValue={''} key={`o1-${t.symbol}`}>
+                {t.name}
+              </option>
+            ))}
+          </Select>
 
-        <Select
-          placeholder="Select token 2"
-          onChange={(e) => onTokenSelected(1, e.currentTarget.value)}>
-          {tokens.map((t) => (
-            <option value={t.symbol} defaultValue={''} key={`o2-${t.symbol}`}>
-              {t.name}
-            </option>
-          ))}
-        </Select>
+          <Select
+            placeholder="Select token 2"
+            onChange={(e) => onTokenSelected(1, e.currentTarget.value)}>
+            {tokens.map((t) => (
+              <option value={t.symbol} defaultValue={''} key={`o2-${t.symbol}`}>
+                {t.name}
+              </option>
+            ))}
+          </Select>
 
-        <Button mt={3} type="submit" colorScheme="linkedin">
-          Create empty pool
-        </Button>
+          <Button type="submit" colorScheme="linkedin" w="full">
+            Create {tokenSet[0]}/{tokenSet[1]} pool
+          </Button>
+        </Flex>
       </form>
     </Box>
   );

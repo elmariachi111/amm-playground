@@ -95,7 +95,7 @@ const PoolView = ({ pool }: { pool: Pool }) => {
             <Text fontSize="sm" fontWeight="bold">
               k: {poolInfo.k}
             </Text>
-            <Text fontSize="sm" overflowWrap="anywhere">
+            <Text fontSize="sm" isTruncated maxWidth={200}>
               Address: {pool.account}{' '}
             </Text>
           </Box>
