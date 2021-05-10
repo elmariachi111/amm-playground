@@ -53,7 +53,15 @@ export default function TokenBalancePopover({
       placement="bottom">
       <PopoverTrigger>
         <Flex alignItems="center" ml={5}>
-          <TokenSymbol symbol={token.symbol} mr={2} title={`${balance} ${token.name}`} />
+          <TokenSymbol
+            transition="all .2s ease"
+            _hover={{
+              scale: '1.1',
+            }}
+            symbol={token.symbol}
+            mr={2}
+            title={`${balance} ${token.name}`}
+          />
           <Box>
             <Text fontWeight="bold" fontSize="xl">
               {balance.toFixed(2)}

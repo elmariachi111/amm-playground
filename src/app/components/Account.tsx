@@ -53,7 +53,7 @@ export default function Account({
 
         {pools.map((pool) => (
           <WrapItem key={`liq-${address}-${pool.poolToken.symbol}`}>
-            <Box h="50px">
+            <Box h="50px" title="add liquidity">
               <AddLiquidityPopover pool={pool} from={address} />
             </Box>
           </WrapItem>

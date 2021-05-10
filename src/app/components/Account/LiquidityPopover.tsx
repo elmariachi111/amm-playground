@@ -32,7 +32,14 @@ export default function AddLiquidityPopover({
       placement="bottom"
       closeOnBlur={true}>
       <PopoverTrigger>
-        <Box position="relative" h="50px" w="50px">
+        <Box
+          position="relative"
+          h="50px"
+          w="50px"
+          transition="all .2s ease"
+          _hover={{
+            scale: '1.1',
+          }}>
           <TokenSymbol symbol={pool.token1.symbol} position="absolute" />
           <TokenSymbol symbol={pool.token2.symbol} position="absolute" left="20px" />
         </Box>
