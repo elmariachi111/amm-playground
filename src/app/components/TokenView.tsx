@@ -1,6 +1,6 @@
 import { Button } from '@chakra-ui/button';
 import { useColorModeValue } from '@chakra-ui/color-mode';
-import { FormControl, FormLabel } from '@chakra-ui/form-control';
+import { FormControl, FormHelperText, FormLabel } from '@chakra-ui/form-control';
 import { Input } from '@chakra-ui/input';
 import { Box, Flex, Heading, Text } from '@chakra-ui/layout';
 import React, { FormEvent, useEffect, useState } from 'react';
@@ -36,8 +36,8 @@ const MintForm = ({ token }: { token: Token }) => {
             })}
           />
         </FormControl>
-        <FormControl id="name">
-          <FormLabel>Recipient</FormLabel>
+        <FormControl id="name" mt={2}>
+          <FormLabel htmlFor="name">Recipient</FormLabel>
           <Input
             type="text"
             name="name"
@@ -45,6 +45,7 @@ const MintForm = ({ token }: { token: Token }) => {
             bg={inputBg}
             onChange={setField(setRecipient)}
           />
+          <FormHelperText>just use any string here.</FormHelperText>
         </FormControl>
         <Box mt={3}>
           <Button type="submit" bg={buttonColor}>

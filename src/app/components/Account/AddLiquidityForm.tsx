@@ -1,5 +1,5 @@
 import { Button } from '@chakra-ui/button';
-import { FormControl } from '@chakra-ui/form-control';
+import { FormControl, FormErrorMessage, FormHelperText } from '@chakra-ui/form-control';
 import { Input, InputGroup, InputLeftAddon } from '@chakra-ui/input';
 import { VStack } from '@chakra-ui/layout';
 import React, { FormEvent, useState } from 'react';
@@ -21,14 +21,16 @@ export default function AddLiquidityForm({
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
+
     pool.addLiquidity(address, amt1, amt2);
+
     onDone();
   };
 
   return (
     <form onSubmit={onSubmit}>
       <VStack>
-        <FormControl id="amount">
+        <FormControl id="amt1" isInvalid={amt1 > pool.token1.balanceOf(address)}>
           <InputGroup size="sm">
             <InputLeftAddon>{pool.token1.symbol}</InputLeftAddon>
             <Input
@@ -40,8 +42,9 @@ export default function AddLiquidityForm({
               })}
             />
           </InputGroup>
+          <FormErrorMessage>not enough {pool.token1.symbol} funds</FormErrorMessage>
         </FormControl>
-        <FormControl id="to">
+        <FormControl id="amt2" isInvalid={amt2 > pool.token2.balanceOf(address)}>
           <InputGroup size="sm">
             <InputLeftAddon>{pool.token2.symbol}</InputLeftAddon>
             <Input
@@ -53,6 +56,7 @@ export default function AddLiquidityForm({
               })}
             />
           </InputGroup>
+          <FormErrorMessage>not enough {pool.token2.symbol} funds</FormErrorMessage>
         </FormControl>
         <Button size="sm" colorScheme="linkedin" px={10} type="submit">
           Mint Liquidity
@@ -61,3 +65,5 @@ export default function AddLiquidityForm({
     </form>
   );
 }
+
+//

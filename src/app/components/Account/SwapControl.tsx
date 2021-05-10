@@ -1,5 +1,5 @@
 import { Button } from '@chakra-ui/button';
-import { FormControl } from '@chakra-ui/form-control';
+import { FormControl, FormHelperText } from '@chakra-ui/form-control';
 import { Input, InputGroup, InputRightAddon } from '@chakra-ui/input';
 import { Box, HStack, Text } from '@chakra-ui/layout';
 import React, { FormEvent, useEffect, useState } from 'react';
@@ -40,7 +40,7 @@ export default function SwapControl({
   return (
     <Box my={3}>
       <form onSubmit={onSubmit}>
-        <HStack>
+        <HStack align="baseline">
           <Text>swap </Text>
           <FormControl id="amount">
             <InputGroup size="sm">
@@ -56,6 +56,14 @@ export default function SwapControl({
               />
               <InputRightAddon>{from.symbol} </InputRightAddon>
             </InputGroup>
+            {pool.feeRate > 0 && (
+              <FormHelperText>
+                contains a {pool.feeRate * 100}% swap fee
+                {amount && amount > 0 && (
+                  <span> ({`${amount * pool.feeRate} ${from.symbol}`})</span>
+                )}
+              </FormHelperText>
+            )}
           </FormControl>
           <Text whiteSpace="nowrap">to</Text>
           <Text>{quote.toFixed(2)} </Text>

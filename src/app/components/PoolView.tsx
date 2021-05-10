@@ -132,9 +132,15 @@ const PoolView = ({ pool }: { pool: Pool }) => {
         <Text>
           {pool.token2.symbol}/{pool.token1.symbol}: {poolInfo.prices[1]}
         </Text>
+
+        <Heading size="sm" my={3}>
+          Swap Fees: {pool.feeRate * 100} %
+        </Heading>
       </Box>
       <Box w="460" h="460">
-        <PoolDiagram pool={pool} poolInfo={poolInfo} />
+        {poolInfo.reserves[0] + poolInfo.reserves[1] > 0 && (
+          <PoolDiagram pool={pool} poolInfo={poolInfo} />
+        )}
       </Box>
     </HStack>
   );

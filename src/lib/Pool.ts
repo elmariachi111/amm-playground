@@ -12,6 +12,7 @@ export interface PoolInfo {
   liqTokenSupply: number;
   reserves: number[];
   prices: number[];
+  feeRate: number;
 }
 
 export class Pool extends Emitter<PoolEvents> {
@@ -22,11 +23,14 @@ export class Pool extends Emitter<PoolEvents> {
 
   public poolToken: Token;
 
-  constructor(address: string, token1: Token, token2: Token) {
+  public feeRate: number;
+
+  constructor(address: string, token1: Token, token2: Token, feePercent: number = 0.0) {
     super();
     this.token1 = token1;
     this.token2 = token2;
     this.account = address;
+    this.feeRate = feePercent / 100;
     this.poolToken = new Token(
       `${token1.symbol}|${token2.symbol}`,
       `${token1.symbol} ${token2.symbol} Pool Shares`,
@@ -65,7 +69,8 @@ export class Pool extends Emitter<PoolEvents> {
   quote(from: Token, to: Token, amount: number): number {
     const fromReserve = from.balanceOf(this.account);
     const toReserve = to.balanceOf(this.account);
-    return toReserve - this.k() / (amount + fromReserve);
+
+    return toReserve - this.k() / (amount - this.feeRate * amount + fromReserve);
   }
 
   buy(sender: string, from: Token, to: Token, amount: number) {
@@ -88,6 +93,7 @@ export class Pool extends Emitter<PoolEvents> {
       k: this.k(),
       liqTokenSupply: this.poolToken.totalSupply,
       prices: this.prices(),
+      feeRate: this.feeRate,
     };
   }
 
