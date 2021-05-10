@@ -55,7 +55,7 @@ export default function AddLiquidityForm({
           </InputGroup>
         </FormControl>
         <Button size="sm" colorScheme="linkedin" px={10} type="submit">
-          Add Liquidity
+          Mint Liquidity
         </Button>
       </VStack>
     </form>

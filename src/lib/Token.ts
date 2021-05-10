@@ -1,5 +1,7 @@
 import { Emitter } from '@servie/events';
 
+import { Pool } from './Pool';
+
 interface TokenEvents {
   Minted: [{ to: string; amount: number }];
   Transferred: [{ from: string; to: string; amount: number }];
@@ -18,6 +20,8 @@ export class Token extends Emitter<TokenEvents> {
 
   public readonly symbol: string;
   public readonly name: string;
+
+  public pool: Pool | undefined;
 
   constructor(symbol: string, name: string, feature = TokenFeature.ERC20) {
     super();

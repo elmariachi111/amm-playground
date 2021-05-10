@@ -14,6 +14,7 @@ import React from 'react';
 import { Pool } from '../../../lib/Pool';
 import TokenSymbol from '../TokenSymbol';
 import AddLiquidityForm from './AddLiquidityForm';
+import RedeemForm from './RedeemForm';
 
 export default function AddLiquidityPopover({
   from,
@@ -46,12 +47,15 @@ export default function AddLiquidityPopover({
       </PopoverTrigger>
       <PopoverContent>
         <PopoverHeader fontWeight="semibold">
-          Add Liquidity {pool.poolToken.name}
+          Mint Liquidity {pool.poolToken.name}
         </PopoverHeader>
         <PopoverArrow />
         <PopoverCloseButton />
         <PopoverBody>
           <AddLiquidityForm address={from} pool={pool} onDone={onClose} />
+          <Box mt={5}>
+            <RedeemForm from={from} pool={pool} onDone={onClose} />
+          </Box>
         </PopoverBody>
       </PopoverContent>
     </Popover>

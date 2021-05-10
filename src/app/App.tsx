@@ -35,17 +35,16 @@ export default function App() {
     setTokens([]);
     addToken(eth);
 
-    // const dai = new Token('DAI', 'Dai');
-    // dai.mint(100_000, 'stadolf');
-    // eth.mint(1000, 'stadolf');
-    // dai.mint(1500000, 'baddi');
-    // eth.mint(1000, 'baddi');
-    // addToken(dai);
-    // const pool = new Pool('0xabcdefabcdef', eth, dai);
-    // addPool(pool);
-    // //pool.addLiquidity('stadolf', 9000, 3);
-    // setAccounts(['stadolf', 'baddi', pool.account]);
-    // pool.addLiquidity('stadolf', 10, 3000 * 10);
+    const dai = new Token('DAI', 'Dai');
+    dai.mint(100_000, 'stadolf');
+    eth.mint(1000, 'stadolf');
+    dai.mint(1500000, 'baddi');
+    eth.mint(1000, 'baddi');
+    addToken(dai);
+    const pool = new Pool('0xabcdefabcdef', eth, dai);
+    addPool(pool);
+    setAccounts(['stadolf', 'baddi', pool.account]);
+    //pool.addLiquidity('stadolf', 10, 3000 * 10);
   }, []);
 
   const includeAccount = (acc: string) => {

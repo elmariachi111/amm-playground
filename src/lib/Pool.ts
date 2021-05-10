@@ -32,6 +32,7 @@ export class Pool extends Emitter<PoolEvents> {
       `${token1.symbol} ${token2.symbol} Pool Shares`,
       TokenFeature.LiquidityToken,
     );
+    this.poolToken.pool = this;
   }
 
   addLiquidity(sender: string, amt1: number, amt2: number) {

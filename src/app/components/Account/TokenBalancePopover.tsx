@@ -13,6 +13,7 @@ import React, { useEffect, useState } from 'react';
 
 import { Token, TokenFeature } from '../../../lib/Token';
 import TokenSymbol from '../TokenSymbol';
+import RedeemForm from './RedeemForm';
 import TransferForm from './TransferForm';
 
 export default function TokenBalancePopover({
@@ -39,6 +40,7 @@ export default function TokenBalancePopover({
 
     off.push(token.on('Minted', (e) => updateBalances()));
     off.push(token.on('Transferred', (e) => updateBalances()));
+    off.push(token.on('Burnt', (e) => updateBalances()));
     updateBalances();
     return () => {
       for (const _off of off) _off();
