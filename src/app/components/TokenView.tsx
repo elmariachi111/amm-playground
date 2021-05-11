@@ -5,7 +5,7 @@ import { Input } from '@chakra-ui/input';
 import { Box, Flex, Heading, Text } from '@chakra-ui/layout';
 import React, { FormEvent, useEffect, useState } from 'react';
 
-import { Token } from '../../lib/Token';
+import { Token, TokenFeature } from '../../lib/Token';
 import { setField } from '../helpers';
 import TokenSymbol from './TokenSymbol';
 
@@ -18,18 +18,20 @@ const MintForm = ({ token }: { token: Token }) => {
     token.mint(toMint, recipient);
   };
   const inputBg = useColorModeValue('white', 'gray.800');
-  const buttonColor = useColorModeValue('linkedin.200', 'linkedin.600');
 
   return (
-    <Box p={3} alignItems="start">
-      <form onSubmit={mint}>
-        <Heading size="md">Mint new {token.symbol}</Heading>
+    <form onSubmit={mint} autoComplete="off">
+      <Box px={3} py={2} alignItems="start">
+        <Heading size="sm" my={1}>
+          Mint new {token.symbol}
+        </Heading>
         <FormControl id="symbol">
-          <FormLabel>Amount</FormLabel>
           <Input
+            size="sm"
             type="text"
             name="symbol"
             variant="outline"
+            placeHolder="Amount"
             bg={inputBg}
             onChange={setField((val: string) => {
               setToMint(parseInt(val));
@@ -37,23 +39,24 @@ const MintForm = ({ token }: { token: Token }) => {
           />
         </FormControl>
         <FormControl id="name" mt={2}>
-          <FormLabel htmlFor="name">Recipient</FormLabel>
           <Input
             type="text"
+            size="sm"
             name="name"
             variant="outline"
+            placeHolder="recipient"
             bg={inputBg}
             onChange={setField(setRecipient)}
           />
           <FormHelperText>just use any string here.</FormHelperText>
         </FormControl>
-        <Box mt={3}>
-          <Button type="submit" bg={buttonColor}>
+        <Flex justify="end">
+          <Button type="submit" colorScheme="linkedin" size="sm">
             Mint {token.symbol}
           </Button>
-        </Box>
-      </form>
-    </Box>
+        </Flex>
+      </Box>
+    </form>
   );
 };
 
@@ -84,11 +87,11 @@ const TokenView = ({ token }: { token: Token }) => {
           <Text fontSize={24} title={token.name}>
             {token.symbol}
           </Text>
-          <Text>Supply: {totalSupply.toFixed(4)}</Text>
+          <Text>Supply: {totalSupply.toFixed(2)}</Text>
         </Box>
         <TokenSymbol symbol={token.symbol} />
       </Flex>
-      <MintForm token={token} />
+      {!(token.feature === TokenFeature.LiquidityToken) && <MintForm token={token} />}
     </Box>
   );
 };

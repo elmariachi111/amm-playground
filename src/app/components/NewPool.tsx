@@ -40,7 +40,7 @@ export default function NewPool({
 
   return (
     <Box>
-      <Heading size="md">Create a pool</Heading>
+      <Heading size="md">Create a new pool</Heading>
       <form onSubmit={onSubmit}>
         <Flex gridGap={3}>
           <Select

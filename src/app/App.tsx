@@ -1,7 +1,4 @@
-import { CloseButton } from '@chakra-ui/close-button';
-import { useDisclosure } from '@chakra-ui/hooks';
-import { Box, Container, Heading, SimpleGrid, Text, VStack } from '@chakra-ui/layout';
-import { Collapse } from '@chakra-ui/transition';
+import { Box, Container, Heading, SimpleGrid, VStack } from '@chakra-ui/layout';
 import React, { useEffect, useState } from 'react';
 
 import { Pool } from '../lib/Pool';
@@ -9,17 +6,16 @@ import { Token } from '../lib/Token';
 import Account from './components/Account';
 import { Footer } from './components/Footer';
 import { Header } from './components/Header';
+import Intro from './components/Intro';
 import NewPool from './components/NewPool';
 import NewToken from './components/NewToken';
 import { PoolView } from './components/PoolView';
 import { TokenView } from './components/TokenView';
 
-
 export default function App() {
   const [tokens, setTokens] = useState<Token[]>([]);
   const [pools, setPools] = useState<Pool[]>([]);
   const [accounts, setAccounts] = useState<string[]>([]);
-  const {isOpen, onClose} = useDisclosure({defaultIsOpen: true});
 
   const addToken = (token: Token) => {
     setTokens((old) => [...old, token]);
@@ -30,23 +26,22 @@ export default function App() {
     setPools((old) => [...old, pool]);
   };
 
-  useEffect(() => {
+  const setSomeDefaults = () => {
     const eth = new Token('ETH', 'Eth');
     setTokens([]);
     addToken(eth);
 
-    // const dai = new Token('DAI', 'Dai');
-    // dai.mint(100_000, 'stadolf');
-    // eth.mint(1000, 'stadolf');
-    // dai.mint(1500000, 'baddi');
-    // eth.mint(1000, 'baddi');
-    // addToken(dai);
-    // const pool = new Pool('0xabcdefabcdef', eth, dai);
-    // addPool(pool);
-    //setAccounts(['stadolf', 'baddi']); //pool.account
-    //pool.addLiquidity('stadolf', 10, 3000 * 10);
-  }, []);
-
+    const dai = new Token('DAI', 'Dai');
+    dai.mint(1_000_000, 'alice');
+    eth.mint(1000, 'alice');
+    dai.mint(1_000_000, 'bob');
+    eth.mint(1000, 'bob');
+    addToken(dai);
+    setAccounts(['alice', 'bob']); //pool.account
+    const pool = new Pool('0xethdaipool', eth, dai, 0.3);
+    pool.addLiquidity('alice', 10, 3000 * 10);
+    addPool(pool);
+  };
   const includeAccount = (acc: string) => {
     if (!accounts.includes(acc)) {
       setAccounts([...accounts, acc]);
@@ -68,17 +63,7 @@ export default function App() {
     <>
       <Header />
       <Container maxW="container.lg" mt={5}>
-        <Collapse  in={isOpen}>
-        <Box rounded="xl" bg="gray.200" p={3} border="gray.300" position="relative">
-          <CloseButton onClick={onClose} position="absolute" right={2} />
-          <Text fontWeight="bold"> This is all built in plain Typescript, no chain, no gas, no tx, no db involved.</Text>
-          <Text>1. create some tokens ("DAI"). Eth is a default</Text>
-          <Text>2. Mint some tokens. Use real names as addresses (10 Eth -> "stadolf")</Text>
-          <Text>3. Create a new pool using two tokens</Text>
-          <Text>4. add Liquidity to the new pool</Text>
-          <Text>5. swap one token for another using another user</Text>
-        </Box>
-        </Collapse>
+        <Intro setDefaults={setSomeDefaults} />
         <SimpleGrid minChildWidth="250px" spacing={5} mt={5}>
           {tokens.map((t) => (
             <TokenView token={t} key={`token-${t.symbol}`} />

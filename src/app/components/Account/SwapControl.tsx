@@ -39,7 +39,7 @@ export default function SwapControl({
 
   return (
     <Box my={3}>
-      <form onSubmit={onSubmit}>
+      <form onSubmit={onSubmit} autoComplete="off">
         <HStack align="baseline">
           <Text>swap </Text>
           <FormControl id="amount">

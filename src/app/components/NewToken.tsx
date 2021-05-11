@@ -34,7 +34,7 @@ export default function NewToken({ onNew }: { onNew: (t: Token) => void }) {
         <TokenSymbol symbol={symbol} />
       </Flex>
 
-      <form onSubmit={onSubmit}>
+      <form onSubmit={onSubmit} autoComplete="off">
         <FormControl id="symbol" my={3}>
           <FormLabel>Symbol</FormLabel>
           <Input

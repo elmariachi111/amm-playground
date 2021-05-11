@@ -1,11 +1,7 @@
-import { useColorMode } from '@chakra-ui/color-mode';
-import { Box, Flex, Grid, Heading, Link, Spacer, Text, VStack } from '@chakra-ui/layout';
-import { Switch } from '@chakra-ui/switch';
+import { Box, Flex, Grid, Heading, Link, Text, VStack } from '@chakra-ui/layout';
 import React from 'react';
 
 export function Footer() {
-  const { colorMode, toggleColorMode } = useColorMode();
-
   return (
     <Grid
       bgGradient="linear(to-t,gray.800,linkedin.700)"
@@ -37,7 +33,15 @@ export function Footer() {
           </Link>
         </Text>
       </Flex>
-      <Box></Box>
+      <Flex align="center" justify="center">
+        <Link
+          color="white"
+          isExternal
+          fontSize="xl"
+          href="https://github.com/elmariachi111/amm-playground">
+          Github
+        </Link>
+      </Flex>
       <Box color="white">
         <Heading size="sm">Background</Heading>
         <VStack alignItems="start" spacing={0} ml={2} mt={2} fontSize=".9em">
