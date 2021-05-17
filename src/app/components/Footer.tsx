@@ -1,5 +1,9 @@
+import Icon from '@chakra-ui/icon';
+import { Image } from '@chakra-ui/image';
 import { Box, Flex, Grid, Heading, Link, Text, VStack } from '@chakra-ui/layout';
 import React from 'react';
+import { FaGithub } from 'react-icons/fa';
+import TXBLogo from 'url:../../img/logo_txb_white.png';
 
 export function Footer() {
   return (
@@ -10,20 +14,22 @@ export function Footer() {
       mt={10}
       templateColumns="repeat(3, 1fr)"
       justifyContent="center">
-      <Flex color="white" direction="column" px={3} alignItems="start" justify="end">
+      <Flex
+        color="white"
+        direction="column"
+        px={3}
+        alignItems="start"
+        justify="space-evenly">
         <Text>
           built by{' '}
-          <Link isExternal href="https://twitter.com/stadolf">
-            Stefan Adolf
-          </Link>
+          <Link fontWeight="bold" isExternal href="https://twitter.com/stadolf">
+            stadolf
+          </Link>{' '}
+          for
         </Text>
         <Text>
-          for{' '}
-          <Link
-            fontWeight="bold"
-            textTransform="uppercase"
-            href="https://turbinekreuzberg.com">
-            Turbine Kreuzberg
+          <Link isExternal href="https://turbinekreuzberg.com">
+            <Image src={TXBLogo} w={200} />
           </Link>{' '}
         </Text>
         <Text>
@@ -39,7 +45,7 @@ export function Footer() {
           isExternal
           fontSize="xl"
           href="https://github.com/elmariachi111/amm-playground">
-          Github
+          <Icon as={FaGithub} w={12} h={12} />
         </Link>
       </Flex>
       <Box color="white">
