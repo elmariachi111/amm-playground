@@ -25,8 +25,6 @@ export default function Account({
     return btoa(avatar(address, 50));
   }, [address]);
 
-  const { isOpen: swapOpen, onToggle: toggleSwap } = useDisclosure();
-
   return (
     <Flex
       borderRadius={4}
@@ -35,7 +33,9 @@ export default function Account({
       border="1px solid"
       borderColor="gray.200"
       overflow="hidden">
-      <Flex backgroundColor="red" width="10px"></Flex>
+      <Flex bg="red" minWidth="4px">
+        {' '}
+      </Flex>
       <Flex direction="column" width="100%" bg={selected ? 'red' : 'gray.100'}>
         <Flex p={3} justifyContent="space-between">
           <Text size="lg" fontWeight="bold">
@@ -45,7 +45,7 @@ export default function Account({
             select
           </Button>
         </Flex>
-        <Flex bgColor="white" p={3} borderBottomRadius={4}>
+        <Flex bgColor="white" p={3}>
           {tokens.map((t) => (
             <TokenBalance key={`tb-${address}-${t.symbol}`} address={address} token={t} />
           ))}

@@ -20,6 +20,7 @@ import Account from './components/molecules/Account';
 import NewToken from './components/molecules/Tokens/NewToken';
 import { TokenView } from './components/molecules/Tokens/TokenView';
 import NewPool from './components/NewPool';
+import AMM from './components/organisms/AMM';
 import { PoolView } from './components/PoolView';
 
 export default function App() {
@@ -76,41 +77,28 @@ export default function App() {
       <Intro setDefaults={setSomeDefaults} />
       <Container maxW="1800px" mt={5}>
         <Grid py={8} templateColumns="repeat(4, 1fr)" gridGap={12}>
-          <GridItem colSpan={1}>
+          <GridItem colSpan={1} overflow="hidden">
             <Heading size="xl">Accounts</Heading>
-            <Box>
-              {accounts.map((account) => (
-                <Account
-                  address={account}
-                  tokens={tokens}
-                  pools={pools}
-                  key={`acc-${account}`}
-                  selected={account === selectedAccount}
-                  onSelect={setSelectedAccount}
-                />
-              ))}
-            </Box>
+
+            {accounts.map((account) => (
+              <Account
+                address={account}
+                tokens={tokens}
+                pools={pools}
+                key={`acc-${account}`}
+                selected={account === selectedAccount}
+                onSelect={setSelectedAccount}
+              />
+            ))}
           </GridItem>
           <GridItem colSpan={2}>
             <Heading size="xl">Interact</Heading>
-            <Box
-              borderRadius={4}
-              p={4}
-              background="gray.100"
-              border="1px solid"
-              borderColor="gray.300">
-              <HStack>
-                <Flex>
-                  <Heading size="md">Swap</Heading>
-                </Flex>
-                <Flex>
-                  <Heading size="md">Add Liquidity</Heading>
-                </Flex>
-                <Flex>
-                  <Heading size="md">Withdraw</Heading>
-                </Flex>
-              </HStack>
-            </Box>
+            <AMM
+              account={selectedAccount}
+              tokens={tokens}
+              pools={pools}
+              poolAdded={addPool}
+            />
           </GridItem>
           <GridItem colSpan={1}>
             <Heading size="xl">Tokens</Heading>

@@ -13,7 +13,7 @@ import React from 'react';
 
 import { Pool } from '../../../lib/Pool';
 import TokenSymbol from '../atoms/TokenSymbol';
-import AddLiquidityForm from './AddLiquidityForm';
+import AddLiquidityForm from '../organisms/AddLiquidityForm';
 import RedeemForm from './RedeemForm';
 
 export default function AddLiquidityPopover({
