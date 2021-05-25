@@ -12,7 +12,7 @@ import {
 import React from 'react';
 
 import { Pool } from '../../../lib/Pool';
-import TokenSymbol from '../TokenSymbol';
+import TokenSymbol from '../atoms/TokenSymbol';
 import AddLiquidityForm from './AddLiquidityForm';
 import RedeemForm from './RedeemForm';
 

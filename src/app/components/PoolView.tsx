@@ -2,9 +2,9 @@ import { Box, Flex, Heading, HStack, Text, VStack } from '@chakra-ui/layout';
 import React, { useEffect, useState } from 'react';
 
 import { Pool, PoolInfo } from '../../lib/Pool';
+import TokenSymbol from './atoms/TokenSymbol';
 import { PoolDiagram } from './PoolDiagram';
 import { PoolHistory } from './PoolHistory';
-import TokenSymbol from './TokenSymbol';
 
 const PoolView = ({ pool }: { pool: Pool }) => {
   const [poolInfo, setPoolInfo] = useState<PoolInfo>(pool.poolInfo());

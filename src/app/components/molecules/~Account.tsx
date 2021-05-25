@@ -5,11 +5,11 @@ import { Collapse } from '@chakra-ui/transition';
 import avatar from 'gradient-avatar';
 import React, { useMemo } from 'react';
 
-import { Pool } from '../../lib/Pool';
-import { Token } from '../../lib/Token';
-import AddLiquidityPopover from './Account/LiquidityPopover';
-import SwapControl from './Account/SwapControl';
-import TokenBalancePopover from './Account/TokenBalancePopover';
+import { Pool } from '../../../lib/Pool';
+import { Token } from '../../../lib/Token';
+import AddLiquidityPopover from '../Account/LiquidityPopover';
+import TokenBalancePopover from '../Account/TokenBalancePopover';
+import SwapControl from '../organisms/SwapControl';
 
 export default function Account({
   address,

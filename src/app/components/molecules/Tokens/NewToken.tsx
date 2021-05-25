@@ -1,15 +1,17 @@
 import { Button } from '@chakra-ui/button';
 import { useColorModeValue } from '@chakra-ui/color-mode';
 import { FormControl, FormLabel } from '@chakra-ui/form-control';
+import Icon from '@chakra-ui/icon';
 import { Input } from '@chakra-ui/input';
 import { Box, Flex, Heading } from '@chakra-ui/layout';
 import React, { FormEvent, useState } from 'react';
+import { HiPlus } from 'react-icons/hi';
 
-import { Token } from '../../lib/Token';
-import { setField } from '../helpers';
-import TokenSymbol from './TokenSymbol';
+import { Token } from '../../../../lib/Token';
+import { setField } from '../../../helpers';
+import TokenSymbol from '../../atoms/TokenSymbol';
 
-export default function NewToken({ onNew }: { onNew: (t: Token) => void }) {
+function NewTokenForm({ onNew }: { onNew: (t: Token) => void }) {
   const [symbol, setSymbol] = useState('');
   const [name, setName] = useState('');
 
@@ -62,5 +64,24 @@ export default function NewToken({ onNew }: { onNew: (t: Token) => void }) {
         </Button>
       </form>
     </Box>
+  );
+}
+
+export default function NewToken({ onNew }: { onNew: (t: Token) => void }) {
+  const [form, setForm] = useState<boolean>(false);
+
+  const onNewToken = (token: Token) => {
+    onNew(token);
+    setForm(false);
+  };
+  return form ? (
+    <NewTokenForm onNew={onNewToken} />
+  ) : (
+    <Button colorScheme="green" isFullWidth onClick={() => setForm(true)}>
+      <Flex align="end">
+        <Icon as={HiPlus} w={6} h={6} />
+        New Token
+      </Flex>
+    </Button>
   );
 }

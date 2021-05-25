@@ -1,21 +1,32 @@
-import { Box, Container, Heading, SimpleGrid, VStack } from '@chakra-ui/layout';
+import {
+  Box,
+  Container,
+  Flex,
+  Grid,
+  GridItem,
+  Heading,
+  HStack,
+  SimpleGrid,
+  VStack,
+} from '@chakra-ui/layout';
 import React, { useEffect, useState } from 'react';
 
 import { Pool } from '../lib/Pool';
 import { Token } from '../lib/Token';
-import Account from './components/Account';
+import { Header } from './components/atoms/Header';
+import Intro from './components/atoms/Intro';
 import { Footer } from './components/Footer';
-import { Header } from './components/Header';
-import Intro from './components/Intro';
+import Account from './components/molecules/Account';
+import NewToken from './components/molecules/Tokens/NewToken';
+import { TokenView } from './components/molecules/Tokens/TokenView';
 import NewPool from './components/NewPool';
-import NewToken from './components/NewToken';
 import { PoolView } from './components/PoolView';
-import { TokenView } from './components/TokenView';
 
 export default function App() {
   const [tokens, setTokens] = useState<Token[]>([]);
   const [pools, setPools] = useState<Pool[]>([]);
   const [accounts, setAccounts] = useState<string[]>([]);
+  const [selectedAccount, setSelectedAccount] = useState<string>();
 
   const addToken = (token: Token) => {
     setTokens((old) => [...old, token]);
@@ -62,26 +73,54 @@ export default function App() {
   return (
     <>
       <Header />
-      <Container maxW="container.lg" mt={5}>
-        <Intro setDefaults={setSomeDefaults} />
-        <SimpleGrid minChildWidth="250px" spacing={5} mt={5}>
-          {tokens.map((t) => (
-            <TokenView token={t} key={`token-${t.symbol}`} />
-          ))}
-          {<NewToken onNew={addToken} />}
-        </SimpleGrid>
+      <Intro setDefaults={setSomeDefaults} />
+      <Container maxW="1800px" mt={5}>
+        <Grid py={8} templateColumns="repeat(4, 1fr)" gridGap={12}>
+          <GridItem colSpan={1}>
+            <Heading size="xl">Accounts</Heading>
+            <Box>
+              {accounts.map((account) => (
+                <Account
+                  address={account}
+                  tokens={tokens}
+                  pools={pools}
+                  key={`acc-${account}`}
+                  selected={account === selectedAccount}
+                  onSelect={setSelectedAccount}
+                />
+              ))}
+            </Box>
+          </GridItem>
+          <GridItem colSpan={2}>
+            <Heading size="xl">Interact</Heading>
+            <Box
+              borderRadius={4}
+              p={4}
+              background="gray.100"
+              border="1px solid"
+              borderColor="gray.300">
+              <HStack>
+                <Flex>
+                  <Heading size="md">Swap</Heading>
+                </Flex>
+                <Flex>
+                  <Heading size="md">Add Liquidity</Heading>
+                </Flex>
+                <Flex>
+                  <Heading size="md">Withdraw</Heading>
+                </Flex>
+              </HStack>
+            </Box>
+          </GridItem>
+          <GridItem colSpan={1}>
+            <Heading size="xl">Tokens</Heading>
+            {tokens.map((t) => (
+              <TokenView token={t} key={`token-${t.symbol}`} />
+            ))}
+            {<NewToken onNew={addToken} />}
+          </GridItem>
+        </Grid>
 
-        <Heading mt={5}>Accounts</Heading>
-        <Box>
-          {accounts.map((account) => (
-            <Account
-              address={account}
-              tokens={tokens}
-              pools={pools}
-              key={`acc-${account}`}
-            />
-          ))}
-        </Box>
         {tokens.length >= 2 && (
           <Box>
             <Heading mt={5}>Pools</Heading>
@@ -94,7 +133,7 @@ export default function App() {
           </Box>
         )}
       </Container>
-      <Footer />
+      <Header />
     </>
   );
 }

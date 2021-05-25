@@ -1,61 +1,65 @@
-import { Button } from '@chakra-ui/button';
+import { Button, IconButton } from '@chakra-ui/button';
 import { useColorModeValue } from '@chakra-ui/color-mode';
 import { FormControl, FormHelperText, FormLabel } from '@chakra-ui/form-control';
 import { Input } from '@chakra-ui/input';
 import { Box, Flex, Heading, Text } from '@chakra-ui/layout';
 import React, { FormEvent, useEffect, useState } from 'react';
+import { HiArrowRight } from 'react-icons/hi';
 
-import { Token, TokenFeature } from '../../lib/Token';
-import { setField } from '../helpers';
-import TokenSymbol from './TokenSymbol';
+import { Token, TokenFeature } from '../../../../lib/Token';
+import { setField } from '../../../helpers';
+import TokenSymbol from '../../atoms/TokenSymbol';
 
 const MintForm = ({ token }: { token: Token }) => {
   const [toMint, setToMint] = useState(0);
   const [recipient, setRecipient] = useState<string>('');
 
   const mint = (e: FormEvent) => {
+    console.log(toMint);
     e.preventDefault();
+    console.log(toMint);
     token.mint(toMint, recipient);
   };
   const inputBg = useColorModeValue('white', 'gray.800');
 
   return (
     <form onSubmit={mint} autoComplete="off">
-      <Box px={3} py={2} alignItems="start">
-        <Heading size="sm" my={1}>
-          Mint new {token.symbol}
-        </Heading>
+      <Flex px={3} py={2} alignItems="center" gridGap={2}>
+        <Text>Mint</Text>
         <FormControl id="symbol">
           <Input
             size="sm"
             type="text"
             name="symbol"
-            variant="outline"
-            placeHolder="Amount"
+            variant="flushed"
+            placeholder="Amount"
             bg={inputBg}
             onChange={setField((val: string) => {
               setToMint(parseInt(val));
             })}
           />
         </FormControl>
-        <FormControl id="name" mt={2}>
+        <Text>to</Text>
+        <FormControl id="name">
           <Input
             type="text"
             size="sm"
             name="name"
-            variant="outline"
-            placeHolder="recipient"
+            variant="flushed"
+            placeholder="recipient"
             bg={inputBg}
             onChange={setField(setRecipient)}
           />
-          <FormHelperText>just use any string here.</FormHelperText>
         </FormControl>
-        <Flex justify="end">
-          <Button type="submit" colorScheme="linkedin" size="sm">
-            Mint {token.symbol}
-          </Button>
-        </Flex>
-      </Box>
+        <IconButton
+          colorScheme="green"
+          size="sm"
+          variant="link"
+          type="submit"
+          aria-label="Submit"
+          icon={<HiArrowRight />}
+        />
+      </Flex>
     </form>
   );
 };
@@ -76,23 +80,31 @@ const TokenView = ({ token }: { token: Token }) => {
   const headerBg = useColorModeValue('linkedin.200', 'linkedin.600');
 
   return (
-    <Box borderRadius={10} bg={bgColor}>
-      <Flex
-        alignItems="start"
-        justify="space-between"
-        bg={headerBg}
-        p={2}
-        borderTopRadius={10}>
-        <Box ml={2}>
-          <Text fontSize={24} title={token.name}>
-            {token.symbol}
-          </Text>
+    <Flex
+      borderRadius={4}
+      mb={3}
+      width="100%"
+      border="1px solid"
+      borderColor="gray.200"
+      overflow="hidden">
+      <Flex backgroundColor="red" width="5px"></Flex>
+      <Flex direction="column" width="100%">
+        <Flex p={3} align="center" justifyContent="space-between" bg="gray.100">
+          <Flex align="center">
+            <TokenSymbol symbol={token.symbol} size={15} />
+            <Text size="lg" fontWeight="bold" ml={1}>
+              {token.symbol}
+            </Text>
+          </Flex>
           <Text>Supply: {totalSupply.toFixed(2)}</Text>
-        </Box>
-        <TokenSymbol symbol={token.symbol} />
+        </Flex>
+        {token.feature !== TokenFeature.LiquidityToken && (
+          <Flex bgColor="white" p={3} borderBottomRadius={4}>
+            <MintForm token={token} />
+          </Flex>
+        )}
       </Flex>
-      {!(token.feature === TokenFeature.LiquidityToken) && <MintForm token={token} />}
-    </Box>
+    </Flex>
   );
 };
 

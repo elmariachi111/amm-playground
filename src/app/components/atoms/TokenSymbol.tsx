@@ -3,7 +3,10 @@ import { Box, BoxProps } from '@chakra-ui/layout';
 import React from 'react';
 import Identicon from 'react-identicons';
 
-const TokenSymbol = (props: { symbol: string; size?: number } & BoxProps) => {
+//{shares && <Text>{shares.toFixed(1)}%</Text>}
+const TokenSymbol = (
+  props: { symbol: string; size?: number; shares?: number } & BoxProps,
+) => {
   const bg = useColorModeValue('white', 'gray.800');
   const borderColor = useColorModeValue('gray.200', 'gray.600');
 
@@ -13,7 +16,7 @@ const TokenSymbol = (props: { symbol: string; size?: number } & BoxProps) => {
       border="1px solid"
       borderColor={borderColor}
       bg={bg}
-      p={3}
+      p={2}
       {...props}>
       <Identicon string={props.symbol} size={props.size || 30} />
     </Box>

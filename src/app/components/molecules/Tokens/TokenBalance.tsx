@@ -11,12 +11,12 @@ import {
 } from '@chakra-ui/popover';
 import React, { useEffect, useState } from 'react';
 
-import { Token, TokenFeature } from '../../../lib/Token';
-import TokenSymbol from '../atoms/TokenSymbol';
+import { Token, TokenFeature } from '../../../../lib/Token';
+import TokenSymbol from '../../atoms/TokenSymbol';
 import RedeemForm from './RedeemForm';
 import TransferForm from './TransferForm';
 
-export default function TokenBalancePopover({
+export default function TokenBalance({
   address,
   token,
 }: {
@@ -48,38 +48,20 @@ export default function TokenBalancePopover({
   }, []);
 
   return (
-    <Popover
-      isOpen={popover.isOpen}
-      onOpen={popover.onOpen}
-      onClose={popover.onClose}
-      placement="bottom">
-      <PopoverTrigger>
-        <Flex alignItems="center" ml={5}>
-          <TokenSymbol
-            transition="all .2s ease"
-            _hover={{
-              scale: '1.1',
-            }}
-            symbol={token.symbol}
-            mr={2}
-            title={`${balance} ${token.name}`}
-          />
-          <Box>
-            <Text fontWeight="bold" fontSize="xl">
-              {balance.toFixed(2)}
-            </Text>
-            {shares && <Text>{shares.toFixed(1)}%</Text>}
-          </Box>
-        </Flex>
-      </PopoverTrigger>
-      <PopoverContent>
-        <PopoverHeader fontWeight="semibold">Send {token.symbol}</PopoverHeader>
-        <PopoverArrow />
-        <PopoverCloseButton />
-        <PopoverBody>
-          <TransferForm token={token} from={address} onDone={popover.onClose} />
-        </PopoverBody>
-      </PopoverContent>
-    </Popover>
+    <Flex alignItems="center" mr={5}>
+      <TokenSymbol
+        symbol={token.symbol}
+        mr={2}
+        title={`${balance} ${token.name}`}
+        shares={shares}
+        size={15}
+      />
+      <Box>
+        <Text fontWeight="bold" fontSize="lg">
+          {balance.toFixed(2)}
+        </Text>
+        <Text color="gray.300">{token.symbol}</Text>
+      </Box>
+    </Flex>
   );
 }
