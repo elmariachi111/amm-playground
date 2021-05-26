@@ -12,7 +12,7 @@ export function Header() {
 
   return (
     <Box bg="gray.100">
-      <Container maxW="container.xl" py={5}>
+      <Container maxW="1800px" py={5}>
         <Flex
           maxW="50%"
           color="gray.400"

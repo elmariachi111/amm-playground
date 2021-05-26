@@ -25,6 +25,7 @@ const AMM = ({
       py={6}
       background="gray.100"
       border="1px solid"
+      boxShadow="lg"
       borderColor="gray.300">
       {account ? (
         <SimpleGrid columns={3} spacing={2}>

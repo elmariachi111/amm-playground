@@ -22,7 +22,7 @@ export default function Intro({setDefaults}: {setDefaults: () => void}) {
   
   return( 
   <Box bg="#f2f2fd">
-    <Container maxW="container.xl">
+    <Container maxW="1800px">
   
     <Grid
       py={8}
@@ -31,9 +31,9 @@ export default function Intro({setDefaults}: {setDefaults: () => void}) {
       >
       <Box>
         <Heading size="lg">Welcome to the <b>Automated Market Maker</b> Simulator</Heading>
-        <Text size="small" color="gray.600">some text</Text>
-        <Text my={3}>This is an <Link isExternal href="https://academy.binance.com/en/articles/what-is-an-automated-market-maker-amm" color={linkColor}>automated market maker</Link> simulator. {' '}
-          <b>It's all <Link color={linkColor} isExternal href="https://github.com/elmariachi111/amm-playground">built in plain Typescript</Link>, no chain, no gas, no tx, no db involved.</b>
+        
+        <Text my={3}>This is an <Link isExternal href="https://academy.binance.com/en/articles/what-is-an-automated-market-maker-amm" color={linkColor}>automated market maker</Link> <b>simulator</b>. {' '}
+          It's all <Link color={linkColor} isExternal href="https://github.com/elmariachi111/amm-playground">built in <b>plain Typescript</b></Link>, no chain, no gas, no tx, no db involved.
         </Text>
         <Button 
           colorScheme="green"
@@ -44,7 +44,7 @@ export default function Intro({setDefaults}: {setDefaults: () => void}) {
 
       <Box>
         <Heading size="lg">What to do?</Heading>
-        <Text size="small" color="gray.600">some text</Text>
+        <Text fontSize="sm" color="gray.500">start trying: </Text>
         <Box my={3}>
           <Text>1. create some tokens ("DAI"). Eth is a default</Text>
           <Text>2. Mint some tokens. Use real names as addresses (10 Eth -> "stadolf")</Text>
@@ -54,8 +54,8 @@ export default function Intro({setDefaults}: {setDefaults: () => void}) {
         </Box>
       </Box>
       <Box >
-        <Heading size="lg">Library</Heading>
-        <Text size="small" color="gray.600">some text</Text>
+        <Heading size="lg">Learn</Heading>
+        <Text fontSize="sm" color="gray.500">links to get you started </Text>
 
         <VStack alignItems="start" spacing={0}  mt={2} fontSize=".9em">
           <Box>

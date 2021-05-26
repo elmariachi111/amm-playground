@@ -6,6 +6,7 @@ import React, { useMemo } from 'react';
 
 import { Pool } from '../../../lib/Pool';
 import { Token } from '../../../lib/Token';
+import { colorRange } from '../../helpers';
 import TokenBalance from './Tokens/TokenBalance';
 
 export default function Account({
@@ -25,6 +26,11 @@ export default function Account({
     return btoa(avatar(address, 50));
   }, [address]);
 
+  const accountColors = colorRange(address);
+  const bgGradient = {
+    bgGradient: `linear(to-b, ${accountColors[0]}, ${accountColors[1]})`,
+  };
+
   return (
     <Flex
       borderRadius={4}
@@ -32,18 +38,31 @@ export default function Account({
       width="100%"
       border="1px solid"
       borderColor="gray.200"
-      overflow="hidden">
-      <Flex bg="red" minWidth="4px">
+      overflow="hidden"
+      {...(selected ? { width: '107%' } : {})}>
+      <Flex {...bgGradient} minWidth="4px">
         {' '}
       </Flex>
-      <Flex direction="column" width="100%" bg={selected ? 'red' : 'gray.100'}>
-        <Flex p={3} justifyContent="space-between">
-          <Text size="lg" fontWeight="bold">
+      <Flex
+        direction="column"
+        width="100%"
+        {...(selected ? bgGradient : { bg: 'gray.100' })}>
+        <Flex p={3} justifyContent="space-between" align="center">
+          <Text
+            fontSize="2xl"
+            fontWeight="normal"
+            color={selected ? 'white' : 'gray.800'}>
             {address}
           </Text>
-          <Button variant="link" colorScheme="green" onClick={() => onSelect(address)}>
-            select
-          </Button>
+          {selected ? (
+            <Text color="white" casing="uppercase" fontWeight="bold" fontSize="sm">
+              selected
+            </Text>
+          ) : (
+            <Button variant="link" colorScheme="green" onClick={() => onSelect(address)}>
+              select
+            </Button>
+          )}
         </Flex>
         <Flex bgColor="white" p={3}>
           {tokens.map((t) => (

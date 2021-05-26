@@ -76,9 +76,9 @@ export default function App() {
       <Header />
       <Intro setDefaults={setSomeDefaults} />
       <Container maxW="1800px" mt={5}>
-        <Grid py={8} templateColumns="repeat(4, 1fr)" gridGap={12}>
-          <GridItem colSpan={1} overflow="hidden">
-            <Heading size="xl" mb={3}>
+        <SimpleGrid py={8} columns={4} spacing={8} minChildWidth="460px">
+          <Box>
+            <Heading size="xl" mb={4}>
               Accounts
             </Heading>
 
@@ -92,8 +92,8 @@ export default function App() {
                 onSelect={setSelectedAccount}
               />
             ))}
-          </GridItem>
-          <GridItem colSpan={2}>
+          </Box>
+          <Box>
             <Heading size="xl" mb={3}>
               Interact
             </Heading>
@@ -103,8 +103,8 @@ export default function App() {
               pools={pools}
               poolAdded={addPool}
             />
-          </GridItem>
-          <GridItem colSpan={1}>
+          </Box>
+          <Box>
             <Heading size="xl" mb={3}>
               Tokens
             </Heading>
@@ -112,8 +112,8 @@ export default function App() {
               <TokenView token={t} key={`token-${t.symbol}`} />
             ))}
             {<NewToken onNew={addToken} />}
-          </GridItem>
-        </Grid>
+          </Box>
+        </SimpleGrid>
 
         {tokens.length >= 2 && (
           <Box>
