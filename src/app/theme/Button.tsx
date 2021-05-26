@@ -1,5 +1,4 @@
 const Button = {
-  // The styles all button have in common
   baseStyle: {
     fontWeight: 'bold',
     textTransform: 'uppercase',

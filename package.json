@@ -28,6 +28,7 @@
     "@download/blockies": "^1.0.3",
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
+    "@fontsource/roboto": "^4.3.0",
     "@servie/events": "^3.0.0",
     "@ukstv/jazzicon-react": "^1.0.0",
     "framer-motion": "^4",

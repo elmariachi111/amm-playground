@@ -25,13 +25,13 @@ const AMM = ({
       border="1px solid"
       borderColor="gray.300">
       {account ? (
-        <VStack>
+        <HStack align="start">
           <Flex direction="column">
-            <Heading size="md">Swap</Heading>
+            <Heading size="lg">Swap</Heading>
             <SwapControl sender={account} pools={pools} />
           </Flex>
           <Flex direction="column">
-            <Heading size="md">Provide</Heading>
+            <Heading size="lg">Provide</Heading>
             {
               <AddLiquidityForm
                 address={account}
@@ -44,9 +44,9 @@ const AMM = ({
             }
           </Flex>
           <Flex>
-            <Heading size="md">Withdraw</Heading>
+            <Heading size="lg">Withdraw</Heading>
           </Flex>
-        </VStack>
+        </HStack>
       ) : (
         <Text>select an account</Text>
       )}

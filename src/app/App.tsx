@@ -78,7 +78,9 @@ export default function App() {
       <Container maxW="1800px" mt={5}>
         <Grid py={8} templateColumns="repeat(4, 1fr)" gridGap={12}>
           <GridItem colSpan={1} overflow="hidden">
-            <Heading size="xl">Accounts</Heading>
+            <Heading size="xl" mb={3}>
+              Accounts
+            </Heading>
 
             {accounts.map((account) => (
               <Account
@@ -92,7 +94,9 @@ export default function App() {
             ))}
           </GridItem>
           <GridItem colSpan={2}>
-            <Heading size="xl">Interact</Heading>
+            <Heading size="xl" mb={3}>
+              Interact
+            </Heading>
             <AMM
               account={selectedAccount}
               tokens={tokens}
@@ -101,7 +105,9 @@ export default function App() {
             />
           </GridItem>
           <GridItem colSpan={1}>
-            <Heading size="xl">Tokens</Heading>
+            <Heading size="xl" mb={3}>
+              Tokens
+            </Heading>
             {tokens.map((t) => (
               <TokenView token={t} key={`token-${t.symbol}`} />
             ))}
@@ -111,7 +117,9 @@ export default function App() {
 
         {tokens.length >= 2 && (
           <Box>
-            <Heading mt={5}>Pools</Heading>
+            <Heading mt={5} mb={3}>
+              Pools
+            </Heading>
             <VStack spacing={5} mt={5} align="start">
               {pools.map((p) => (
                 <PoolView pool={p} key={`pool-${p.poolToken.symbol}`} />

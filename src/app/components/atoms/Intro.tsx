@@ -37,7 +37,6 @@ export default function Intro({setDefaults}: {setDefaults: () => void}) {
         </Text>
         <Button 
           colorScheme="green"
-          color="green.300"
           variant="link"
           onClick={setDefaults}
         >Set some defaults</Button>
