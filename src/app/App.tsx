@@ -21,7 +21,7 @@ import NewToken from './components/molecules/Tokens/NewToken';
 import { TokenView } from './components/molecules/Tokens/TokenView';
 import NewPool from './components/NewPool';
 import AMM from './components/organisms/AMM';
-import { PoolView } from './components/PoolView';
+import { PoolView } from './components/organisms/PoolView';
 
 export default function App() {
   const [tokens, setTokens] = useState<Token[]>([]);
@@ -75,7 +75,7 @@ export default function App() {
     <>
       <Header />
       <Intro setDefaults={setSomeDefaults} />
-      <Container maxW="1800px" mt={5}>
+      <Container maxW="1800px" my={5}>
         <SimpleGrid py={8} columns={4} spacing={8} minChildWidth="460px">
           <Box>
             <Heading size="xl" mb={4}>
@@ -120,12 +120,11 @@ export default function App() {
             <Heading mt={5} mb={3}>
               Pools
             </Heading>
-            <VStack spacing={5} mt={5} align="start">
+            <SimpleGrid columns={2} spacing={5} mt={5} align="start">
               {pools.map((p) => (
                 <PoolView pool={p} key={`pool-${p.poolToken.symbol}`} />
               ))}
-              <NewPool onCreated={addPool} tokens={tokens} />
-            </VStack>
+            </SimpleGrid>
           </Box>
         )}
       </Container>

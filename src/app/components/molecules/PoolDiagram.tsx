@@ -1,4 +1,5 @@
 import { Box, Text } from '@chakra-ui/layout';
+import { useToken } from '@chakra-ui/system';
 import React, { useEffect, useState } from 'react';
 import { LineSeries, XAxis, XYPlot, YAxis } from 'react-vis';
 import Hint from 'react-vis/es/plot/hint';
@@ -11,6 +12,7 @@ type DataPoint = {
 };
 
 const PoolDiagram = ({ pool, poolInfos }: { pool: Pool; poolInfos: PoolInfo[] }) => {
+  const [green300] = useToken('colors', ['green.300']);
   const [series, setSeries] = useState<DataPoint[][]>([]);
   const [selectedDataPoint, setSelectedDataPoint] = useState<DataPoint>({
     x: 0,
@@ -34,7 +36,7 @@ const PoolDiagram = ({ pool, poolInfos }: { pool: Pool; poolInfos: PoolInfo[] })
   }, [poolInfos]);
 
   return (
-    <XYPlot width={480} height={480}>
+    <XYPlot width={300} height={300}>
       <Hint value={selectedDataPoint} align={{ vertical: 'top', horizontal: 'right' }}>
         <Box
           bg="rgba(255,255,255,0.9)"
@@ -57,7 +59,7 @@ const PoolDiagram = ({ pool, poolInfos }: { pool: Pool; poolInfos: PoolInfo[] })
           key={`hist-${idx}`}
           curve={'curveMonotoneX'}
           data={_series}
-          color="#FF9900"
+          color={green300}
           opacity={(idx + 1) / series.length}
           onNearestX={(datapoint, event) => {
             setSelectedDataPoint(datapoint);
