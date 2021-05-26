@@ -14,7 +14,7 @@ import React from 'react';
 import { Pool } from '../../../lib/Pool';
 import TokenSymbol from '../atoms/TokenSymbol';
 import AddLiquidityForm from '../organisms/AddLiquidityForm';
-import RedeemForm from './RedeemForm';
+import RedeemForm from '../organisms/RedeemForm';
 
 export default function AddLiquidityPopover({
   from,

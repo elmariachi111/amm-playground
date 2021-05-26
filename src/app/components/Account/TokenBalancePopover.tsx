@@ -13,7 +13,7 @@ import React, { useEffect, useState } from 'react';
 
 import { Token, TokenFeature } from '../../../lib/Token';
 import TokenSymbol from '../atoms/TokenSymbol';
-import RedeemForm from './RedeemForm';
+import RedeemForm from '../organisms/RedeemForm';
 import TransferForm from './TransferForm';
 
 export default function TokenBalancePopover({

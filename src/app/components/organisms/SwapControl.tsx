@@ -88,9 +88,20 @@ export default function SwapControl({
     }
   };
 
+  const onSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    console.log(amount);
+  };
+
   return (
-    <Box my={3}>
-      <form onSubmit={() => {}} autoComplete="off">
+    <Flex
+      as="form"
+      direction="column"
+      onSubmit={onSubmit}
+      justify="space-between"
+      h="100%"
+      autoComplete="off">
+      <Flex direction="column">
         <TokenValueChooser
           onTokenChanged={onFromChanged}
           tokens={fromOptions}
@@ -126,16 +137,16 @@ export default function SwapControl({
             )}
           </Text>
         )}
-        <Button
-          mt={3}
-          size="lg"
-          colorScheme="green"
-          variant="solid"
-          isFullWidth
-          type="submit">
-          Swap
-        </Button>
-      </form>
-    </Box>
+      </Flex>
+      <Button
+        mt={3}
+        size="lg"
+        colorScheme="green"
+        variant="solid"
+        isFullWidth
+        type="submit">
+        Swap
+      </Button>
+    </Flex>
   );
 }

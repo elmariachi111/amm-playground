@@ -1,7 +1,7 @@
 import { Button } from '@chakra-ui/button';
 import { FormControl } from '@chakra-ui/form-control';
 import { Input, InputGroup } from '@chakra-ui/input';
-import { Box, Text } from '@chakra-ui/layout';
+import { Box, Flex, Text } from '@chakra-ui/layout';
 import React, { FormEvent, useEffect, useState } from 'react';
 
 import { Pool } from '../../../lib/Pool';
@@ -56,8 +56,14 @@ export default function AddLiquidityForm({
     };
   };
   return (
-    <Box my={3}>
-      <form onSubmit={onSubmit} autoComplete="off">
+    <Flex
+      direction="column"
+      as="form"
+      onSubmit={onSubmit}
+      justify="space-between"
+      h="100%"
+      autoComplete="off">
+      <Flex direction="column">
         <TokenValueChooser
           onTokenChanged={(symbol) => {
             setFirstToken(tokens.find((t) => t.symbol === symbol));
@@ -102,23 +108,22 @@ export default function AddLiquidityForm({
             </InputGroup>
           </FormControl>
         </TokenValueChooser>
-
         <Text color="gray.500" align="right" my={2}>
-          {pool && pool.poolToken.name}
+          {pool && pool.poolToken.symbol}
           {firstToken && secondToken && !pool && <Text>creates a new pool</Text>}
         </Text>
+      </Flex>
 
-        <Button
-          mt={3}
-          size="lg"
-          colorScheme="green"
-          variant="solid"
-          isFullWidth
-          isDisabled={firstToken === undefined || secondToken === undefined}
-          type="submit">
-          Mint Liquidity
-        </Button>
-      </form>
-    </Box>
+      <Button
+        mt={3}
+        size="lg"
+        colorScheme="green"
+        variant="solid"
+        isFullWidth
+        isDisabled={firstToken === undefined || secondToken === undefined}
+        type="submit">
+        Mint Liquidity
+      </Button>
+    </Flex>
   );
 }
