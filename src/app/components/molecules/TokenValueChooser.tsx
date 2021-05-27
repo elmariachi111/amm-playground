@@ -33,7 +33,7 @@ const TokenValueChooser = ({
           e.stopPropagation();
           onTokenChanged(e.target.value);
         }}>
-        <option>select</option>
+        <option value={''}>select</option>
         {tokens.map((token) => (
           <option
             value={token.symbol}

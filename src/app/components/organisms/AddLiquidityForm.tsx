@@ -120,7 +120,9 @@ export default function AddLiquidityForm({
         colorScheme="green"
         variant="solid"
         isFullWidth
-        isDisabled={firstToken === undefined || secondToken === undefined}
+        isDisabled={
+          firstToken === undefined || secondToken === undefined || !amt1 || !amt2
+        }
         type="submit">
         Mint Liquidity
       </Button>

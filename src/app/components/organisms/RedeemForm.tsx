@@ -54,7 +54,6 @@ export default function RedeemForm({
       h="100%"
       autoComplete="off">
       <RadioGroup
-        isFullWidth
         colorScheme="green"
         onChange={(symbol) => {
           selectPool(redeemablePools.find((p) => p.poolToken.symbol === symbol));

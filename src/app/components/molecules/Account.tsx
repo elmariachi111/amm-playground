@@ -2,7 +2,7 @@ import { Button } from '@chakra-ui/button';
 import { useDisclosure } from '@chakra-ui/hooks';
 import { Box, Flex, Text } from '@chakra-ui/layout';
 import avatar from 'gradient-avatar';
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 
 import { Pool } from '../../../lib/Pool';
 import { Token } from '../../../lib/Token';
@@ -31,6 +31,7 @@ export default function Account({
     bgGradient: `linear(to-b, ${accountColors[0]}, ${accountColors[1]})`,
   };
 
+  const isPool = !!pools.find((p) => p.account === address);
   return (
     <Flex
       borderRadius={4}
@@ -40,9 +41,11 @@ export default function Account({
       borderColor="gray.200"
       overflow="hidden"
       {...(selected ? { width: '107%' } : {})}>
-      <Flex {...bgGradient} minWidth="4px">
-        {' '}
-      </Flex>
+      {!isPool && (
+        <Flex {...bgGradient} minWidth="4px">
+          {' '}
+        </Flex>
+      )}
       <Flex
         direction="column"
         width="100%"
@@ -58,16 +61,24 @@ export default function Account({
             <Text color="white" casing="uppercase" fontWeight="bold" fontSize="sm">
               selected
             </Text>
-          ) : (
+          ) : !isPool ? (
             <Button variant="link" colorScheme="green" onClick={() => onSelect(address)}>
               select
             </Button>
+          ) : (
+            <></>
           )}
         </Flex>
         <Flex bgColor="white" p={3}>
-          {tokens.map((t) => (
-            <TokenBalance key={`tb-${address}-${t.symbol}`} address={address} token={t} />
-          ))}
+          {tokens
+            .filter((t) => t.balanceOf(address) > 0)
+            .map((t) => (
+              <TokenBalance
+                key={`tb-${address}-${t.symbol}`}
+                address={address}
+                token={t}
+              />
+            ))}
         </Flex>
       </Flex>
     </Flex>

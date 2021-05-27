@@ -50,9 +50,15 @@ export default function SwapControl({
   }, [pools]);
 
   const onFromChanged = (symbol: string) => {
+    console.log(symbol);
+    if (!symbol) {
+      setFrom(undefined);
+      setTo(undefined);
+      setPool(null);
+      return;
+    }
     const token = fromOptions.find((t) => t.symbol === symbol);
     setFrom(token);
-
     const _toOptions: Set<Token> = new Set();
     pools.forEach((p) => {
       if (p.token1.symbol == symbol) _toOptions.add(p.token2);
@@ -91,6 +97,7 @@ export default function SwapControl({
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
     console.log(amount);
+    pool?.buy(sender, from, to, amount);
   };
 
   return (
@@ -144,6 +151,7 @@ export default function SwapControl({
         colorScheme="green"
         variant="solid"
         isFullWidth
+        disabled={!pool}
         type="submit">
         Swap
       </Button>
