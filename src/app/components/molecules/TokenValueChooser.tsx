@@ -1,4 +1,4 @@
-import { Flex, FlexProps } from '@chakra-ui/layout';
+import { Flex } from '@chakra-ui/layout';
 import { Select } from '@chakra-ui/select';
 import React from 'react';
 
@@ -26,8 +26,8 @@ const TokenValueChooser = ({
       align="center"
       {...(isFirst ? { borderTopRadius: 6 } : { borderBottomRadius: 6 })}>
       <Select
-        w="200px"
-        size="lg"
+        w="240px"
+        size="md"
         border="none"
         onChange={(e) => {
           e.stopPropagation();

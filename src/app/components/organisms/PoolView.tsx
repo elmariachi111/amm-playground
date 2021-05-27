@@ -179,7 +179,7 @@ const PoolView = ({ pool }: { pool: Pool }) => {
             </Tr>
           </Tbody>
         </Table>
-        <Box w="350" h="350" p={3}>
+        <Box p={3}>
           {poolInfo.reserves[0] + poolInfo.reserves[1] > 0 && (
             <PoolDiagram pool={pool} poolInfos={history} />
           )}

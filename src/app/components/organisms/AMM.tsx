@@ -1,4 +1,4 @@
-import { Box, Flex, Heading, HStack, SimpleGrid, Text, VStack } from '@chakra-ui/layout';
+import { Box, Flex, Heading, SimpleGrid, Text } from '@chakra-ui/layout';
 import React from 'react';
 
 import { Pool } from '../../../lib/Pool';
@@ -13,7 +13,7 @@ const AMM = ({
   pools,
   poolAdded,
 }: {
-  account: string | undefined;
+  account: string;
   tokens: Token[];
   pools: Pool[];
   poolAdded: (p: Pool) => void;

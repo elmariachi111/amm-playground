@@ -1,20 +1,9 @@
 import { useDisclosure } from '@chakra-ui/hooks';
 import { Box, Flex, Text } from '@chakra-ui/layout';
-import {
-  Popover,
-  PopoverArrow,
-  PopoverBody,
-  PopoverCloseButton,
-  PopoverContent,
-  PopoverHeader,
-  PopoverTrigger,
-} from '@chakra-ui/popover';
 import React, { useEffect, useState } from 'react';
 
 import { Token, TokenFeature } from '../../../../lib/Token';
 import TokenSymbol from '../../atoms/TokenSymbol';
-import RedeemForm from './RedeemForm';
-import TransferForm from './TransferForm';
 
 export default function TokenBalance({
   address,
@@ -56,12 +45,14 @@ export default function TokenBalance({
         shares={shares}
         size={15}
       />
-      <Box>
-        <Text fontWeight="bold" fontSize="lg">
+      <Flex direction="column">
+        <Text fontWeight="medium" fontSize="sm">
           {balance.toFixed(2)}
         </Text>
-        <Text color="gray.300">{token.symbol}</Text>
-      </Box>
+        <Text color="gray.300" fontSize="xs">
+          {token.symbol}
+        </Text>
+      </Flex>
     </Flex>
   );
 }

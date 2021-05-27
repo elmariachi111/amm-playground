@@ -47,7 +47,7 @@ export default function Account({
         direction="column"
         width="100%"
         {...(selected ? bgGradient : { bg: 'gray.100' })}>
-        <Flex p={3} justifyContent="space-between" align="center">
+        <Flex p={2} px={4} justifyContent="space-between" align="center">
           <Text
             fontSize="2xl"
             fontWeight="normal"

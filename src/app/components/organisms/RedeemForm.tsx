@@ -3,7 +3,7 @@ import { FormControl } from '@chakra-ui/form-control';
 import { Input, InputGroup, InputLeftAddon, InputRightAddon } from '@chakra-ui/input';
 import { Box, Flex, Stack, Text, VStack } from '@chakra-ui/layout';
 import { Radio, RadioGroup } from '@chakra-ui/radio';
-import React, { FormEvent, useEffect, useState } from 'react';
+import React, { FormEvent, useCallback, useEffect, useState } from 'react';
 
 import { Pool } from '../../../lib/Pool';
 import { setField } from '../../helpers';
@@ -20,21 +20,35 @@ export default function RedeemForm({
   const [redeemablePools, setRedeemablePools] = useState<Pool[]>([]);
   const [selectedPool, selectPool] = useState<Pool>();
 
+  const updatePools = useCallback(() => {
+    const _pools = pools.filter((p) => p.poolToken.balanceOf(from) > 1);
+    setRedeemablePools(_pools);
+  }, [from]);
+
   useEffect(() => {
-    setRedeemablePools(pools.filter((p) => p.poolToken.balanceOf(from) > 0));
-    //todo: listen on pool events to adjust balance.
-  }, [pools]);
+    const off: Array<() => void> = [];
+    updatePools();
+    for (const p of pools) {
+      off.push(p.on('LiquidityChanged', (e) => updatePools()));
+      off.push(p.on('ReservesChanged', (e) => updatePools()));
+    }
+    return () => {
+      for (const _off of off) _off();
+    };
+  }, [pools, from]);
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
-    selectedPool?.withdrawLiquidity(from, amount);
+    if (!selectedPool) return;
+    const amount = selectedPool.poolToken.balanceOf(from);
+    selectedPool.withdrawLiquidity(from, amount);
     onDone && onDone();
   };
 
   return (
     <Flex
-      direction="column"
       as="form"
+      direction="column"
       onSubmit={onSubmit}
       justify="space-between"
       h="100%"
