@@ -53,12 +53,11 @@ export class Pool extends Emitter<PoolEvents> {
 
     this.token1.transfer(this.account, sender, withdraw1);
     this.token2.transfer(this.account, sender, withdraw2);
+    this.poolToken.burn(this.account, liquidity);
     this.emit('LiquidityChanged', {
       token1amt: withdraw1,
       token2amt: withdraw2,
     });
-
-    this.poolToken.burn(this.account, liquidity);
   }
 
   k() {
