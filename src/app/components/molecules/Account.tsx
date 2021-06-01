@@ -1,8 +1,11 @@
 import { Button } from '@chakra-ui/button';
 import { useDisclosure } from '@chakra-ui/hooks';
+import Icon from '@chakra-ui/icon';
 import { Box, Flex, Text } from '@chakra-ui/layout';
 import avatar from 'gradient-avatar';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { FaCaretRight } from 'react-icons/fa';
+import { HiCheck } from 'react-icons/hi';
 
 import { Pool } from '../../../lib/Pool';
 import { Token } from '../../../lib/Token';
@@ -67,7 +70,7 @@ export default function Account({
         {...(selected ? bgGradient : { bg: 'gray.100' })}>
         <Flex p={2} px={4} justifyContent="space-between" align="center">
           <Text
-            fontSize="2xl"
+            fontSize="xl"
             fontWeight="normal"
             maxW="400px"
             isTruncated
@@ -76,10 +79,15 @@ export default function Account({
           </Text>
           {selected ? (
             <Text color="white" casing="uppercase" fontWeight="bold" fontSize="sm">
+              <Icon as={HiCheck} mr={1} w={5} h={5} />
               selected
             </Text>
           ) : !isPool ? (
-            <Button variant="link" colorScheme="green" onClick={() => onSelect(address)}>
+            <Button
+              variant="link"
+              colorScheme="green"
+              onClick={() => onSelect(address)}
+              rightIcon={<FaCaretRight />}>
               select
             </Button>
           ) : (

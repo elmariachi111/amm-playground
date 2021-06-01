@@ -92,11 +92,16 @@ const TokenView = ({ token }: { token: Token }) => {
         <Flex p={3} align="center" justifyContent="space-between" bg="gray.100">
           <Flex align="center">
             <TokenSymbol symbol={token.symbol} size={15} />
-            <Text size="lg" fontWeight="bold" ml={1}>
+            <Text fontSize="xl" fontWeight="normal" maxW="400px" ml={2}>
               {token.symbol}
             </Text>
           </Flex>
-          <Text>Supply: {totalSupply.toFixed(2)}</Text>
+          <Flex gridGap={1} align="center" fontSize="sm">
+            <Text color="gray.400" textTransform="uppercase" fontWeight="bold">
+              Supply
+            </Text>
+            <Text>{totalSupply.toFixed(2)}</Text>
+          </Flex>
         </Flex>
         {token.feature !== TokenFeature.LiquidityToken && (
           <Flex bgColor="white" p={3} borderBottomRadius={4}>

@@ -9,45 +9,13 @@ import '@fontsource/roboto/700.css';
 import '@fontsource/roboto/900.css';
 
 import { ChakraProvider, LightMode } from '@chakra-ui/react';
-import { extendTheme } from '@chakra-ui/react';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
 import App from './App';
-import Button from './theme/Button';
+import theme from './theme';
 
 const AmmDemo = () => {
-  const theme = extendTheme({
-    fonts: {
-      body: 'Roboto',
-      heading: 'Roboto',
-    },
-    textStyles: {
-      h2: {
-        color: 'red',
-        fontWeight: '300',
-      },
-    },
-    components: {
-      Button,
-      Heading: {
-        baseStyle: {
-          fontWeight: 400,
-        },
-      },
-      Container: {
-        sizes: {
-          xl: {
-            maxW: '1800px',
-          },
-        },
-      },
-    },
-    config: {
-      initialColorMode: 'light',
-      useSystemColorMode: false,
-    },
-  });
   return (
     <ChakraProvider theme={theme}>
       <App />

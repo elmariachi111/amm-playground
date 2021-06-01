@@ -79,8 +79,8 @@ export default function App() {
       <Intro setDefaults={setSomeDefaults} />
       <Container maxW="1800px" my={5}>
         {/*<SimpleGrid py={8} columns={4} spacing={8} minChildWidth="460px">*/}
-        <Grid templateColumns="repeat(4, 1fr)" gap={4}>
-          <GridItem>
+        <Grid templateColumns="repeat(12, 1fr)" gap={6}>
+          <GridItem colSpan={3}>
             <Heading size="xl" mb={4}>
               Accounts
             </Heading>
@@ -96,7 +96,7 @@ export default function App() {
               />
             ))}
           </GridItem>
-          <GridItem colSpan={2}>
+          <GridItem colSpan={7}>
             <Heading size="xl" mb={3}>
               Interact
             </Heading>
@@ -107,7 +107,7 @@ export default function App() {
               poolAdded={addPool}
             />
           </GridItem>
-          <GridItem>
+          <GridItem colSpan={2}>
             <Heading size="xl" mb={3}>
               Tokens
             </Heading>

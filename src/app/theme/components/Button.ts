@@ -13,15 +13,13 @@ const Button = {
     md: {
       fontSize: 'md',
       px: 6,
-      py: 4,
+      py: 7,
     },
   },
   // Two variants: outline and solid
   variants: {
     outline: {
       border: '2px solid',
-      //borderColor: 'purple.500',
-      //color: 'purple.500',
     },
     solid: {
       //bg: 'purple.500',

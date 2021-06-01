@@ -13,7 +13,7 @@ const AMM = ({
   pools,
   poolAdded,
 }: {
-  account: string;
+  account: string | undefined;
   tokens: Token[];
   pools: Pool[];
   poolAdded: (p: Pool) => void;

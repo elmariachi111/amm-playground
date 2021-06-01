@@ -1,4 +1,5 @@
 import { Flex, Text } from '@chakra-ui/layout';
+import { CircularProgress, CircularProgressLabel } from '@chakra-ui/progress';
 import React, { useEffect, useState } from 'react';
 
 import { Token, TokenFeature } from '../../../../lib/Token';
@@ -33,20 +34,33 @@ export default function TokenBalance({
     };
   }, []);
 
-  return (
-    <Flex alignItems="center" mr={5}>
+  const symbol =
+    token.feature === TokenFeature.LiquidityToken ? (
+      <CircularProgress
+        value={shares}
+        color="green.400"
+        capIsRound={false}
+        size="2.8rem"
+        mr={1}>
+        <CircularProgressLabel>{shares?.toFixed(0)}%</CircularProgressLabel>
+      </CircularProgress>
+    ) : (
       <TokenSymbol
         symbol={token.symbol}
-        mr={2}
+        mr={1}
         title={`${balance} ${token.name}`}
         shares={shares}
         size={15}
       />
+    );
+  return (
+    <Flex alignItems="center" mr={5}>
+      {symbol}
       <Flex direction="column">
         <Text fontWeight="medium" fontSize="sm">
           {balance.toFixed(2)}
         </Text>
-        <Text color="gray.300" fontSize="xs">
+        <Text color="gray.400" fontSize="xs">
           {token.symbol}
         </Text>
       </Flex>
