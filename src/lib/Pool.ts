@@ -51,7 +51,6 @@ export class Pool extends Emitter<PoolEvents> {
     const withdraw1 = share * this.token1.balanceOf(this.account);
     const withdraw2 = share * this.token2.balanceOf(this.account);
 
-    this.poolToken.transfer(sender, this.account, liquidity);
     this.token1.transfer(this.account, sender, withdraw1);
     this.token2.transfer(this.account, sender, withdraw2);
     this.emit('LiquidityChanged', {

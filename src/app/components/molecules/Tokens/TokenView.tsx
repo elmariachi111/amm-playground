@@ -68,11 +68,17 @@ const TokenView = ({ token }: { token: Token }) => {
   const [totalSupply, setTotalSupply] = useState<number>(token.totalSupply);
 
   useEffect(() => {
-    const off = token.on('Minted', (args) => {
-      setTotalSupply(token.totalSupply);
-    });
+    const off = [
+      token.on('Minted', (args) => {
+        setTotalSupply(token.totalSupply);
+      }),
+      token.on('Burnt', (args) => {
+        setTotalSupply(token.totalSupply);
+      }),
+    ];
+
     return () => {
-      off();
+      off.map((_off) => _off());
     };
   }, [token]);
 
