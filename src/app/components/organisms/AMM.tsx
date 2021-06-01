@@ -33,7 +33,7 @@ const AMM = ({
             <Heading size="lg" mb={3}>
               Swap
             </Heading>
-            <SwapControl sender={account} pools={pools} />
+            <SwapControl sender={account} pools={pools} tokens={tokens} />
           </Flex>
           <Flex direction="column">
             <Heading size="lg" mb={3}>

@@ -2,7 +2,7 @@ import { Button } from '@chakra-ui/button';
 import { useDisclosure } from '@chakra-ui/hooks';
 import { Box, Flex, Text } from '@chakra-ui/layout';
 import avatar from 'gradient-avatar';
-import React, { useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Pool } from '../../../lib/Pool';
 import { Token } from '../../../lib/Token';
@@ -22,9 +22,23 @@ export default function Account({
   selected: boolean;
   onSelect: (acc: string) => void;
 }) {
-  const svg = useMemo(() => {
-    return btoa(avatar(address, 50));
-  }, [address]);
+  const [tokensWithBalance, setTokensWithBalance] = useState<Token[]>([]);
+
+  const updateTokens = useCallback(() => {
+    setTokensWithBalance(tokens.filter((t) => t.balanceOf(address) > 0));
+  }, [tokens]);
+
+  useEffect(() => {
+    updateTokens();
+    const off: Array<() => void> = [];
+    for (const t of tokens) {
+      off.push(t.on('Minted', (e) => updateTokens()));
+      off.push(t.on('Transferred', (e) => updateTokens()));
+    }
+    return () => {
+      for (const _off of off) _off();
+    };
+  }, [tokens]);
 
   const accountColors = colorRange(address);
   const bgGradient = {
@@ -32,6 +46,7 @@ export default function Account({
   };
 
   const isPool = !!pools.find((p) => p.account === address);
+
   return (
     <Flex
       borderRadius={4}
@@ -54,6 +69,8 @@ export default function Account({
           <Text
             fontSize="2xl"
             fontWeight="normal"
+            maxW="400px"
+            isTruncated
             color={selected ? 'white' : 'gray.800'}>
             {address}
           </Text>
@@ -70,15 +87,9 @@ export default function Account({
           )}
         </Flex>
         <Flex bgColor="white" p={3}>
-          {tokens
-            .filter((t) => t.balanceOf(address) > 0)
-            .map((t) => (
-              <TokenBalance
-                key={`tb-${address}-${t.symbol}`}
-                address={address}
-                token={t}
-              />
-            ))}
+          {tokensWithBalance.map((t) => (
+            <TokenBalance key={`tb-${address}-${t.symbol}`} address={address} token={t} />
+          ))}
         </Flex>
       </Flex>
     </Flex>

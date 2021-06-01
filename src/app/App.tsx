@@ -44,11 +44,13 @@ export default function App() {
     addToken(eth);
 
     const dai = new Token('DAI', 'Dai');
+
     dai.mint(1_000_000, 'alice');
     eth.mint(1000, 'alice');
     dai.mint(1_000_000, 'bob');
     eth.mint(1000, 'bob');
     addToken(dai);
+
     setAccounts(['alice', 'bob']); //pool.account
     const pool = new Pool('0xethdaipool', eth, dai, 0.3);
     pool.addLiquidity('alice', 10, 3000 * 10);
@@ -76,8 +78,9 @@ export default function App() {
       <Header />
       <Intro setDefaults={setSomeDefaults} />
       <Container maxW="1800px" my={5}>
-        <SimpleGrid py={8} columns={4} spacing={8} minChildWidth="460px">
-          <Box>
+        {/*<SimpleGrid py={8} columns={4} spacing={8} minChildWidth="460px">*/}
+        <Grid templateColumns="repeat(4, 1fr)" gap={4}>
+          <GridItem>
             <Heading size="xl" mb={4}>
               Accounts
             </Heading>
@@ -92,8 +95,8 @@ export default function App() {
                 onSelect={setSelectedAccount}
               />
             ))}
-          </Box>
-          <Box>
+          </GridItem>
+          <GridItem colSpan={2}>
             <Heading size="xl" mb={3}>
               Interact
             </Heading>
@@ -103,8 +106,8 @@ export default function App() {
               pools={pools}
               poolAdded={addPool}
             />
-          </Box>
-          <Box>
+          </GridItem>
+          <GridItem>
             <Heading size="xl" mb={3}>
               Tokens
             </Heading>
@@ -112,8 +115,8 @@ export default function App() {
               <TokenView token={t} key={`token-${t.symbol}`} />
             ))}
             {<NewToken onNew={addToken} />}
-          </Box>
-        </SimpleGrid>
+          </GridItem>
+        </Grid>
 
         {tokens.length >= 2 && (
           <Box>

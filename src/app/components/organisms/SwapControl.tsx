@@ -3,100 +3,107 @@ import { FormControl, FormHelperText } from '@chakra-ui/form-control';
 import { Input, InputGroup, InputRightAddon } from '@chakra-ui/input';
 import { Box, Flex, HStack, Text, VStack } from '@chakra-ui/layout';
 import { Select } from '@chakra-ui/select';
-import React, { FormEvent, useEffect, useState } from 'react';
+import React, {
+  FormEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 
 import { Pool } from '../../../lib/Pool';
-import { Token } from '../../../lib/Token';
-import { setField } from '../../helpers';
+import { Token, TokenFeature } from '../../../lib/Token';
+import { setField, setNumericalField } from '../../helpers';
 import TokenValueChooser from '../molecules/TokenValueChooser';
 
 export default function SwapControl({
   sender,
   pools,
+  tokens,
 }: {
   sender: string;
   pools: Pool[];
+  tokens: Token[];
 }) {
-  const [amount, setAmount] = useState<number>();
+  const [amount, setAmount] = useState<number>(0);
   const [quote, setQuote] = useState<number>(0);
   const [fromOptions, setFromOptions] = useState<Token[]>([]);
   const [toOptions, setToOptions] = useState<Token[]>([]);
   const [from, setFrom] = useState<Token>();
   const [to, setTo] = useState<Token>();
-  const [pool, setPool] = useState<Pool | null>(null);
-  const [swaps, setSwaps] = useState<Record<string, Pool[]>>();
-  // const onSubmit = (e: FormEvent) => {
-  //   e.preventDefault();
-  //   if (!amount) return;
-  //   pool.buy(sender, from, to, amount);
-  // };
-  // useEffect(() => {
-  //   if (!amount) return;
-  //   const off = pools.map(pool => pool.on('ReservesChanged', (e) => {
-  //     setQuote(pool.quote(from, to, amount));
-  //   });
-  //   return () => {
-  //     off();
-  //   };
-  // }, [pools, amount]);
+  const [pool, setPool] = useState<Pool>();
+  const amtRef = useRef();
 
   useEffect(() => {
-    const _fromOptions: Set<Token> = new Set();
-    pools.forEach((pool) => {
-      _fromOptions.add(pool.token1);
-      _fromOptions.add(pool.token2);
-    });
-    setFromOptions([..._fromOptions]);
-  }, [pools]);
+    setFromOptions(tokens.filter((t) => t.feature !== TokenFeature.LiquidityToken));
+  }, [tokens]);
 
-  const onFromChanged = (symbol: string) => {
-    console.log(symbol);
-    if (!symbol) {
-      setFrom(undefined);
-      setTo(undefined);
-      setPool(null);
-      return;
-    }
-    const token = fromOptions.find((t) => t.symbol === symbol);
-    setFrom(token);
-    const _toOptions: Set<Token> = new Set();
-    pools.forEach((p) => {
-      if (p.token1.symbol == symbol) _toOptions.add(p.token2);
-      if (p.token2.symbol == symbol) _toOptions.add(p.token1);
-    });
-    setToOptions([..._toOptions]);
-    updateQuote('0');
-    setTo(undefined);
-  };
+  useEffect(() => {
+    setToOptions(fromOptions.filter((t) => from !== t));
+  }, [from]);
 
-  const onToChanged = (symbol: string) => {
-    const token = fromOptions.find((t) => t.symbol === symbol);
-    setTo(token);
+  const updateQuote = useCallback(() => {
+    console.log('uip quote', amount);
 
-    const _pool = pools.find((pool) => {
-      const tokens = [pool.token1, pool.token2];
-      if (from === tokens[0] && token === tokens[1]) return true;
-      if (from === tokens[1] && token === tokens[0]) return true;
-    });
-    if (!_pool) {
-      console.error('pool has gone o0');
-    } else {
-      setPool(_pool);
-    }
-  };
-  const updateQuote = (amount: string) => {
-    const newVal = parseFloat(amount) || 0;
-    setAmount(newVal);
-    if (pool && from && to) {
-      setQuote(pool.quote(from, to, newVal));
+    if (amount && pool && from && to) {
+      setQuote(pool.quote(from, to, amount));
     } else {
       setQuote(0);
     }
+  }, [amount, pool]);
+
+  useEffect(updateQuote, [amount]);
+
+  useEffect(() => {
+    if (pool) {
+      const off: Array<() => void> = [];
+      off.push(pool.on('LiquidityChanged', (e) => updateQuote()));
+      off.push(pool.on('ReservesChanged', (e) => updateQuote()));
+      updateQuote();
+      return () => {
+        for (const _off of off) _off();
+      };
+    }
+  }, [pool, updateQuote]);
+
+  useEffect(() => {
+    if (from && to) {
+      const _pool = pools.find((p) => {
+        const tokens = [p.token1, p.token2];
+        if (from === tokens[0] && to === tokens[1]) return true;
+        if (from === tokens[1] && to === tokens[0]) return true;
+      });
+      setPool(_pool);
+    }
+  }, [pools, from, to]);
+
+  const onFromChanged = (symbol: string) => {
+    if (!symbol) {
+      setFrom(undefined);
+      setTo(undefined);
+      setPool(undefined);
+      setAmount(0);
+      amtRef.current.value = null;
+      return;
+    } else {
+      const newFrom = tokens.find((t) => t.symbol === symbol);
+      if (to === newFrom) {
+        setTo(from);
+        setAmount(quote);
+        amtRef.current.value = quote;
+      }
+      setFrom(newFrom);
+      updateQuote();
+    }
+  };
+
+  const onToChanged = (symbol: string) => {
+    setTo(tokens.find((t) => t.symbol === symbol));
   };
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
-    console.log(amount);
     pool?.buy(sender, from, to, amount);
   };
 
@@ -123,8 +130,8 @@ export default function SwapControl({
                 textAlign="right"
                 type="text"
                 name="amount"
-                value={amount}
-                onChange={setField(updateQuote)}
+                ref={amtRef}
+                onChange={setNumericalField(setAmount)}
               />
             </InputGroup>
           </FormControl>
@@ -132,16 +139,21 @@ export default function SwapControl({
 
         <TokenValueChooser onTokenChanged={onToChanged} tokens={toOptions} selected={to}>
           <InputGroup justifyContent="end" width="100%" p={3}>
-            <Text fontSize="lg">{quote.toFixed(2)} </Text>
+            <Text fontSize="lg">{quote?.toFixed(2)}</Text>
           </InputGroup>
         </TokenValueChooser>
 
         {pool && pool.feeRate > 0 && (
           <Text color="gray.500" align="right" my={2}>
-            contains a {pool.feeRate * 100}% swap fee
-            {amount && from && amount > 0 && (
-              <span> ({`${amount * pool.feeRate} ${from.symbol}`})</span>
+            pool takes a {pool.feeRate * 100}% swap fee
+            {amount > 0 && from && (
+              <Text fontSize="xs"> ({`${amount * pool.feeRate} ${from.symbol}`})</Text>
             )}
+          </Text>
+        )}
+        {from && to && !pool && (
+          <Text color="red.300" align="right" my={2}>
+            there's no {from.symbol}|{to.symbol} pool
           </Text>
         )}
       </Flex>

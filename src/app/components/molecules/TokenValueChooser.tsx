@@ -3,6 +3,7 @@ import { Select } from '@chakra-ui/select';
 import React from 'react';
 
 import { Token } from '../../../lib/Token';
+import { setField } from '../../helpers';
 
 const TokenValueChooser = ({
   tokens,
@@ -25,14 +26,7 @@ const TokenValueChooser = ({
       borderColor="gray.200"
       align="center"
       {...(isFirst ? { borderTopRadius: 6 } : { borderBottomRadius: 6 })}>
-      <Select
-        w="240px"
-        size="md"
-        border="none"
-        onChange={(e) => {
-          e.stopPropagation();
-          onTokenChanged(e.target.value);
-        }}>
+      <Select w="240px" size="md" border="none" onChange={setField(onTokenChanged)}>
         <option value={''}>select</option>
         {tokens.map((token) => (
           <option

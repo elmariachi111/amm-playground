@@ -7,9 +7,18 @@ import stringHash from 'string-hash';
 const encoder = new TextEncoder();
 
 export const setField = (setter: (val: string) => void) => {
-  return (e: FormEvent<HTMLInputElement>) => {
+  return (e: FormEvent<HTMLInputElement | HTMLSelectElement>) => {
     e.preventDefault();
     setter(e.currentTarget.value);
+  };
+};
+
+export const setNumericalField = (setter: (val: number | undefined) => void) => {
+  return (e: FormEvent<HTMLInputElement | HTMLSelectElement>) => {
+    e.preventDefault();
+    const str = e.currentTarget.value;
+    const fl = parseFloat(str);
+    setter(fl || undefined);
   };
 };
 

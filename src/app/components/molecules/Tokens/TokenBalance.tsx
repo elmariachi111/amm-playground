@@ -1,5 +1,4 @@
-import { useDisclosure } from '@chakra-ui/hooks';
-import { Box, Flex, Text } from '@chakra-ui/layout';
+import { Flex, Text } from '@chakra-ui/layout';
 import React, { useEffect, useState } from 'react';
 
 import { Token, TokenFeature } from '../../../../lib/Token';
@@ -14,8 +13,6 @@ export default function TokenBalance({
 }) {
   const [balance, setBalance] = useState<number>(token.balanceOf(address));
   const [shares, setShares] = useState<number>();
-
-  const popover = useDisclosure();
 
   useEffect(() => {
     const off: Array<() => void> = [];

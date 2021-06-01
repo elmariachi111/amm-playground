@@ -6,9 +6,9 @@ import React, { useEffect, useState } from 'react';
 import { Pool, PoolInfo } from '../../../lib/Pool';
 import CardBox from '../atoms/CardBox';
 import TokenSymbol from '../atoms/TokenSymbol';
+import { PoolDiagram } from '../molecules/Pool/PoolDiagram';
 import PoolHeader from '../molecules/Pool/PoolHeader';
-import { PoolDiagram } from '../molecules/PoolDiagram';
-import { PoolHistory } from '../molecules/PoolHistory';
+import { PoolHistory } from '../molecules/Pool/PoolHistory';
 
 const PfxVal = ({ pfx, val, sfx }: { pfx: string; val: string; sfx?: string }) => {
   return (
