@@ -59,7 +59,7 @@ export default function Account({
       border="1px solid"
       borderColor="gray.200"
       overflow="hidden"
-      {...(selected ? { width: '107%' } : {})}>
+      {...(selected ? { width: '110%' } : {})}>
       {!isPool && (
         <Flex {...bgGradient} minWidth="4px">
           {' '}

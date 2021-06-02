@@ -2,6 +2,7 @@ import { Flex, Text } from '@chakra-ui/layout';
 import { CircularProgress, CircularProgressLabel } from '@chakra-ui/progress';
 import React, { useCallback, useEffect, useState } from 'react';
 
+import { colorRange } from '../../../helpers';
 import { Token, TokenFeature } from '../../../lib/Token';
 import TokenSymbol from '../../atoms/TokenSymbol';
 
@@ -34,11 +35,12 @@ export default function TokenBalance({
     };
   }, []);
 
+  const tokenColor = colorRange(token.symbol)[0];
   const symbol =
     token.feature === TokenFeature.LiquidityToken ? (
       <CircularProgress
         value={shares}
-        color="green.400"
+        color={tokenColor}
         capIsRound={false}
         size="2.8rem"
         mr={1}>

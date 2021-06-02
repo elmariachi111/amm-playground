@@ -90,7 +90,7 @@ export default function AddLiquidityForm({
       justify="space-between"
       h="100%"
       autoComplete="off">
-      <Flex direction="column">
+      <Stack direction="column" spacing={-1}>
         <TokenValueChooser
           onTokenChanged={(symbol) => {
             setFirstToken(tokens.find((t) => t.symbol === symbol));
@@ -135,25 +135,26 @@ export default function AddLiquidityForm({
             </InputGroup>
           </FormControl>
         </TokenValueChooser>
-        {createsNewPool && (
-          <Flex direction="column">
-            <Text color="gray.500" align="start" my={2}>
-              choose a pool fee
-            </Text>
-            <RadioGroup onChange={setNewPoolFee} value={newPoolFee}>
-              <Stack direction="row" spacing={6}>
-                {Object.keys(predefinedFees)
-                  .sort()
-                  .map((fee) => (
-                    <Radio key={`np-fee-${fee}`} value={fee}>
-                      <Text whiteSpace="nowrap">{`${fee} %`}</Text>
-                    </Radio>
-                  ))}
-              </Stack>
-            </RadioGroup>
-          </Flex>
-        )}
-      </Flex>
+      </Stack>
+
+      {createsNewPool && (
+        <Flex direction="column">
+          <Text color="gray.500" align="start" my={2}>
+            choose a pool fee
+          </Text>
+          <RadioGroup onChange={setNewPoolFee} value={newPoolFee}>
+            <Stack direction="row" spacing={6}>
+              {Object.keys(predefinedFees)
+                .sort()
+                .map((fee) => (
+                  <Radio key={`np-fee-${fee}`} value={fee}>
+                    <Text whiteSpace="nowrap">{`${fee} %`}</Text>
+                  </Radio>
+                ))}
+            </Stack>
+          </RadioGroup>
+        </Flex>
+      )}
 
       <Button
         mt={3}

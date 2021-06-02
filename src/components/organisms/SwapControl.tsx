@@ -1,8 +1,7 @@
 import { Button } from '@chakra-ui/button';
-import { FormControl, FormErrorMessage, FormHelperText } from '@chakra-ui/form-control';
-import { Input, InputGroup, InputRightAddon } from '@chakra-ui/input';
-import { Box, Flex, HStack, Text, VStack } from '@chakra-ui/layout';
-import { Select } from '@chakra-ui/select';
+import { FormControl, FormErrorMessage } from '@chakra-ui/form-control';
+import { Input, InputGroup } from '@chakra-ui/input';
+import { Flex, Stack, Text } from '@chakra-ui/layout';
 import React, {
   FormEvent,
   useCallback,
@@ -12,7 +11,7 @@ import React, {
   useState,
 } from 'react';
 
-import { setField, setNumericalField } from '../../helpers';
+import { setNumericalField } from '../../helpers';
 import { Pool } from '../../lib/Pool';
 import { Token, TokenFeature } from '../../lib/Token';
 import TokenValueChooser from '../molecules/TokenValueChooser';
@@ -123,7 +122,7 @@ export default function SwapControl({
       justify="space-between"
       h="100%"
       autoComplete="off">
-      <Flex direction="column">
+      <Stack direction="column" spacing={-1}>
         <TokenValueChooser
           onTokenChanged={onFromChanged}
           tokens={fromOptions}
@@ -165,7 +164,8 @@ export default function SwapControl({
             there's no {from.symbol}|{to.symbol} pool
           </Text>
         )}
-      </Flex>
+      </Stack>
+
       <Button
         mt={3}
         size="lg"

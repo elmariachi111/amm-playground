@@ -58,12 +58,12 @@ export default function RedeemForm({
           selectPool(redeemablePools.find((p) => p.poolToken.symbol === symbol));
         }}
         value={selectedPool?.poolToken.symbol}>
-        <Stack spacing={5} direction="column">
+        <Stack spacing={-1} direction="column">
           {redeemablePools.map((pool) => (
             <Flex
               bg="white"
-              p={2}
-              py={4}
+              p={4}
+              borderRadius={4}
               border="1px solid"
               borderColor="gray.200"
               justify="space-between"
