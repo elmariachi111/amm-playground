@@ -32,6 +32,11 @@ export default extendTheme({
   },
   components: {
     Button,
+    Link: {
+      baseStyle: {
+        color: 'linkedin.500',
+      },
+    },
     Heading: {
       baseStyle: {
         fontWeight: 400,

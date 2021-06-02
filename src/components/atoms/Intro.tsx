@@ -33,8 +33,8 @@ export default function Intro({setDefaults}: {setDefaults: () => void}) {
       <Box>
         <Heading size="lg">Welcome to the <b>Automated Market Maker</b> Simulator</Heading>
         
-        <Text my={3}>This is an <Link isExternal href="https://academy.binance.com/en/articles/what-is-an-automated-market-maker-amm" color={linkColor}>automated market maker</Link> <b>simulator</b>. {' '}
-          It's all <Link color={linkColor} isExternal href="https://github.com/elmariachi111/amm-playground">built in <b>plain Typescript</b></Link>, no chain, no gas, no tx, no db involved.
+        <Text my={3}>This is an <Link isExternal href="https://academy.binance.com/en/articles/what-is-an-automated-market-maker-amm" >automated market maker</Link> <b>simulator</b>. {' '}
+          It's all <Link isExternal href="https://github.com/elmariachi111/amm-playground">built in <b>plain Typescript</b></Link>, no chain, no gas, no tx, no db involved.
         </Text>
         <Button 
           colorScheme="green"
@@ -63,7 +63,7 @@ export default function Intro({setDefaults}: {setDefaults: () => void}) {
             <Link
               href="https://www.gemini.com/cryptopedia/amm-what-are-automated-market-makers#section-constant-product-formula"
               isExternal>
-              Automated Market Makers
+              What's an Automated Market Maker?
             </Link>{' '}
             |{' '}
             <Link href="https://changelly.com/blog/automated-market-maker/" isExternal>
@@ -85,12 +85,14 @@ export default function Intro({setDefaults}: {setDefaults: () => void}) {
               V3
             </Link>
           </Box>
-
+          <Link href="https://docs.google.com/spreadsheets/d/1VH-lbF9RDUpVozGeA3BtWwypjW66MjcD1DnOYzcHmzk/edit#gid=0" isExternal>Uniswap Math</Link>
+          <Link href="https://defi-lab.xyz/" isExternal>defi-lab.xyz</Link>
           <Link
             href="https://ethresear.ch/t/improving-front-running-resistance-of-x-y-k-market-makers/1281"
             isExternal>
             on front running
           </Link>
+          
         </VStack>
 
       </Box>
