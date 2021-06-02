@@ -112,9 +112,9 @@ export default function App() {
               Pools
             </Heading>
             <SimpleGrid columns={2} spacing={5} mt={5} align="start">
-              {/*pools.map((p) => (
+              {pools.map((p) => (
                 <PoolView pool={p} key={`pool-${p.poolToken.symbol}`} />
-              ))*/}
+              ))}
             </SimpleGrid>
           </Box>
         )}

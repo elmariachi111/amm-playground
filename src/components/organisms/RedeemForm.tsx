@@ -35,9 +35,11 @@ export default function RedeemForm({
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
-    if (!selectedPool) return;
+    if (!selectedPool) {
+      return;
+    }
+
     const amount = selectedPool.poolToken.balanceOf(from);
-    debugger;
     selectedPool.withdrawLiquidity(from, amount);
     onDone && onDone();
   };
