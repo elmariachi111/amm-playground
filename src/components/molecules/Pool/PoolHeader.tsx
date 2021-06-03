@@ -7,7 +7,7 @@ import TokenSymbol from '../../atoms/TokenSymbol';
 
 const PoolHeader = ({ pool }: { pool: Pool }) => {
   return (
-    <Flex bg="gray.100" p={4}>
+    <Flex bg="gray.75" p={4}>
       <Flex align="center" gridGap={4}>
         <Box position="relative" h="40px" w="50px">
           <TokenSymbol size={20} symbol={pool.token1.symbol} position="absolute" />

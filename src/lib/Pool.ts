@@ -13,6 +13,7 @@ export interface PoolInfo {
   reserves: number[];
   prices: number[];
   feeRate: number;
+  collectedFees: Record<string, number>;
 }
 
 export class Pool extends Emitter<PoolEvents> {
@@ -25,12 +26,19 @@ export class Pool extends Emitter<PoolEvents> {
 
   public feeRate: number;
 
+  private collectedFees: Record<string, number>;
+
   constructor(address: string, token1: Token, token2: Token, feePercent: number = 0.0) {
     super();
     this.token1 = token1;
     this.token2 = token2;
     this.account = address;
     this.feeRate = feePercent / 100;
+    this.collectedFees = {
+      [token1.symbol]: 0,
+      [token2.symbol]: 0,
+    };
+
     this.poolToken = new Token(
       `${token1.symbol}|${token2.symbol}`,
       `${token1.symbol} ${token2.symbol} Pool Shares`,
@@ -73,6 +81,8 @@ export class Pool extends Emitter<PoolEvents> {
 
   buy(sender: string, from: Token, to: Token, amount: number) {
     const q = this.quote(from, to, amount);
+    this.collectedFees[from.symbol] += this.feeRate * amount;
+
     from.transfer(sender, this.account, amount);
     to.transfer(this.account, sender, q);
     this.emit('ReservesChanged', {
@@ -92,12 +102,13 @@ export class Pool extends Emitter<PoolEvents> {
       liqTokenSupply: this.poolToken.totalSupply,
       prices: this.prices(),
       feeRate: this.feeRate,
+      collectedFees: this.collectedFees,
     };
   }
 
   prices() {
     const bal1 = this.token1.balanceOf(this.account);
     const bal2 = this.token2.balanceOf(this.account);
-    return [bal1 / bal2, bal2 / bal1];
+    return [bal2 / bal1, bal1 / bal2];
   }
 }

@@ -15,9 +15,7 @@ const MintForm = ({ token }: { token: Token }) => {
   const [recipient, setRecipient] = useState<string>('');
 
   const mint = (e: FormEvent) => {
-    console.log(toMint);
     e.preventDefault();
-    console.log(toMint);
     token.mint(toMint, recipient);
   };
   const inputBg = useColorModeValue('white', 'gray.800');
