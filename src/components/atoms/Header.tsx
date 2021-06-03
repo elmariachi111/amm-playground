@@ -11,7 +11,7 @@ export function Header() {
   const { colorMode, toggleColorMode } = useColorMode();
 
   return (
-    <Box bg="gray.75" borderBottom="1px solid" borderColor="gray.200">
+    <Box bg="gray.100" borderBottom="1px solid" borderColor="gray.200">
       <Container maxW="1800px" py={5}>
         <Flex
           maxW="50%"

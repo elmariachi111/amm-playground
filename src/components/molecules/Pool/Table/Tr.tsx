@@ -7,6 +7,6 @@ const Tr = ({
 }: {
   odd?: undefined | boolean;
   children: React.ReactNode;
-}) => <ChTr bg={odd ? 'white' : 'gray.100'}>{children}</ChTr>;
+}) => <ChTr bg={odd ? 'white' : 'gray.75'}>{children}</ChTr>;
 
 export default Tr;

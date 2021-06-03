@@ -21,23 +21,23 @@ const PoolTokenRow = ({
 }) => {
   return (
     <Tr odd={odd}>
-      <Td>
+      <Td borderColor="gray.300" borderTop="1px solid">
         <Flex align="center" gridGap={2}>
           <TokenSymbol symbol={pool.poolToken.symbol} size={10} />
           <Text>{pool.poolToken.symbol}</Text>
         </Flex>
       </Td>
-      <Td>
+      <Td borderColor="gray.300" borderTop="1px solid">
         <PfxVal pfx="sup" val={poolInfoCur.liqTokenSupply} />
       </Td>
-      <Td>
+      <Td borderColor="gray.300" borderTop="1px solid">
         <Diff
           cur={poolInfoCur.liqTokenSupply}
           last={poolInfoLast?.liqTokenSupply}
           type="abs"
         />
       </Td>
-      <Td>
+      <Td borderColor="gray.300" borderTop="1px solid">
         <PfxVal pfx="sup" val={poolInfoLast?.liqTokenSupply} />
       </Td>
     </Tr>

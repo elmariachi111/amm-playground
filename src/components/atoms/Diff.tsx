@@ -17,10 +17,10 @@ const Diff = ({
   const abs = cur - last;
   const change = (cur * 100) / last;
   const rel = change > 100 ? change - 100 : 100 - change;
-  const color = abs > 0 ? 'green.300' : 'red.300';
+  const color = abs > 0 ? 'green.300' : 'red.500';
   const val = type === 'abs' ? abs.toFixed(2) : rel.toFixed(2);
   return (
-    <Text color={color}>
+    <Text color={color} fontWeight="medium">
       {val} {type == 'rel' ? '%' : ''}
     </Text>
   );

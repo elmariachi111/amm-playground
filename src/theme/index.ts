@@ -12,8 +12,8 @@ export default extendTheme({
   },
   colors: {
     gray: {
-      75: '#f7f8fa',
-      100: '#f6f9ff',
+      75: '#f6f9ff',
+      100: '#f7f8fa',
     },
     green: {
       500: '#1dd08e',

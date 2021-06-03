@@ -2,42 +2,65 @@ import { Flex, Text } from '@chakra-ui/layout';
 import { Td } from '@chakra-ui/table';
 import React from 'react';
 
+import { Pool, PoolInfo } from '../../../../lib/Pool';
 import { Token } from '../../../../lib/Token';
+import Diff from '../../../atoms/Diff';
 import PfxVal from '../../../atoms/PfxVal';
 import TokenSymbol from '../../../atoms/TokenSymbol';
 import Tr from './Tr';
 
-const FeesRow = ({ poolInfos }: { poolInfos: PoolInfo[]; odd?: boolean | undefined }) => {
+const FeesRow = ({
+  odd,
+  pool,
+  poolInfoCur,
+  poolInfoLast,
+}: {
+  odd?: boolean | undefined;
+  pool: Pool;
+  poolInfoCur: PoolInfo;
+  poolInfoLast: PoolInfo | null;
+}) => {
   return (
     <>
       <Tr odd={odd}>
-        <Td rowSpan={2}>
-          <Flex align="center" gridGap={2}>
-            <TokenSymbol symbol={token.symbol} size={10} />
-            <Text>{token.symbol}</Text>
-          </Flex>
+        <Td rowSpan={2} borderColor="gray.300" borderTop="1px solid">
+          <Text>Fees</Text>
         </Td>
-        <Td>
-          <PfxVal pfx="vol" val={reserves.toFixed(2)} />
+        <Td borderColor="gray.300" borderTop="1px solid">
+          <PfxVal
+            pfx="sum"
+            val={poolInfoCur?.collectedFees[0]}
+            sfx={pool.token1.symbol}
+          />
         </Td>
-        <Td>
-          <Text color="green.300">501</Text>
+        <Td borderColor="gray.300" borderTop="1px solid">
+          <Diff
+            cur={poolInfoCur.collectedFees[0]}
+            last={poolInfoLast?.collectedFees[0]}
+            type="abs"
+          />
         </Td>
-        <Td>
-          <PfxVal pfx="vol" val={reserves.toFixed(2)} />
+        <Td borderColor="gray.300" borderTop="1px solid">
+          <PfxVal pfx="sum" val={poolInfoCur.collectedFees[1]} sfx={pool.token1.symbol} />
         </Td>
       </Tr>
       <Tr odd={odd}>
-        <Td>
-          <PfxVal pfx="pri" val={price.toFixed(2)} sfx={otherToken.symbol} />
+        <Td borderColor="gray.300" borderTop="1px solid">
+          <PfxVal pfx="sum" val={poolInfoCur.collectedFees[1]} sfx={pool.token2.symbol} />
         </Td>
-        <Td>
-          <Flex>
-            <Text color="green.300">25%</Text>
-          </Flex>
+        <Td borderColor="gray.300" borderTop="1px solid">
+          <Diff
+            cur={poolInfoCur.collectedFees[1]}
+            last={poolInfoLast?.collectedFees[1]}
+            type="abs"
+          />
         </Td>
-        <Td>
-          <PfxVal pfx="pri" val={price.toFixed(2)} sfx={otherToken.symbol} />
+        <Td borderColor="gray.300" borderTop="1px solid">
+          <PfxVal
+            pfx="sum"
+            val={poolInfoLast?.collectedFees[1]}
+            sfx={pool.token1.symbol}
+          />
         </Td>
       </Tr>
     </>

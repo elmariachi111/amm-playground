@@ -29,38 +29,42 @@ const TokenRow = ({
   return (
     <>
       <Tr odd={odd}>
-        <Td rowSpan={2}>
+        <Td
+          rowSpan={2}
+          borderColor="gray.300"
+          borderTop="1px solid"
+          borderBottom="1px solid">
           <Flex align="center" gridGap={2}>
             <TokenSymbol symbol={token.symbol} size={10} />
             <Text>{token.symbol}</Text>
           </Flex>
         </Td>
-        <Td>
+        <Td borderColor="gray.300" borderTop="1px solid">
           <PfxVal pfx="vol" val={poolInfoCur.reserves[tokenIdx]} />
         </Td>
-        <Td>
+        <Td borderColor="gray.300" borderTop="1px solid">
           <Diff
             cur={poolInfoCur.reserves[tokenIdx]}
             last={poolInfoLast?.reserves[tokenIdx]}
             type="abs"
           />
         </Td>
-        <Td>
+        <Td borderColor="gray.300" borderTop="1px solid">
           <PfxVal pfx="vol" val={poolInfoLast?.reserves[tokenIdx]} />
         </Td>
       </Tr>
       <Tr odd={odd}>
-        <Td>
+        <Td borderColor="gray.300" borderTop="1px solid">
           <PfxVal pfx="pri" val={poolInfoCur.prices[tokenIdx]} sfx={otherToken.symbol} />
         </Td>
-        <Td>
+        <Td borderColor="gray.300" borderTop="1px solid">
           <Diff
             cur={poolInfoCur.prices[tokenIdx]}
             last={poolInfoLast?.prices[tokenIdx]}
             type="rel"
           />
         </Td>
-        <Td>
+        <Td borderColor="gray.300" borderTop="1px solid">
           <PfxVal
             pfx="pri"
             val={poolInfoLast?.prices[tokenIdx]}

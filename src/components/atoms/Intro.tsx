@@ -1,5 +1,4 @@
 import { Button } from '@chakra-ui/button';
-import { CloseButton } from '@chakra-ui/close-button';
 import { useColorModeValue } from '@chakra-ui/color-mode';
 import { useDisclosure } from '@chakra-ui/hooks';
 import {
@@ -11,9 +10,7 @@ import {
   Text,
   VStack
 } from '@chakra-ui/layout';
-import { Collapse } from '@chakra-ui/transition';
 import React from 'react';
-import { FaGratipay } from 'react-icons/fa';
 
 export default function Intro({setDefaults}: {setDefaults: () => void}) {
   const { isOpen, onClose } = useDisclosure({ defaultIsOpen: true });
@@ -22,7 +19,7 @@ export default function Intro({setDefaults}: {setDefaults: () => void}) {
   const linkColor = useColorModeValue('linkedin.600', 'linkedin.300');
   
   return( 
-  <Box bg="gray.100" fontSize="lg">
+  <Box bg="gray.75" fontSize="lg">
     <Container maxW="1800px">
   
     <Grid
