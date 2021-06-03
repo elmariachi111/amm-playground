@@ -84,7 +84,7 @@ const PoolView = ({ pool }: { pool: Pool }) => {
               </Td>
               <Td></Td>
               <Td>
-                <PfxVal pfx="k" val={poolInfo.k.toFixed()} />
+                <PfxVal pfx="k" val={lastPoolInfo?.k.toFixed()} />
               </Td>
             </Tr>
           </Tbody>

@@ -105,7 +105,10 @@ export class Pool extends Emitter<PoolEvents> {
       collectedFees: this.collectedFees,
     };
   }
-
+  price(token: Token) {
+    const other = token === this.token1 ? this.token2 : this.token1;
+    return other.balanceOf(this.account) / token.balanceOf(this.account);
+  }
   prices() {
     const bal1 = this.token1.balanceOf(this.account);
     const bal2 = this.token2.balanceOf(this.account);

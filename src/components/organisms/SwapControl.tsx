@@ -27,6 +27,8 @@ export default function SwapControl({
 }) {
   const [amount, setAmount] = useState<number>(0);
   const [quote, setQuote] = useState<number>(0);
+  const [price, setPrice] = useState<number>();
+
   const [fromOptions, setFromOptions] = useState<Token[]>([]);
   const [toOptions, setToOptions] = useState<Token[]>([]);
   const [from, setFrom] = useState<Token>();
@@ -43,11 +45,12 @@ export default function SwapControl({
   }, [from]);
 
   const updateQuote = useCallback(() => {
-    console.debug('uip quote', amount);
     if (amount && pool && from && to) {
       setQuote(pool.quote(from, to, amount));
+      setPrice(pool.price(from));
     } else {
       setQuote(0);
+      setPrice(0);
     }
   }, [amount, pool]);
 
@@ -56,8 +59,8 @@ export default function SwapControl({
   useEffect(() => {
     if (pool) {
       const off: Array<() => void> = [];
-      off.push(pool.on('LiquidityChanged', (e) => updateQuote()));
-      off.push(pool.on('ReservesChanged', (e) => updateQuote()));
+      off.push(pool.on('LiquidityChanged', updateQuote));
+      off.push(pool.on('ReservesChanged', updateQuote));
       updateQuote();
       return () => {
         for (const _off of off) _off();
@@ -129,7 +132,7 @@ export default function SwapControl({
           selected={from}
           isFirst>
           <FormControl id="amount" isInvalid={!hasSufficientFunds}>
-            <InputGroup>
+            <InputGroup alignItems="center">
               <Input
                 border="none"
                 size="lg"
@@ -140,6 +143,16 @@ export default function SwapControl({
                 ref={amtRef}
                 onChange={setNumericalField(setAmount)}
               />
+              {from && (
+                <Button
+                  size="xs"
+                  onClick={() => {
+                    setAmount(from.balanceOf(sender));
+                    amtRef.current.value = from.balanceOf(sender);
+                  }}>
+                  Max
+                </Button>
+              )}
             </InputGroup>
             <FormErrorMessage>not enough funds</FormErrorMessage>
           </FormControl>
@@ -151,16 +164,23 @@ export default function SwapControl({
           </InputGroup>
         </TokenValueChooser>
 
-        {pool && pool.feeRate > 0 && (
+        {from && to && price && (
           <Text color="gray.500" align="right" pt={2}>
+            1 {from.symbol} = {price.toFixed(4)} {to.symbol}{' '}
+          </Text>
+        )}
+
+        {pool && pool.feeRate > 0 && (
+          <Text color="gray.500" align="right">
             pool takes a {pool.feeRate * 100}% swap fee
             {amount > 0 && from && (
               <Text fontSize="xs"> ({`${amount * pool.feeRate} ${from.symbol}`})</Text>
             )}
           </Text>
         )}
+
         {from && to && !pool && (
-          <Text color="red.300" align="right" my={2}>
+          <Text color="red.300" align="right" pt={2}>
             there's no {from.symbol}|{to.symbol} pool
           </Text>
         )}

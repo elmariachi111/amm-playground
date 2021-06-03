@@ -29,37 +29,45 @@ const FeesRow = ({
         <Td borderColor="gray.300" borderTop="1px solid">
           <PfxVal
             pfx="sum"
-            val={poolInfoCur?.collectedFees[0]}
+            val={poolInfoCur?.collectedFees[pool.token1.symbol]}
             sfx={pool.token1.symbol}
           />
         </Td>
         <Td borderColor="gray.300" borderTop="1px solid">
           <Diff
-            cur={poolInfoCur.collectedFees[0]}
-            last={poolInfoLast?.collectedFees[0]}
-            type="abs"
-          />
-        </Td>
-        <Td borderColor="gray.300" borderTop="1px solid">
-          <PfxVal pfx="sum" val={poolInfoCur.collectedFees[1]} sfx={pool.token1.symbol} />
-        </Td>
-      </Tr>
-      <Tr odd={odd}>
-        <Td borderColor="gray.300" borderTop="1px solid">
-          <PfxVal pfx="sum" val={poolInfoCur.collectedFees[1]} sfx={pool.token2.symbol} />
-        </Td>
-        <Td borderColor="gray.300" borderTop="1px solid">
-          <Diff
-            cur={poolInfoCur.collectedFees[1]}
-            last={poolInfoLast?.collectedFees[1]}
+            cur={poolInfoCur.collectedFees[pool.token1.symbol]}
+            last={poolInfoLast?.collectedFees[pool.token1.symbol]}
             type="abs"
           />
         </Td>
         <Td borderColor="gray.300" borderTop="1px solid">
           <PfxVal
             pfx="sum"
-            val={poolInfoLast?.collectedFees[1]}
+            val={poolInfoLast?.collectedFees[pool.token1.symbol]}
             sfx={pool.token1.symbol}
+          />
+        </Td>
+      </Tr>
+      <Tr odd={odd}>
+        <Td borderColor="gray.300" borderTop="1px solid">
+          <PfxVal
+            pfx="sum"
+            val={poolInfoCur.collectedFees[pool.token2.symbol]}
+            sfx={pool.token2.symbol}
+          />
+        </Td>
+        <Td borderColor="gray.300" borderTop="1px solid">
+          <Diff
+            cur={poolInfoCur.collectedFees[pool.token2.symbol]}
+            last={poolInfoLast?.collectedFees[pool.token2.symbol]}
+            type="abs"
+          />
+        </Td>
+        <Td borderColor="gray.300" borderTop="1px solid">
+          <PfxVal
+            pfx="sum"
+            val={poolInfoLast?.collectedFees[pool.token2.symbol]}
+            sfx={pool.token2.symbol}
           />
         </Td>
       </Tr>
