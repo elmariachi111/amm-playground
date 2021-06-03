@@ -4,6 +4,7 @@
   "license": "MIT",
   "devDependencies": {
     "@parcel/transformer-image": "2.0.0-beta.2",
+    "@parcel/transformer-typescript-tsc": "^2.0.0-alpha.3",
     "@types/react": "^17.0.4",
     "@types/react-dom": "^17.0.3",
     "@typescript-eslint/eslint-plugin": "^4.22.1",
@@ -28,20 +29,25 @@
     "@download/blockies": "^1.0.3",
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
+    "@fontsource/roboto": "^4.3.0",
     "@servie/events": "^3.0.0",
     "@ukstv/jazzicon-react": "^1.0.0",
     "framer-motion": "^4",
     "giticon": "^1.0.8",
     "gradient-avatar": "^1.0.2",
+    "hsl-rgb": "^1.0.0",
+    "hsl-triad": "^1.0.0",
     "parcel": "^2.0.0-beta.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-icons": "^4.2.0",
     "react-identicons": "^1.2.5",
-    "react-vis": "^1.11.7"
+    "react-vis": "^1.11.7",
+    "rgb-hex": "^4.0.0",
+    "string-hash": "^1.1.3"
   },
   "scripts": {
-    "start": "parcel index.html",
-    "build": "parcel build index.html --no-scope-hoist --dist-dir dist/app"
+    "start": "parcel src/index.html",
+    "build": "parcel build src/index.html --no-scope-hoist --dist-dir dist/app"
   }
 }
