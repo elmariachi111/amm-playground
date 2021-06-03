@@ -152,7 +152,7 @@ export default function SwapControl({
         </TokenValueChooser>
 
         {pool && pool.feeRate > 0 && (
-          <Text color="gray.500" align="right" my={2}>
+          <Text color="gray.500" align="right" pt={2}>
             pool takes a {pool.feeRate * 100}% swap fee
             {amount > 0 && from && (
               <Text fontSize="xs"> ({`${amount * pool.feeRate} ${from.symbol}`})</Text>

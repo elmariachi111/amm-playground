@@ -69,6 +69,12 @@ export default function AddLiquidityForm({
       setter(newVal);
     };
   };
+  useEffect(() => {
+    if (!(pool && secondToken)) return;
+    const pidx = pool.token1 === firstToken ? 0 : 1;
+    const price = pool.poolInfo().prices[pidx] * amt1;
+    setAmt2(price);
+  }, [amt1, pool, secondToken]);
 
   const canSubmit = useMemo(() => {
     if (!firstToken || !secondToken) return false;
