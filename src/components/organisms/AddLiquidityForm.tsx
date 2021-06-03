@@ -61,7 +61,7 @@ export default function AddLiquidityForm({
       if (pool.token2 == firstToken && pool.token1 == secondToken) return true;
     });
     setPool(pool);
-  }, [firstToken, secondToken]);
+  }, [pools, firstToken, secondToken]);
 
   const updateAmount = (setter: (n: number) => void) => {
     return (amt: string) => {
@@ -74,7 +74,7 @@ export default function AddLiquidityForm({
     const pidx = pool.token1 === firstToken ? 0 : 1;
     const price = pool.poolInfo().prices[pidx] * amt1;
     setAmt2(price);
-  }, [amt1, pool, secondToken]);
+  }, [pool, amt1, secondToken]);
 
   const canSubmit = useMemo(() => {
     if (!firstToken || !secondToken) return false;

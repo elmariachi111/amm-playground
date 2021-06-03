@@ -1,26 +1,28 @@
 import { Button } from '@chakra-ui/button';
 import { Flex, Stack, Text } from '@chakra-ui/layout';
 import { Radio, RadioGroup } from '@chakra-ui/radio';
-import React, { FormEvent, useCallback, useEffect, useState } from 'react';
+import React, { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Pool } from '../../lib/Pool';
 
-export default function RedeemForm({
-  pools,
-  from,
-  onDone,
-}: {
-  pools: Pool[];
-  from: string;
-  onDone?: () => void;
-}) {
+export default function RedeemForm({ pools, from }: { pools: Pool[]; from: string }) {
   const [redeemablePools, setRedeemablePools] = useState<Pool[]>([]);
-  const [selectedPool, selectPool] = useState<Pool>();
+  const [selectedPool, selectPool] = useState<Pool | undefined | null>();
+
+  const onSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    if (!selectedPool) {
+      return;
+    }
+
+    const amount = selectedPool.poolToken.balanceOf(from);
+    selectedPool.withdrawLiquidity(from, amount);
+  };
 
   const updatePools = useCallback(() => {
-    const _pools = pools.filter((p) => p.poolToken.balanceOf(from) > 1);
-    setRedeemablePools(_pools);
-  }, [from, pools]);
+    setRedeemablePools(pools.filter((p) => p.poolToken.balanceOf(from) > 0));
+    selectPool(null);
+  }, [pools, from]);
 
   useEffect(() => {
     updatePools();
@@ -32,17 +34,6 @@ export default function RedeemForm({
       off.map((_off) => _off());
     };
   }, [pools, from]);
-
-  const onSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    if (!selectedPool) {
-      return;
-    }
-
-    const amount = selectedPool.poolToken.balanceOf(from);
-    selectedPool.withdrawLiquidity(from, amount);
-    onDone && onDone();
-  };
 
   return (
     <Flex
@@ -57,7 +48,7 @@ export default function RedeemForm({
         onChange={(symbol) => {
           selectPool(redeemablePools.find((p) => p.poolToken.symbol === symbol));
         }}
-        value={selectedPool?.poolToken.symbol}>
+        value={selectedPool ? selectedPool.poolToken.symbol : null}>
         <Stack spacing={-1} direction="column">
           {redeemablePools.map((pool) => (
             <Flex

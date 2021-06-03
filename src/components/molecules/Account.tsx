@@ -45,9 +45,6 @@ export default function Account({
   }, [tokens]);
 
   const accountColors = colorRange(address);
-  const bgGradient = {
-    bgGradient: `linear(to-b, ${accountColors[0]}, ${accountColors[1]})`,
-  };
 
   const isPool = !!pools.find((p) => p.account === address);
 
@@ -61,14 +58,20 @@ export default function Account({
       overflow="hidden"
       {...(selected ? { width: '110%' } : {})}>
       {!isPool && (
-        <Flex {...bgGradient} minWidth="4px">
+        <Flex
+          bgGradient={`linear(to-b, ${accountColors[0]}, ${accountColors[1]})`}
+          minWidth="4px">
           {' '}
         </Flex>
       )}
       <Flex
         direction="column"
         width="100%"
-        {...(selected ? bgGradient : { bg: 'gray.100' })}>
+        {...(selected
+          ? {
+              bgGradient: `linear(to-r, ${accountColors[0]}, ${accountColors[1]})`,
+            }
+          : { bg: 'gray.100' })}>
         <Flex p={2} px={4} justifyContent="space-between" align="center">
           <Text
             fontSize="xl"

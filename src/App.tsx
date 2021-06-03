@@ -26,34 +26,65 @@ export default function App() {
     setPools((old) => [...old, pool]);
   };
 
-  const setSomeDefaults = () => {
-    const eth = new Token('ETH', 'Eth');
-    setTokens([]);
-    addToken(eth);
+  const removePool = (pool: Pool) => {
+    const poolSymbol = pool.poolToken.symbol;
+    setTokens((old) => old.filter((o) => o.symbol !== poolSymbol));
+    setPools((old) => old.filter((o) => o.poolToken.symbol !== poolSymbol));
+  };
 
+  const setSomeDefaults = () => {
+    setPools([]);
+    const eth = new Token('ETH', 'Eth');
     const dai = new Token('DAI', 'Dai');
+    setTokens([eth, dai]);
 
     dai.mint(1_000_000, 'alice');
     eth.mint(1000, 'alice');
+
     dai.mint(1_000_000, 'bob');
     eth.mint(1000, 'bob');
-    addToken(dai);
 
-    setAccounts(['alice', 'bob']); //pool.account
     const pool = new Pool('0xethdaipool', eth, dai, 0.3);
     pool.addLiquidity('alice', 10, 3000 * 10);
+    setAccounts(['alice', 'bob', '0xethdaipool']); //pool.account
     addPool(pool);
   };
+
   const includeAccount = (acc: string) => {
     if (!accounts.includes(acc)) {
-      setAccounts([...accounts, acc]);
+      setAccounts([...accounts, acc].sort((a, b) => (a.startsWith('0x') ? 1 : -1)));
     }
   };
+
+  useEffect(() => {
+    const eth = new Token('ETH', 'Eth');
+    setTokens([eth]);
+  }, []);
+
+  useEffect(() => {
+    const off = pools.flatMap((p) =>
+      p.poolToken.on('Burnt', () => {
+        if (p.poolToken.totalSupply === 0) {
+          console.log('pool removed');
+          setPools((old) => old.filter((o) => o.poolToken !== p.poolToken));
+        }
+      }),
+    );
+    return () => {
+      off.map((_off) => _off());
+    };
+  }, [pools]);
 
   useEffect(() => {
     const off = tokens.flatMap((t) => [
       t.on('Minted', (e) => includeAccount(e.to)),
       t.on('Transferred', (e) => includeAccount(e.to)),
+      t.on('Burnt', (e) => {
+        if (t.totalSupply === 0) {
+          console.log('removing token after burn');
+          setTokens((old) => old.filter((o) => o.symbol != t.symbol));
+        }
+      }),
     ]);
 
     return () => {
@@ -64,7 +95,7 @@ export default function App() {
   return (
     <>
       <Header />
-      <Intro setDefaults={setSomeDefaults} />
+      <Intro setDefaults={setSomeDefaults} tokens={tokens} addToken={addToken} />
       <Container maxW="1800px" my={5}>
         {/*<SimpleGrid py={8} columns={4} spacing={8} minChildWidth="460px">*/}
         <Grid templateColumns="repeat(12, 1fr)" gap={10}>

@@ -54,7 +54,7 @@ const AMM = ({
             <Heading size="lg" mb={3}>
               Redeem
             </Heading>
-            <RedeemForm from={account} pools={pools} onDone={() => {}} />
+            <RedeemForm from={account} pools={pools} />
           </Flex>
         </SimpleGrid>
       ) : (
