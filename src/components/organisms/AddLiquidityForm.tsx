@@ -71,9 +71,19 @@ export default function AddLiquidityForm({
   };
   useEffect(() => {
     if (!(pool && secondToken)) return;
-    const pidx = pool.token1 === firstToken ? 0 : 1;
-    const price = pool.poolInfo().prices[pidx] * amt1;
-    setAmt2(price);
+    const updateBestPrice = () => {
+      const pidx = pool.token1 === firstToken ? 0 : 1;
+      const price = pool.poolInfo().prices[pidx] * amt1;
+      setAmt2(price);
+    };
+    const off = [
+      pool.on('LiquidityChanged', updateBestPrice),
+      pool.on('ReservesChanged', updateBestPrice),
+    ];
+    updateBestPrice();
+    return () => {
+      off.map((o) => o());
+    };
   }, [pool, amt1, secondToken]);
 
   const canSubmit = useMemo(() => {

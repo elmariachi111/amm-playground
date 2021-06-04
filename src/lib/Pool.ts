@@ -102,7 +102,7 @@ export class Pool extends Emitter<PoolEvents> {
       liqTokenSupply: this.poolToken.totalSupply,
       prices: this.prices(),
       feeRate: this.feeRate,
-      collectedFees: this.collectedFees,
+      collectedFees: { ...this.collectedFees },
     };
   }
   price(token: Token) {
