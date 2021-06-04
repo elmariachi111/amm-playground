@@ -22,7 +22,8 @@ const PoolDiagram = ({ pool, poolInfos }: { pool: Pool; poolInfos: PoolInfo[] })
   useEffect(() => {
     const steps = 100;
     const _series = [];
-    for (const poolInfo of poolInfos) {
+    const pi = poolInfos.filter((p) => !!p);
+    for (const poolInfo of pi) {
       const data = [];
       for (let i = 1; i <= steps; i++) {
         const x = (i / steps) * 10; //(1 * poolInfo.reserves[0]);
@@ -31,12 +32,14 @@ const PoolDiagram = ({ pool, poolInfos }: { pool: Pool; poolInfos: PoolInfo[] })
       }
       _series.push(data);
     }
-    console.log(_series);
+    //console.log(_series);
     setSeries(_series);
   }, [poolInfos]);
 
   return (
-    <XYPlot width={300} height={300}>
+    <XYPlot width={300} height={300} margin={{ left: 55 }}>
+      <XAxis title={pool.token1.symbol} />
+      <YAxis title={pool.token2.symbol} />
       <Hint value={selectedDataPoint} align={{ vertical: 'top', horizontal: 'right' }}>
         <Box
           bg="rgba(255,255,255,0.9)"
@@ -47,13 +50,17 @@ const PoolDiagram = ({ pool, poolInfos }: { pool: Pool; poolInfos: PoolInfo[] })
           <Text color="gray.600">
             {selectedDataPoint.x.toFixed(2)} {pool.token1.symbol}
           </Text>
-          <Text>
-            {selectedDataPoint.y.toFixed(2)} {pool.token2.symbol}
+          <Text color="gray.600">
+            {(poolInfos[0].k / selectedDataPoint.x).toFixed(2)} {pool.token2.symbol}
           </Text>
+          {poolInfos[1] && (
+            <Text color="gray.300">
+              {(poolInfos[1].k / selectedDataPoint.x).toFixed(2)} {pool.token2.symbol}
+            </Text>
+          )}
         </Box>
       </Hint>
-      <XAxis title={pool.token1.symbol} />
-      <YAxis title={pool.token2.symbol} />
+
       {series.map((_series, idx) => (
         <LineSeries
           key={`hist-${idx}`}

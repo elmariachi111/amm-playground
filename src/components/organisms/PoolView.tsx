@@ -1,4 +1,4 @@
-import { Flex, Stack, Text } from '@chakra-ui/layout';
+import { Box, Stack, Text } from '@chakra-ui/layout';
 import { Table, Tbody, Td, Th, Thead } from '@chakra-ui/table';
 import React, { useCallback, useEffect, useState } from 'react';
 
@@ -89,11 +89,11 @@ const PoolView = ({ pool }: { pool: Pool }) => {
             </Tr>
           </Tbody>
         </Table>
-        <Flex p={3}>
+        <Box p={3}>
           {poolInfo.reserves[0] + poolInfo.reserves[1] > 0 && (
-            <PoolDiagram pool={pool} poolInfos={[poolInfo]} />
+            <PoolDiagram pool={pool} poolInfos={[poolInfo, lastPoolInfo]} />
           )}
-        </Flex>
+        </Box>
       </Stack>
     </CardBox>
   );
