@@ -8,6 +8,7 @@ import { HiArrowRight } from 'react-icons/hi';
 
 import { colorRange, setField } from '../../../helpers';
 import { Token, TokenFeature } from '../../../lib/Token';
+import PfxVal from '../../atoms/PfxVal';
 import TokenSymbol from '../../atoms/TokenSymbol';
 
 const MintForm = ({ token }: { token: Token }) => {
@@ -64,6 +65,7 @@ const MintForm = ({ token }: { token: Token }) => {
 
 const TokenView = ({ token }: { token: Token }) => {
   const [totalSupply, setTotalSupply] = useState<number>(token.totalSupply);
+  const [marketPrice, setMarketPrice] = useState<number | undefined>(token.marketPrice);
 
   useEffect(() => {
     const off = [
@@ -72,6 +74,9 @@ const TokenView = ({ token }: { token: Token }) => {
       }),
       token.on('Burnt', (args) => {
         setTotalSupply(token.totalSupply);
+      }),
+      token.on('MarketPriceUpdated', (args) => {
+        setMarketPrice(args.price);
       }),
     ];
 
@@ -97,16 +102,14 @@ const TokenView = ({ token }: { token: Token }) => {
       <Flex direction="column" width="100%">
         <Flex p={3} align="center" justifyContent="space-between" bg="gray.100">
           <Flex align="center">
-            <TokenSymbol symbol={token.symbol} size={15} />
+            <TokenSymbol token={token} size={15} />
             <Text fontSize="xl" fontWeight="normal" maxW="400px" ml={2}>
               {token.symbol}
             </Text>
           </Flex>
-          <Flex gridGap={1} align="center" fontSize="sm">
-            <Text color="gray.400" textTransform="uppercase" fontWeight="bold">
-              Supply
-            </Text>
-            <Text>{totalSupply.toFixed(2)}</Text>
+          <Flex direction="column">
+            <PfxVal pfx="supply" val={totalSupply} />
+            {marketPrice && <PfxVal pfx="$" val={marketPrice} />}
           </Flex>
         </Flex>
         {token.feature !== TokenFeature.LiquidityToken && (

@@ -1,11 +1,14 @@
 import { Emitter } from '@servie/events';
 
+import { CoinInfo } from '../types/Coingecko';
+import { default as coinGeckoApi } from './Coingecko';
 import { Pool } from './Pool';
 
 interface TokenEvents {
   Minted: [{ to: string; amount: number }];
   Transferred: [{ from: string; to: string; amount: number }];
   Burnt: [{ from: string; amount: number }];
+  MarketPriceUpdated: [{ price: number }];
 }
 
 export enum TokenFeature {
@@ -22,12 +25,33 @@ export class Token extends Emitter<TokenEvents> {
   public readonly name: string;
 
   public pool: Pool | undefined;
+  public coinInfo?: CoinInfo;
+
+  public marketPrice?: number;
 
   constructor(symbol: string, name: string, feature = TokenFeature.ERC20) {
     super();
     this.symbol = symbol;
     this.name = name;
     this.feature = feature;
+  }
+
+  static fromCoinInfo(coinInfo: CoinInfo): Token {
+    const token = new Token(
+      coinInfo.symbol.toUpperCase(),
+      coinInfo.name,
+      TokenFeature.ERC20,
+    );
+    token.coinInfo = coinInfo;
+    return token;
+  }
+
+  async fetchMarketPrice(): Promise<number> {
+    if (!this.coinInfo) return 0;
+
+    this.marketPrice = await coinGeckoApi.getUSDCoinPrice(this.coinInfo.id);
+    this.emit('MarketPriceUpdated', { price: this.marketPrice });
+    return this.marketPrice;
   }
 
   mint(amount: number, to: string) {

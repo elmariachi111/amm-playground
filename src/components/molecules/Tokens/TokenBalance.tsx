@@ -48,7 +48,7 @@ export default function TokenBalance({
       </CircularProgress>
     ) : (
       <TokenSymbol
-        symbol={token.symbol}
+        token={token}
         mr={1}
         title={`${balance} ${token.name}`}
         shares={shares}

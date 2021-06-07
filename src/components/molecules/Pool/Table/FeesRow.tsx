@@ -1,12 +1,10 @@
-import { Flex, Text } from '@chakra-ui/layout';
+import { Text } from '@chakra-ui/layout';
 import { Td } from '@chakra-ui/table';
 import React from 'react';
 
 import { Pool, PoolInfo } from '../../../../lib/Pool';
-import { Token } from '../../../../lib/Token';
 import Diff from '../../../atoms/Diff';
 import PfxVal from '../../../atoms/PfxVal';
-import TokenSymbol from '../../../atoms/TokenSymbol';
 import Tr from './Tr';
 
 const FeesRow = ({

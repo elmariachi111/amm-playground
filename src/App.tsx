@@ -1,4 +1,12 @@
-import { Box, Container, Grid, GridItem, Heading, SimpleGrid } from '@chakra-ui/layout';
+import {
+  Box,
+  Container,
+  Grid,
+  GridItem,
+  Heading,
+  Link,
+  SimpleGrid,
+} from '@chakra-ui/layout';
 import React, { useEffect, useState } from 'react';
 
 import { Header } from './components/atoms/Header';
@@ -7,6 +15,7 @@ import Account from './components/molecules/Account';
 import NewToken from './components/molecules/Tokens/NewToken';
 import { TokenView } from './components/molecules/Tokens/TokenView';
 import AMM from './components/organisms/AMM';
+import CoinGeckoTokens from './components/organisms/CoinGeckoTokens';
 import { PoolView } from './components/organisms/PoolView';
 import { Pool } from './lib/Pool';
 import { Token } from './lib/Token';
@@ -57,11 +66,6 @@ export default function App() {
   };
 
   useEffect(() => {
-    const eth = new Token('ETH', 'Eth');
-    setTokens([eth]);
-  }, []);
-
-  useEffect(() => {
     const off = pools.flatMap((p) =>
       p.poolToken.on('Burnt', () => {
         if (p.poolToken.totalSupply === 0) {
@@ -97,9 +101,8 @@ export default function App() {
       <Header />
       <Intro setDefaults={setSomeDefaults} tokens={tokens} addToken={addToken} />
       <Container maxW="1800px" my={5}>
-        {/*<SimpleGrid py={8} columns={4} spacing={8} minChildWidth="460px">*/}
-        <Grid templateColumns="repeat(12, 1fr)" gap={10}>
-          <GridItem colSpan={3}>
+        <Grid templateRows="min-content" templateColumns="repeat(12, 1fr)" gap={10}>
+          <GridItem rowSpan={1} colSpan={3}>
             <Heading size="xl" mb={4}>
               Accounts
             </Heading>
@@ -115,7 +118,7 @@ export default function App() {
               />
             ))}
           </GridItem>
-          <GridItem colSpan={7}>
+          <GridItem rowSpan={1} colSpan={7}>
             <Heading size="xl" mb={3}>
               Interact
             </Heading>
@@ -126,7 +129,7 @@ export default function App() {
               poolAdded={addPool}
             />
           </GridItem>
-          <GridItem colSpan={2}>
+          <GridItem colSpan={2} rowSpan={2}>
             <Heading size="xl" mb={3}>
               Tokens
             </Heading>
@@ -134,21 +137,27 @@ export default function App() {
               <TokenView token={t} key={`token-${t.symbol}`} />
             ))}
             {<NewToken onNew={addToken} />}
-          </GridItem>
-        </Grid>
-
-        {tokens.length >= 2 && (
-          <Box>
-            <Heading mt={5} mb={3}>
-              Pools
+            <Heading size="md" mt={10}>
+              Adapt a token from
+              <Link isExternal href="https://www.coingecko.com/en" ml={1}>
+                CoinGecko
+              </Link>
             </Heading>
-            <SimpleGrid columns={2} spacing={5} mt={5} align="start">
-              {pools.map((p) => (
-                <PoolView pool={p} key={`pool-${p.poolToken.symbol}`} />
-              ))}
-            </SimpleGrid>
-          </Box>
-        )}
+            {<CoinGeckoTokens onNew={addToken} />}
+          </GridItem>
+          {pools.length > 0 && (
+            <GridItem colSpan={10} rowSpan={1} alignSelf="start">
+              <Heading mt={5} mb={3}>
+                Pools
+              </Heading>
+              <SimpleGrid columns={2} spacing={5} mt={5} align="start">
+                {pools.map((p) => (
+                  <PoolView pool={p} key={`pool-${p.poolToken.symbol}`} />
+                ))}
+              </SimpleGrid>
+            </GridItem>
+          )}
+        </Grid>
       </Container>
       <Header />
     </>
