@@ -28,6 +28,7 @@ export class Token extends Emitter<TokenEvents> {
   public coinInfo?: CoinInfo;
 
   public marketPrice?: number;
+  private lastFetch: number = 0;
 
   constructor(symbol: string, name: string, feature = TokenFeature.ERC20) {
     super();
@@ -48,8 +49,12 @@ export class Token extends Emitter<TokenEvents> {
 
   async fetchMarketPrice(): Promise<number> {
     if (!this.coinInfo) return 0;
+    const now = new Date().getTime();
+    if ((now - this.lastFetch) / 1000 < 3600) return this.marketPrice || 0;
 
     this.marketPrice = await coinGeckoApi.getUSDCoinPrice(this.coinInfo.id);
+    this.lastFetch = now;
+    console.log('fetched', this.marketPrice);
     this.emit('MarketPriceUpdated', { price: this.marketPrice });
     return this.marketPrice;
   }

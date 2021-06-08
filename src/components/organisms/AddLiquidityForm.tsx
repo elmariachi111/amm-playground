@@ -82,6 +82,7 @@ export default function AddLiquidityForm({
       token1.fetchMarketPrice(),
       token2.fetchMarketPrice(),
     ]);
+    if (marketPrices[0] === 0 || marketPrices[1] === 0) return NaN;
     return amt * (marketPrices[0] / marketPrices[1]);
   };
 
@@ -94,9 +95,10 @@ export default function AddLiquidityForm({
     if (!secondToken) return;
     const updateBestPrice = async () => {
       if (firstToken) {
+        const marketPrice = await predictPriceFromMarket(firstToken, secondToken, amt1);
         const _price = {
           pool: pool ? predictPriceFromPool(pool, firstToken, amt1) : 0,
-          market: await predictPriceFromMarket(firstToken, secondToken, amt1),
+          market: marketPrice,
         };
         setBestPrice(_price);
         //setAmt2(marketPrice || poolPrice || 0);
