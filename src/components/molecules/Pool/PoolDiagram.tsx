@@ -26,7 +26,8 @@ const PoolDiagram = ({ pool, poolInfos }: { pool: Pool; poolInfos: PoolInfo[] })
     for (const poolInfo of pi) {
       const data = [];
       for (let i = 1; i <= steps; i++) {
-        const x = (i / steps) * 10; //(1 * poolInfo.reserves[0]);
+        const x = (i / steps) * poolInfo.reserves[0];
+        //const y = poolInfo.reserves[1] - poolInfo.k / (x + poolInfo.reserves[0]);
         const y = poolInfo.k / x;
         data.push({ x, y });
       }

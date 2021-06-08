@@ -91,4 +91,8 @@ export class Token extends Emitter<TokenEvents> {
   balanceOf(from: string) {
     return this.balances[from] || 0;
   }
+
+  shareOf(from: string) {
+    return this.balanceOf(from) / this.totalSupply;
+  }
 }

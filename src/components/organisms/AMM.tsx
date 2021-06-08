@@ -37,7 +37,7 @@ const AMM = ({
           </Flex>
           <Flex direction="column">
             <Heading size="lg" mb={3}>
-              Provide
+              Deposit
             </Heading>
             {
               <AddLiquidityForm
