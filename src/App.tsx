@@ -17,6 +17,7 @@ import { TokenView } from './components/molecules/Tokens/TokenView';
 import AMM from './components/organisms/AMM';
 import CoinGeckoTokens from './components/organisms/CoinGeckoTokens';
 import { PoolView } from './components/organisms/PoolView';
+import { adaptCoin } from './lib/Coingecko';
 import { Pool } from './lib/Pool';
 import { Token } from './lib/Token';
 
@@ -41,10 +42,12 @@ export default function App() {
     setPools((old) => old.filter((o) => o.poolToken.symbol !== poolSymbol));
   };
 
-  const setSomeDefaults = () => {
+  const setSomeDefaults = async () => {
     setPools([]);
-    const eth = new Token('ETH', 'Eth');
-    const dai = new Token('DAI', 'Dai');
+    const eth = await adaptCoin('eth');
+    const dai = await adaptCoin('dai');
+    if (!eth || !dai) return;
+
     setTokens([eth, dai]);
 
     dai.mint(1_000_000, 'alice');
@@ -136,14 +139,14 @@ export default function App() {
             {tokens.map((t) => (
               <TokenView token={t} key={`token-${t.symbol}`} />
             ))}
-            {<NewToken onNew={addToken} />}
             <Heading size="md" mt={10}>
               Adapt a token from
               <Link isExternal href="https://www.coingecko.com/en" ml={1}>
                 CoinGecko
               </Link>
             </Heading>
-            {<CoinGeckoTokens onNew={addToken} />}
+            {<CoinGeckoTokens onNew={addToken} tokens={tokens} />}
+            {<NewToken onNew={addToken} />}
           </GridItem>
           {pools.length > 0 && (
             <GridItem colSpan={10} rowSpan={1} alignSelf="start">

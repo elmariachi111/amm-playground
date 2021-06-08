@@ -1,4 +1,5 @@
 import { CoinInfo } from '../types/Coingecko';
+import { Token } from './Token';
 
 //https://www.coingecko.com/en/api#explore-api
 const BASE_URL = 'https://api.coingecko.com/api/v3';
@@ -130,5 +131,17 @@ class API {
 }
 
 const api = new API();
+
+export const adaptCoin = async (symbol: string): Promise<Token | null> => {
+  const defaultCoins = await api.getCachedDefaulTokens();
+  const coinInfo = defaultCoins.find(
+    (ci) => ci.symbol.toLowerCase() === symbol.toLowerCase(),
+  );
+  if (!coinInfo) return null;
+
+  const token = Token.fromCoinInfo(coinInfo);
+  token.fetchMarketPrice();
+  return token;
+};
 
 export default api;
