@@ -103,7 +103,12 @@ const TokenView = ({ token }: { token: Token }) => {
         <Flex p={3} align="center" justifyContent="space-between" bg="gray.100">
           <Flex align="center">
             <TokenSymbol token={token} size={15} />
-            <Text fontSize="xl" fontWeight="normal" maxW="400px" ml={2}>
+            <Text
+              fontSize="xl"
+              fontWeight="normal"
+              maxW="400px"
+              ml={2}
+              title={token.coinInfo?.id || token.name}>
               {token.symbol}
             </Text>
           </Flex>

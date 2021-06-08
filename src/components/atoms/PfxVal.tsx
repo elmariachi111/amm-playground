@@ -5,10 +5,12 @@ const PfxVal = ({
   pfx,
   val,
   sfx,
+  onClick = () => {},
 }: {
   pfx: string;
   val: string | number | undefined;
   sfx?: string;
+  onClick?: () => void;
 }) => {
   let Val: React.ReactNode;
   switch (typeof val) {
@@ -23,7 +25,7 @@ const PfxVal = ({
   }
 
   return (
-    <Flex align="center">
+    <Flex align="center" onClick={onClick}>
       <Text
         color="gray.400"
         textTransform="uppercase"

@@ -1,13 +1,14 @@
 import { Button } from '@chakra-ui/button';
 import { FormControl } from '@chakra-ui/form-control';
 import { Input, InputGroup } from '@chakra-ui/input';
-import { Box, Flex, Stack, Text } from '@chakra-ui/layout';
+import { Flex, Stack, Text } from '@chakra-ui/layout';
 import { Radio, RadioGroup } from '@chakra-ui/radio';
 import React, { FormEvent, useEffect, useMemo, useState } from 'react';
 
-import { setField, setNumericalField } from '../../helpers';
+import { setField } from '../../helpers';
 import { Pool } from '../../lib/Pool';
 import { Token } from '../../lib/Token';
+import PfxVal from '../atoms/PfxVal';
 import TokenValueChooser from '../molecules/TokenValueChooser';
 
 const predefinedFees = {
@@ -36,7 +37,10 @@ export default function AddLiquidityForm({
   const [newPoolFee, setNewPoolFee] = useState<string | undefined>('0');
 
   const [pool, setPool] = useState<Pool>();
-
+  const [bestPrice, setBestPrice] = useState({
+    pool: 0,
+    market: 0,
+  });
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (!pool) {
@@ -56,6 +60,10 @@ export default function AddLiquidityForm({
   };
 
   useEffect(() => {
+    setAmt1(0);
+    setAmt2(0);
+  }, [address]);
+  useEffect(() => {
     const pool = pools.find((pool) => {
       if (pool.token1 == firstToken && pool.token2 == secondToken) return true;
       if (pool.token2 == firstToken && pool.token1 == secondToken) return true;
@@ -69,22 +77,42 @@ export default function AddLiquidityForm({
       setter(newVal);
     };
   };
+  const predictPriceFromMarket = async (token1: Token, token2: Token, amt: number) => {
+    const marketPrices = await Promise.all([
+      token1.fetchMarketPrice(),
+      token2.fetchMarketPrice(),
+    ]);
+    return amt * (marketPrices[0] / marketPrices[1]);
+  };
+
+  const predictPriceFromPool = (pool: Pool, from: Token, amt: number) => {
+    const pidx = pool.token1 === from ? 0 : 1;
+    return pool.poolInfo().prices[pidx] * amt;
+  };
+
   useEffect(() => {
-    if (!(pool && secondToken)) return;
-    const updateBestPrice = () => {
-      const pidx = pool.token1 === firstToken ? 0 : 1;
-      const price = pool.poolInfo().prices[pidx] * amt1;
-      setAmt2(price);
+    if (!secondToken) return;
+    const updateBestPrice = async () => {
+      if (firstToken) {
+        const _price = {
+          pool: pool ? predictPriceFromPool(pool, firstToken, amt1) : 0,
+          market: await predictPriceFromMarket(firstToken, secondToken, amt1),
+        };
+        setBestPrice(_price);
+        //setAmt2(marketPrice || poolPrice || 0);
+      }
     };
-    const off = [
-      pool.on('LiquidityChanged', updateBestPrice),
-      pool.on('ReservesChanged', updateBestPrice),
-    ];
+    const off = pool
+      ? [
+          pool.on('LiquidityChanged', updateBestPrice),
+          pool.on('ReservesChanged', updateBestPrice),
+        ]
+      : [];
     updateBestPrice();
     return () => {
       off.map((o) => o());
     };
-  }, [pool, amt1, secondToken]);
+  }, [pool, amt1, secondToken, firstToken]);
 
   const canSubmit = useMemo(() => {
     if (!firstToken || !secondToken) return false;
@@ -151,6 +179,24 @@ export default function AddLiquidityForm({
             </InputGroup>
           </FormControl>
         </TokenValueChooser>
+        <Stack direction="column" py={3}>
+          {bestPrice.market > 0 && (
+            <PfxVal
+              onClick={() => setAmt2(bestPrice.market)}
+              pfx="market"
+              val={bestPrice.market}
+              sfx={`${secondToken?.symbol}/${firstToken?.symbol}`}
+            />
+          )}
+          {bestPrice.pool > 0 && (
+            <PfxVal
+              onClick={() => setAmt2(bestPrice.pool)}
+              pfx="pool"
+              val={bestPrice.pool}
+              sfx={`${secondToken?.symbol}/${firstToken?.symbol}`}
+            />
+          )}
+        </Stack>
       </Stack>
 
       {createsNewPool && (
