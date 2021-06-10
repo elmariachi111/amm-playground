@@ -54,15 +54,18 @@ export default function App() {
 
     setTokens([eth, dai]);
 
-    dai.mint(1_000_000, 'alice');
-    eth.mint(1000, 'alice');
+    dai.mint(100000, 'alice');
+    eth.mint(100, 'alice');
 
-    dai.mint(1_000_000, 'bob');
-    eth.mint(1000, 'bob');
+    dai.mint(100000, 'bob');
+    eth.mint(100, 'bob');
 
     const pool = new Pool('0xethdaipool', eth, dai, 1);
     pool.addLiquidity('alice', 10, 2000 * 10);
-    setAccounts(['alice', 'bob', '0xethdaipool']); //pool.account
+    pool.addLiquidity('bob', 5, 2000 * 5);
+
+    dai.mint(10000, 'charlie');
+    setAccounts(['alice', 'bob', 'charlie', '0xethdaipool']);
     addPool(pool);
   };
 
