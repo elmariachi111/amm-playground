@@ -10,6 +10,8 @@ import React, {
   useRef,
   useState,
 } from 'react';
+import { ImExit } from 'react-icons/im';
+import { RiArrowLeftRightFill } from 'react-icons/ri';
 
 import { setNumericalField } from '../../helpers';
 import { Pool } from '../../lib/Pool';
@@ -192,6 +194,7 @@ export default function SwapControl({
         colorScheme="green"
         variant="solid"
         isFullWidth
+        leftIcon={<RiArrowLeftRightFill />}
         disabled={!canSubmit}
         type="submit">
         Swap

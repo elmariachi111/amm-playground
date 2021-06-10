@@ -9,6 +9,7 @@ import {
   Grid,
   Heading,
   Link,
+  Stack,
   Text,
   VStack,
 } from '@chakra-ui/layout';
@@ -42,11 +43,15 @@ export default function Intro({
     <Box bg="gray.75" fontSize="lg">
       <Container maxW="1800px">
         <Collapse in={isOpen} animateOpacity>
-          <Grid pt={8} templateColumns="repeat(3, 1fr)" gridGap={12}>
-            <Box>
+          <Stack gridGap={20} pt={8} direction={['column', 'row']} align="start" mb={6}>
+            <Box flex="3">
               <Box mb={4}>
                 <Heading size="lg">
-                  The <b>Automated Market Maker</b> Simulator
+                  The{' '}
+                  <Text fontWeight="medium" d="inline">
+                    Automated Market Maker
+                  </Text>{' '}
+                  Simulator
                 </Heading>
                 <Text fontSize="md" color="gray.500">
                   a playground for liquidity pools based on{' '}
@@ -75,53 +80,53 @@ export default function Intro({
               </Text>
             </Box>
 
-            <Box>
+            <Box flex="2">
               <Box mb={4}>
                 <Heading size="lg">Get started</Heading>
                 <Text fontSize="md" color="gray.500">
                   some simple instructions{' '}
                 </Text>
               </Box>
-              <Box>
-                <Text>
-                  1. Mint some Eth. Just use real names as addresses (Mint 10 Eth to
-                  "alice")
+
+              <Text>
+                1. Mint some Eth. Just use real names as addresses (Mint 10 Eth to
+                "alice")
+              </Text>
+              <Text>
+                2. Create more tokens (e.g.{' '}
+                <Text
+                  as={Link}
+                  onClick={() => {
+                    createToken('Dai', 'DAI');
+                  }}>
+                  "DAI"
                 </Text>
-                <Text>
-                  2. Create more tokens (e.g.{' '}
-                  <Text
-                    as={Link}
-                    onClick={() => {
-                      createToken('Dai', 'DAI');
-                    }}>
-                    "DAI"
-                  </Text>
-                  or{' '}
-                  <Text
-                    as={Link}
-                    onClick={() => {
-                      createToken('Wrapped Bitcoin', 'wBTC');
-                    }}>
-                    "wBTC"
-                  </Text>
-                  ).
+                or{' '}
+                <Text
+                  as={Link}
+                  onClick={() => {
+                    createToken('Wrapped Bitcoin', 'wBTC');
+                  }}>
+                  "wBTC"
                 </Text>
-                <Text>
-                  3. <b>Provide liquidity</b> using two tokens and choosing a pool fee
-                </Text>
-                <Text>
-                  4. Provide more liquidity from another account and watch the pool shares
-                </Text>
-                <Text>
-                  5. <b>swap</b> one token for another using another account
-                </Text>
-                <Text>
-                  6. <b>redeem</b> your position to get back your value + your share of
-                  accrued pool fees.
-                </Text>
-              </Box>
+                ).
+              </Text>
+              <Text>
+                3. <b>Provide liquidity</b> using two tokens and choosing a pool fee
+              </Text>
+              <Text>
+                4. Provide more liquidity from another account and watch the pool shares
+              </Text>
+              <Text>
+                5. <b>swap</b> one token for another using another account
+              </Text>
+              <Text>
+                6. <b>redeem</b> your position to get back your value + your share of
+                accrued pool fees.
+              </Text>
             </Box>
-            <Box>
+
+            <Box flex="1">
               <Box mb={4}>
                 <Heading size="lg">Learn</Heading>
                 <Text fontSize="md" color="gray.500">
@@ -177,9 +182,10 @@ export default function Intro({
                 </Link>
               </VStack>
             </Box>
-          </Grid>
+          </Stack>
         </Collapse>
-        <Flex gridGap={4}>
+
+        <Flex gridGap={8}>
           <Button
             variant="link"
             colorScheme="blue"

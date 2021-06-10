@@ -29,17 +29,26 @@ const CoinGeckoTokens = ({
   }, [tokens]);
 
   return (
-    <SimpleGrid columns={2} spacing={5} my={5}>
+    <SimpleGrid columns={3} spacing={5} my={5}>
       {coinInfo.map((coin) => (
-        <LinkBox as={Flex} key={`coininfo-${coin.id}`} direction="column" align="center">
+        <LinkBox key={`coininfo-${coin.id}`} sx={{ cursor: 'pointer' }}>
           <LinkOverlay
-            href="#"
             onClick={async () => {
               const token = await adaptCoin(coin.symbol);
               if (token) onNew(token);
             }}>
-            <Image src={coin.image.small} alt={coin.name} my={3} />
-            <Text>{coin.name}</Text>
+            <Flex direction="column" align="center" justify="center">
+              <Image
+                width="35px"
+                h="35px"
+                src={coin.image.small}
+                alt={coin.name}
+                my={2}
+              />
+              <Text textAlign="center" fontSize="sm">
+                {coin.name}
+              </Text>
+            </Flex>
           </LinkOverlay>
         </LinkBox>
       ))}

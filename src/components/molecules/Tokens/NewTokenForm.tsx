@@ -12,10 +12,12 @@ import TokenSymbol from '../../atoms/TokenSymbol';
 const NewTokenForm = ({ onNew }: { onNew: (t: Token) => void }) => {
   const [symbol, setSymbol] = useState('');
   const [name, setName] = useState('');
+  const [usdPrice, setUsdPrice] = useState('');
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
     const token = new Token(symbol, name);
+    token.marketPrice = parseFloat(usdPrice);
     onNew(token);
     setName('');
     setSymbol('');
@@ -69,6 +71,17 @@ const NewTokenForm = ({ onNew }: { onNew: (t: Token) => void }) => {
               name="name"
               value={name}
               onChange={setField(setName)}
+            />
+          </FormControl>
+          <FormControl id="price">
+            <Input
+              variant="flushed"
+              background={inputBg}
+              placeholder="USD Price"
+              type="text"
+              name="usdprice"
+              value={usdPrice}
+              onChange={setField(setUsdPrice)}
             />
           </FormControl>
           <Button mt={3} type="submit" colorScheme="green" variant="solid" isFullWidth>

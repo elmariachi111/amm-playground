@@ -43,10 +43,11 @@ const DEFAULT_SYMBOLS = [
     name: 'Chainlink',
   },
   {
-    id: 'basic-attention-token',
-    symbol: 'bat',
-    name: 'Basic Attention Token',
+    id: 'compound-governance-token',
+    symbol: 'comp',
+    name: 'Compound',
   },
+
   {
     id: 'decentraland',
     symbol: 'mana',
@@ -58,14 +59,19 @@ const DEFAULT_SYMBOLS = [
     name: 'Maker',
   },
   {
-    id: 'curvehash',
-    symbol: 'curve',
-    name: 'CURVEHASH',
-  },
-  {
     id: 'internet-computer',
     symbol: 'icp',
     name: 'Internet Computer',
+  },
+  {
+    id: 'sushi',
+    symbol: 'sushi',
+    name: 'Sushi',
+  },
+  {
+    id: 'basic-attention-token',
+    symbol: 'bat',
+    name: 'Basic Attention Token',
   },
   {
     id: 'weth',
@@ -76,16 +82,6 @@ const DEFAULT_SYMBOLS = [
     id: 'wrapped-filecoin',
     symbol: 'wfil',
     name: 'Wrapped Filecoin',
-  },
-  {
-    id: 'compound-governance-token',
-    symbol: 'comp',
-    name: 'Compound',
-  },
-  {
-    id: 'sushi',
-    symbol: 'sushi',
-    name: 'Sushi',
   },
   {
     id: 'pooltogether',
@@ -101,7 +97,7 @@ const DEFAULT_SYMBOLS = [
 
 class API {
   async getCachedDefaulTokens(): Promise<CoinInfo[]> {
-    const ids = DEFAULT_SYMBOLS.slice(0, 10).map((s) => s.id);
+    const ids = DEFAULT_SYMBOLS.slice(0, 12).map((s) => s.id);
     const cacheKey = `coininfo[${ids.join(',')}]`;
     const cached = localStorage.getItem(cacheKey);
     if (cached) {

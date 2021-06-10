@@ -114,7 +114,7 @@ const TokenView = ({ token }: { token: Token }) => {
           </Flex>
           <Flex direction="column">
             <PfxVal pfx="supply" val={totalSupply} />
-            {marketPrice && <PfxVal pfx="$" val={marketPrice} />}
+            {marketPrice ? <PfxVal pfx="$" val={marketPrice} /> : ''}
           </Flex>
         </Flex>
         {token.feature !== TokenFeature.LiquidityToken && (

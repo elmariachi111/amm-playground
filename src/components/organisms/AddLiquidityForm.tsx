@@ -4,6 +4,8 @@ import { Input, InputGroup } from '@chakra-ui/input';
 import { Flex, Stack, Text } from '@chakra-ui/layout';
 import { Radio, RadioGroup } from '@chakra-ui/radio';
 import React, { FormEvent, useEffect, useMemo, useState } from 'react';
+import { BsDownload } from 'react-icons/bs';
+import { ImExit } from 'react-icons/im';
 
 import { setField } from '../../helpers';
 import { Pool } from '../../lib/Pool';
@@ -227,6 +229,7 @@ export default function AddLiquidityForm({
         variant="solid"
         isFullWidth
         isDisabled={!canSubmit}
+        leftIcon={<BsDownload />}
         type="submit">
         Mint Liquidity
       </Button>

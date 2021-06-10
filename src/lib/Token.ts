@@ -27,7 +27,7 @@ export class Token extends Emitter<TokenEvents> {
   public pool: Pool | undefined;
   public coinInfo?: CoinInfo;
 
-  public marketPrice?: number;
+  public marketPrice: number = 0;
   private lastFetch: number = 0;
 
   constructor(symbol: string, name: string, feature = TokenFeature.ERC20) {
@@ -48,9 +48,9 @@ export class Token extends Emitter<TokenEvents> {
   }
 
   async fetchMarketPrice(): Promise<number> {
-    if (!this.coinInfo) return 0;
+    if (!this.coinInfo) return this.marketPrice;
     const now = new Date().getTime();
-    if ((now - this.lastFetch) / 1000 < 3600) return this.marketPrice || 0;
+    if ((now - this.lastFetch) / 1000 < 3600) return this.marketPrice;
 
     this.marketPrice = await coinGeckoApi.getUSDCoinPrice(this.coinInfo.id);
     this.lastFetch = now;

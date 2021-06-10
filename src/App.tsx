@@ -44,9 +44,13 @@ export default function App() {
 
   const setSomeDefaults = async () => {
     setPools([]);
-    const eth = await adaptCoin('eth');
-    const dai = await adaptCoin('dai');
-    if (!eth || !dai) return;
+    // const eth = await adaptCoin('eth');
+    // const dai = await adaptCoin('dai');
+    // if (!eth || !dai) return;
+    const eth = new Token('ETH', 'Eth');
+    eth.marketPrice = 2000;
+    const dai = new Token('DAI', 'Dai');
+    dai.marketPrice = 1;
 
     setTokens([eth, dai]);
 
@@ -56,8 +60,8 @@ export default function App() {
     dai.mint(1_000_000, 'bob');
     eth.mint(1000, 'bob');
 
-    const pool = new Pool('0xethdaipool', eth, dai, 0.3);
-    pool.addLiquidity('alice', 10, 3000 * 10);
+    const pool = new Pool('0xethdaipool', eth, dai, 1);
+    pool.addLiquidity('alice', 10, 2000 * 10);
     setAccounts(['alice', 'bob', '0xethdaipool']); //pool.account
     addPool(pool);
   };
@@ -103,7 +107,7 @@ export default function App() {
     <>
       <Header />
       <Intro setDefaults={setSomeDefaults} tokens={tokens} addToken={addToken} />
-      <Container maxW="1800px" my={5}>
+      <Container maxW="1800px" my={10}>
         <Grid templateRows="min-content" templateColumns="repeat(12, 1fr)" gap={10}>
           <GridItem rowSpan={1} colSpan={3}>
             <Heading size="xl" mb={4}>
@@ -139,14 +143,14 @@ export default function App() {
             {tokens.map((t) => (
               <TokenView token={t} key={`token-${t.symbol}`} />
             ))}
-            <Heading size="md" mt={10}>
-              Adapt a token from
-              <Link isExternal href="https://www.coingecko.com/en" ml={1}>
+            {<NewToken onNew={addToken} />}
+            <Heading size="md" mt={16} whiteSpace="nowrap" textAlign="center">
+              Adopt a token from
+              <Link d="inline" isExternal href="https://www.coingecko.com/en" ml={1}>
                 CoinGecko
               </Link>
             </Heading>
             {<CoinGeckoTokens onNew={addToken} tokens={tokens} />}
-            {<NewToken onNew={addToken} />}
           </GridItem>
           {pools.length > 0 && (
             <GridItem colSpan={10} rowSpan={1} alignSelf="start">
