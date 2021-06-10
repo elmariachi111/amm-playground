@@ -74,7 +74,7 @@ export class Token extends Emitter<TokenEvents> {
       this.balances[to] = 0;
     }
     if (this.balanceOf(from) < amount) {
-      throw new Error('no sufficient funds');
+      throw new Error(`no sufficient funds (${amount} > ${this.balanceOf(from)})`);
     }
     this.balances[from] -= amount;
     this.balances[to] += amount;
