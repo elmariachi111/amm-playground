@@ -28,6 +28,8 @@ const PoolDiagram = ({ pool, poolInfos }: { pool: Pool; poolInfos: PoolInfo[] })
       for (let i = 1; i <= steps; i++) {
         const x = (i / steps) * poolInfo.reserves[0];
         //const y = poolInfo.reserves[1] - poolInfo.k / (x + poolInfo.reserves[0]);
+        //const price = poolInfo.reserves[1] / x;
+        //const y = Math.sqrt(poolInfo.k / price); //Math.sqrt();
         const y = poolInfo.k / x;
         data.push({ x, y });
       }
