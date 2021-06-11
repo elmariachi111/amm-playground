@@ -76,7 +76,7 @@ const AMM = ({
           </Flex>
           <Flex direction="column" pr={4}>
             <Heading size="lg" mb={3}>
-              <Icon as={ImExit} /> Redeem
+              <Icon as={ImExit} /> Withdraw
             </Heading>
             <Text py={4} fontSize="sm" minHeight={DESCR_MIN_HEIGHT}>
               Burn your liquidity pool tokens. This will return your share of the pool,

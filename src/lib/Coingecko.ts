@@ -6,7 +6,7 @@ const BASE_URL = 'https://api.coingecko.com/api/v3';
 const COIN_QUERY_PARAMS =
   'curl -X GET "https://api.coingecko.com/api/v3/coins/decentraland?localization=false&tickers=false&market_data=false&community_data=false&developer_data=false';
 
-const DEFAULT_SYMBOLS = [
+export const DEFAULT_SYMBOLS = [
   {
     id: 'ethereum',
     symbol: 'eth',
@@ -124,16 +124,18 @@ class API {
     const prices = await (await fetch(url)).json();
     return prices[id]['usd'];
   }
+
+  async fetchCoinInfo(symbol: string): Promise<CoinInfo | undefined> {
+    const defaultCoins = await this.getCachedDefaulTokens();
+    return defaultCoins.find((ci) => ci.symbol.toLowerCase() === symbol.toLowerCase());
+  }
 }
 
 const api = new API();
 
-export const adaptCoin = async (symbol: string): Promise<Token | null> => {
-  const defaultCoins = await api.getCachedDefaulTokens();
-  const coinInfo = defaultCoins.find(
-    (ci) => ci.symbol.toLowerCase() === symbol.toLowerCase(),
-  );
-  if (!coinInfo) return null;
+export const adaptCoin = async (symbol: string): Promise<Token | undefined> => {
+  const coinInfo = await api.fetchCoinInfo(symbol);
+  if (!coinInfo) return undefined;
 
   const token = Token.fromCoinInfo(coinInfo);
   token.fetchMarketPrice();

@@ -3,24 +3,38 @@ import { useColorModeValue } from '@chakra-ui/color-mode';
 import { FormControl, FormLabel } from '@chakra-ui/form-control';
 import { Input } from '@chakra-ui/input';
 import { Box, Flex, Heading, Text } from '@chakra-ui/layout';
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useCallback, useState } from 'react';
 
 import { setField } from '../../../helpers';
+import { default as coingeckoApi, DEFAULT_SYMBOLS } from '../../../lib/Coingecko';
 import { Token } from '../../../lib/Token';
+import { CoinInfo } from '../../../types/Coingecko';
 import TokenSymbol from '../../atoms/TokenSymbol';
 
 const NewTokenForm = ({ onNew }: { onNew: (t: Token) => void }) => {
   const [symbol, setSymbol] = useState('');
   const [name, setName] = useState('');
   const [usdPrice, setUsdPrice] = useState('');
+  const [coinInfo, setCoinInfo] = useState<CoinInfo | undefined>();
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
-    const token = new Token(symbol, name);
-    token.marketPrice = parseFloat(usdPrice);
+    const token = coinInfo ? Token.fromCoinInfo(coinInfo) : new Token(symbol, name);
+    if (usdPrice) {
+      token.marketPrice = parseFloat(usdPrice);
+    }
     onNew(token);
-    setName('');
-    setSymbol('');
+  };
+
+  const fetchCoingeckoInfo = async (symbol: string) => {
+    if (!symbol) return;
+    const ci = await coingeckoApi.fetchCoinInfo(symbol);
+    if (!ci) return;
+    const price = await coingeckoApi.getUSDCoinPrice(ci.id);
+    setCoinInfo(ci);
+    setSymbol(ci.symbol.toUpperCase());
+    setName(ci.name);
+    setUsdPrice(price.toString());
   };
 
   const inputBg = useColorModeValue('white', 'gray.800');
@@ -38,7 +52,7 @@ const NewTokenForm = ({ onNew }: { onNew: (t: Token) => void }) => {
       overflow="hidden">
       <Flex direction="column">
         <Flex p={3} align="center" bg="gray.100">
-          <TokenSymbol symbol={symbol} size={15} />
+          <TokenSymbol coinInfo={coinInfo} symbol={symbol} size={30} />
           <Text fontSize="xl" fontWeight="normal" maxW="400px" ml={2}>
             {symbol}
           </Text>
@@ -59,6 +73,7 @@ const NewTokenForm = ({ onNew }: { onNew: (t: Token) => void }) => {
               name="symbol"
               placeholder="Symbol"
               value={symbol}
+              onBlur={() => fetchCoingeckoInfo(symbol)}
               onChange={setField(setSymbol)}
             />
           </FormControl>
@@ -73,7 +88,7 @@ const NewTokenForm = ({ onNew }: { onNew: (t: Token) => void }) => {
               onChange={setField(setName)}
             />
           </FormControl>
-          <FormControl id="price">
+          <FormControl id="usdprice">
             <Input
               variant="flushed"
               background={inputBg}
