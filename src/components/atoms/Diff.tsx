@@ -1,5 +1,7 @@
+import Icon from '@chakra-ui/icon';
 import { Text } from '@chakra-ui/layout';
 import React from 'react';
+import { IoMdArrowDropdown, IoMdArrowDropup } from 'react-icons/io';
 
 type DiffType = 'abs' | 'rel';
 
@@ -20,8 +22,9 @@ const Diff = ({
   const color = abs > 0 ? 'green.300' : 'red.500';
   const val = type === 'abs' ? abs.toFixed(2) : rel.toFixed(2);
   return (
-    <Text color={color} fontWeight="medium">
+    <Text color={color} fontWeight="medium" whiteSpace="nowrap" d="inline">
       {val} {type == 'rel' ? '%' : ''}
+      {<Icon as={abs > 0 ? IoMdArrowDropup : IoMdArrowDropdown} />}
     </Text>
   );
 };

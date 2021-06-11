@@ -23,8 +23,11 @@ const PoolTokenRow = ({
     <Tr odd={odd}>
       <Td borderColor="gray.300" borderTop="1px solid">
         <Flex align="center" gridGap={2}>
-          <TokenSymbol symbol={pool.poolToken.symbol} size={10} />
-          <Text>{pool.poolToken.symbol}</Text>
+          <TokenSymbol token={pool.poolToken} size={10} />
+          <Flex direction="column">
+            <Text fontSize="xs">{pool.token1.symbol}</Text>
+            <Text fontSize="xs">{pool.token2.symbol}</Text>
+          </Flex>
         </Flex>
       </Td>
       <Td borderColor="gray.300" borderTop="1px solid">

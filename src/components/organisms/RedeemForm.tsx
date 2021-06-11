@@ -1,7 +1,8 @@
 import { Button } from '@chakra-ui/button';
 import { Flex, Stack, Text } from '@chakra-ui/layout';
 import { Radio, RadioGroup } from '@chakra-ui/radio';
-import React, { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { FormEvent, useCallback, useEffect, useState } from 'react';
+import { ImExit } from 'react-icons/im';
 
 import { Pool } from '../../lib/Pool';
 
@@ -48,7 +49,7 @@ export default function RedeemForm({ pools, from }: { pools: Pool[]; from: strin
         onChange={(symbol) => {
           selectPool(redeemablePools.find((p) => p.poolToken.symbol === symbol));
         }}
-        value={selectedPool ? selectedPool.poolToken.symbol : null}>
+        value={selectedPool ? selectedPool.poolToken.symbol : undefined}>
         <Stack spacing={-1} direction="column">
           {redeemablePools.map((pool) => (
             <Flex
@@ -59,6 +60,7 @@ export default function RedeemForm({ pools, from }: { pools: Pool[]; from: strin
               borderColor="gray.200"
               justify="space-between"
               align="center"
+              onClick={() => selectPool(pool)}
               key={`radio-${pool.poolToken.symbol}`}>
               <Radio size="lg" value={pool.poolToken.symbol}>
                 <Text>{pool.poolToken.symbol}</Text>
@@ -74,6 +76,7 @@ export default function RedeemForm({ pools, from }: { pools: Pool[]; from: strin
         colorScheme="green"
         variant="solid"
         isFullWidth
+        leftIcon={<ImExit />}
         isDisabled={!selectedPool}
         type="submit">
         Redeem

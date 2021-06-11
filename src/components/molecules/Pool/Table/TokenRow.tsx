@@ -24,8 +24,6 @@ const TokenRow = ({
   const token = tokenIdx === 0 ? pool.token1 : pool.token2;
   const otherToken = tokenIdx === 0 ? pool.token2 : pool.token1;
 
-  console.log(poolInfoLast);
-
   return (
     <>
       <Tr odd={odd}>
@@ -35,7 +33,7 @@ const TokenRow = ({
           borderTop="1px solid"
           borderBottom="1px solid">
           <Flex align="center" gridGap={2}>
-            <TokenSymbol symbol={token.symbol} size={10} />
+            <TokenSymbol token={token} size={10} />
             <Text>{token.symbol}</Text>
           </Flex>
         </Td>

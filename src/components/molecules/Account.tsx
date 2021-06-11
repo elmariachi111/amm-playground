@@ -1,13 +1,12 @@
 import { Button } from '@chakra-ui/button';
-import { useDisclosure } from '@chakra-ui/hooks';
 import Icon from '@chakra-ui/icon';
-import { Box, Flex, Text, Wrap, WrapItem } from '@chakra-ui/layout';
-import avatar from 'gradient-avatar';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { Flex, Text, Wrap, WrapItem } from '@chakra-ui/layout';
+import React, { useCallback, useEffect, useState } from 'react';
 import { FaCaretRight } from 'react-icons/fa';
 import { HiCheck } from 'react-icons/hi';
 
 import { colorRange } from '../../helpers';
+import { computeUsdValue } from '../../lib/computeUsdValue';
 import { Pool } from '../../lib/Pool';
 import { Token } from '../../lib/Token';
 import TokenBalance from './Tokens/TokenBalance';
@@ -26,10 +25,13 @@ export default function Account({
   onSelect: (acc: string) => void;
 }) {
   const [tokensWithBalance, setTokensWithBalance] = useState<Token[]>([]);
+  const [usdValue, setUsdValue] = useState<number>(0);
 
-  const updateTokens = useCallback(() => {
-    setTokensWithBalance(tokens.filter((t) => t.balanceOf(address) > 0));
-  }, [tokens]);
+  const updateTokens = useCallback(async () => {
+    const _tokensWithBalance = tokens.filter((t) => t.balanceOf(address) > 0);
+    setTokensWithBalance(_tokensWithBalance);
+    setUsdValue(await computeUsdValue(address, _tokensWithBalance, pools));
+  }, [pools, tokens]);
 
   useEffect(() => {
     updateTokens();
@@ -73,14 +75,19 @@ export default function Account({
             }
           : { bg: 'gray.100' })}>
         <Flex p={2} px={4} justifyContent="space-between" align="center">
-          <Text
-            fontSize="xl"
-            fontWeight="normal"
-            maxW="400px"
-            isTruncated
-            color={selected ? 'white' : 'gray.800'}>
-            {address}
-          </Text>
+          <Flex align="center" gridGap={3}>
+            <Text
+              fontSize="xl"
+              fontWeight="normal"
+              maxW="400px"
+              isTruncated
+              color={selected ? 'white' : 'gray.800'}>
+              {address}
+            </Text>
+            <Text color={selected ? 'white' : 'gray.400'} fontSize="sm">
+              ${usdValue.toFixed()}
+            </Text>
+          </Flex>
           {selected ? (
             <Text color="white" casing="uppercase" fontWeight="bold" fontSize="sm">
               <Icon as={HiCheck} mr={1} w={5} h={5} />

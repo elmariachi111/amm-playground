@@ -5,7 +5,8 @@ import { Box, Container, Flex, Link, Text } from '@chakra-ui/layout';
 import { Switch } from '@chakra-ui/switch';
 import React from 'react';
 import { FaGithub } from 'react-icons/fa';
-import TXBLogo from 'url:./logo_txb_black.png';
+
+import TXBLogo from './logo_txb_black.png';
 
 export function Header() {
   const { colorMode, toggleColorMode } = useColorMode();

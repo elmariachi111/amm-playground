@@ -37,7 +37,7 @@ const PoolView = ({ pool }: { pool: Pool }) => {
     <CardBox>
       <PoolHeader pool={pool} />
       <Stack direction="row">
-        <Table variant="simple" size="sm">
+        <Table variant="simple" size="sm" borderRight="1px solid" borderColor="gray.200">
           <Thead>
             <Tr odd={true}>
               <Th w="80px"></Th>
@@ -77,7 +77,7 @@ const PoolView = ({ pool }: { pool: Pool }) => {
 
             <Tr odd={false}>
               <Td>
-                <Text>Const</Text>
+                <Text textAlign="center">Const</Text>
               </Td>
               <Td>
                 <PfxVal pfx="k" val={poolInfo.k.toFixed()} />

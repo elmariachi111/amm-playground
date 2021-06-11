@@ -1,4 +1,4 @@
-import { Box, Container, Grid, GridItem, Heading, SimpleGrid } from '@chakra-ui/layout';
+import { Container, Grid, GridItem, Heading, Link, SimpleGrid } from '@chakra-ui/layout';
 import React, { useEffect, useState } from 'react';
 
 import { Header } from './components/atoms/Header';
@@ -7,6 +7,7 @@ import Account from './components/molecules/Account';
 import NewToken from './components/molecules/Tokens/NewToken';
 import { TokenView } from './components/molecules/Tokens/TokenView';
 import AMM from './components/organisms/AMM';
+import CoinGeckoTokens from './components/organisms/CoinGeckoTokens';
 import { PoolView } from './components/organisms/PoolView';
 import { Pool } from './lib/Pool';
 import { Token } from './lib/Token';
@@ -26,27 +27,30 @@ export default function App() {
     setPools((old) => [...old, pool]);
   };
 
-  const removePool = (pool: Pool) => {
-    const poolSymbol = pool.poolToken.symbol;
-    setTokens((old) => old.filter((o) => o.symbol !== poolSymbol));
-    setPools((old) => old.filter((o) => o.poolToken.symbol !== poolSymbol));
-  };
-
-  const setSomeDefaults = () => {
+  const setSomeDefaults = async () => {
     setPools([]);
+    // const eth = await adaptCoin('eth');
+    // const dai = await adaptCoin('dai');
+    // if (!eth || !dai) return;
     const eth = new Token('ETH', 'Eth');
+    eth.marketPrice = 2000;
     const dai = new Token('DAI', 'Dai');
+    dai.marketPrice = 1;
+
     setTokens([eth, dai]);
 
-    dai.mint(1_000_000, 'alice');
-    eth.mint(1000, 'alice');
+    dai.mint(100000, 'alice');
+    eth.mint(100, 'alice');
 
-    dai.mint(1_000_000, 'bob');
-    eth.mint(1000, 'bob');
+    dai.mint(100000, 'bob');
+    eth.mint(100, 'bob');
 
-    const pool = new Pool('0xethdaipool', eth, dai, 0.3);
-    pool.addLiquidity('alice', 10, 3000 * 10);
-    setAccounts(['alice', 'bob', '0xethdaipool']); //pool.account
+    const pool = new Pool('0xethdaipool', eth, dai, 1);
+    pool.addLiquidity('alice', 10, 2000 * 10);
+    pool.addLiquidity('bob', 5, 2000 * 5);
+
+    dai.mint(10000, 'charlie');
+    setAccounts(['alice', 'bob', 'charlie', '0xethdaipool']);
     addPool(pool);
   };
 
@@ -57,15 +61,9 @@ export default function App() {
   };
 
   useEffect(() => {
-    const eth = new Token('ETH', 'Eth');
-    setTokens([eth]);
-  }, []);
-
-  useEffect(() => {
     const off = pools.flatMap((p) =>
       p.poolToken.on('Burnt', () => {
-        if (p.poolToken.totalSupply === 0) {
-          console.log('pool removed');
+        if (p.poolToken.totalSupply < 1e-10) {
           setPools((old) => old.filter((o) => o.poolToken !== p.poolToken));
         }
       }),
@@ -80,7 +78,7 @@ export default function App() {
       t.on('Minted', (e) => includeAccount(e.to)),
       t.on('Transferred', (e) => includeAccount(e.to)),
       t.on('Burnt', (e) => {
-        if (t.totalSupply === 0) {
+        if (t.totalSupply < 1e-10) {
           console.log('removing token after burn');
           setTokens((old) => old.filter((o) => o.symbol != t.symbol));
         }
@@ -96,10 +94,9 @@ export default function App() {
     <>
       <Header />
       <Intro setDefaults={setSomeDefaults} tokens={tokens} addToken={addToken} />
-      <Container maxW="1800px" my={5}>
-        {/*<SimpleGrid py={8} columns={4} spacing={8} minChildWidth="460px">*/}
-        <Grid templateColumns="repeat(12, 1fr)" gap={10}>
-          <GridItem colSpan={3}>
+      <Container maxW="1800px" my={10}>
+        <Grid templateRows="min-content" templateColumns="repeat(12, 1fr)" gap={10}>
+          <GridItem rowSpan={1} colSpan={3}>
             <Heading size="xl" mb={4}>
               Accounts
             </Heading>
@@ -115,7 +112,7 @@ export default function App() {
               />
             ))}
           </GridItem>
-          <GridItem colSpan={7}>
+          <GridItem rowSpan={1} colSpan={7}>
             <Heading size="xl" mb={3}>
               Interact
             </Heading>
@@ -126,7 +123,7 @@ export default function App() {
               poolAdded={addPool}
             />
           </GridItem>
-          <GridItem colSpan={2}>
+          <GridItem colSpan={2} rowSpan={2}>
             <Heading size="xl" mb={3}>
               Tokens
             </Heading>
@@ -134,21 +131,27 @@ export default function App() {
               <TokenView token={t} key={`token-${t.symbol}`} />
             ))}
             {<NewToken onNew={addToken} />}
-          </GridItem>
-        </Grid>
-
-        {tokens.length >= 2 && (
-          <Box>
-            <Heading mt={5} mb={3}>
-              Pools
+            <Heading size="md" mt={16} whiteSpace="nowrap" textAlign="center">
+              Adopt a token from
+              <Link d="inline" isExternal href="https://www.coingecko.com/en" ml={1}>
+                CoinGecko
+              </Link>
             </Heading>
-            <SimpleGrid columns={2} spacing={5} mt={5} align="start">
-              {pools.map((p) => (
-                <PoolView pool={p} key={`pool-${p.poolToken.symbol}`} />
-              ))}
-            </SimpleGrid>
-          </Box>
-        )}
+            {<CoinGeckoTokens onNew={addToken} tokens={tokens} />}
+          </GridItem>
+          {pools.length > 0 && (
+            <GridItem colSpan={10} rowSpan={1} alignSelf="start">
+              <Heading mt={5} mb={3}>
+                Pools
+              </Heading>
+              <SimpleGrid columns={2} spacing={5} mt={5} align="start">
+                {pools.map((p) => (
+                  <PoolView pool={p} key={`pool-${p.poolToken.symbol}`} />
+                ))}
+              </SimpleGrid>
+            </GridItem>
+          )}
+        </Grid>
       </Container>
       <Header />
     </>

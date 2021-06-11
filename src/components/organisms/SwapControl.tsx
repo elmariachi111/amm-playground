@@ -10,6 +10,8 @@ import React, {
   useRef,
   useState,
 } from 'react';
+import { ImExit } from 'react-icons/im';
+import { RiArrowLeftRightFill } from 'react-icons/ri';
 
 import { setNumericalField } from '../../helpers';
 import { Pool } from '../../lib/Pool';
@@ -25,7 +27,7 @@ export default function SwapControl({
   pools: Pool[];
   tokens: Token[];
 }) {
-  const [amount, setAmount] = useState<number>(0);
+  const [amount, setAmount] = useState<number | undefined>(0);
   const [quote, setQuote] = useState<number>(0);
   const [price, setPrice] = useState<number>();
 
@@ -34,7 +36,7 @@ export default function SwapControl({
   const [from, setFrom] = useState<Token>();
   const [to, setTo] = useState<Token>();
   const [pool, setPool] = useState<Pool>();
-  const amtRef = useRef();
+  const amtRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     setFromOptions(tokens.filter((t) => t.feature !== TokenFeature.LiquidityToken));
@@ -85,14 +87,19 @@ export default function SwapControl({
       setTo(undefined);
       setPool(undefined);
       setAmount(0);
-      amtRef.current.value = null;
+      if (amtRef.current) {
+        amtRef.current.value = '';
+      }
+
       return;
     } else {
       const newFrom = tokens.find((t) => t.symbol === symbol);
       if (to === newFrom) {
         setTo(from);
         setAmount(quote);
-        amtRef.current.value = quote;
+        if (amtRef.current) {
+          amtRef.current.value = quote.toString();
+        }
       }
       setFrom(newFrom);
       updateQuote();
@@ -105,7 +112,8 @@ export default function SwapControl({
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
-    pool?.buy(sender, from, to, amount);
+    if (!from || !to || !pool) return;
+    pool.buy(sender, from, to, amount!);
   };
 
   const hasSufficientFunds = useMemo(() => {
@@ -148,7 +156,9 @@ export default function SwapControl({
                   size="xs"
                   onClick={() => {
                     setAmount(from.balanceOf(sender));
-                    amtRef.current.value = from.balanceOf(sender);
+                    if (amtRef.current) {
+                      amtRef.current.value = from.balanceOf(sender).toString();
+                    }
                   }}>
                   Max
                 </Button>
@@ -173,7 +183,7 @@ export default function SwapControl({
         {pool && pool.feeRate > 0 && (
           <Text color="gray.500" align="right">
             pool takes a {pool.feeRate * 100}% swap fee
-            {amount > 0 && from && (
+            {amount && amount > 0 && from && (
               <Text fontSize="xs"> ({`${amount * pool.feeRate} ${from.symbol}`})</Text>
             )}
           </Text>
@@ -192,6 +202,7 @@ export default function SwapControl({
         colorScheme="green"
         variant="solid"
         isFullWidth
+        leftIcon={<RiArrowLeftRightFill />}
         disabled={!canSubmit}
         type="submit">
         Swap

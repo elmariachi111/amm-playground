@@ -1,12 +1,10 @@
-import { Flex, Text } from '@chakra-ui/layout';
+import { Text } from '@chakra-ui/layout';
 import { Td } from '@chakra-ui/table';
 import React from 'react';
 
 import { Pool, PoolInfo } from '../../../../lib/Pool';
-import { Token } from '../../../../lib/Token';
 import Diff from '../../../atoms/Diff';
 import PfxVal from '../../../atoms/PfxVal';
-import TokenSymbol from '../../../atoms/TokenSymbol';
 import Tr from './Tr';
 
 const FeesRow = ({
@@ -24,7 +22,7 @@ const FeesRow = ({
     <>
       <Tr odd={odd}>
         <Td rowSpan={2} borderColor="gray.300" borderTop="1px solid">
-          <Text>Fees</Text>
+          <Text textAlign="center">Fees</Text>
         </Td>
         <Td borderColor="gray.300" borderTop="1px solid">
           <PfxVal
