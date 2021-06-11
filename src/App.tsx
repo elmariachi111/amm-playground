@@ -1,12 +1,4 @@
-import {
-  Box,
-  Container,
-  Grid,
-  GridItem,
-  Heading,
-  Link,
-  SimpleGrid,
-} from '@chakra-ui/layout';
+import { Container, Grid, GridItem, Heading, Link, SimpleGrid } from '@chakra-ui/layout';
 import React, { useEffect, useState } from 'react';
 
 import { Header } from './components/atoms/Header';
@@ -17,7 +9,6 @@ import { TokenView } from './components/molecules/Tokens/TokenView';
 import AMM from './components/organisms/AMM';
 import CoinGeckoTokens from './components/organisms/CoinGeckoTokens';
 import { PoolView } from './components/organisms/PoolView';
-import { adaptCoin } from './lib/Coingecko';
 import { Pool } from './lib/Pool';
 import { Token } from './lib/Token';
 

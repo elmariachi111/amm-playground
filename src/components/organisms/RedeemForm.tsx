@@ -49,7 +49,7 @@ export default function RedeemForm({ pools, from }: { pools: Pool[]; from: strin
         onChange={(symbol) => {
           selectPool(redeemablePools.find((p) => p.poolToken.symbol === symbol));
         }}
-        value={selectedPool ? selectedPool.poolToken.symbol : null}>
+        value={selectedPool ? selectedPool.poolToken.symbol : undefined}>
         <Stack spacing={-1} direction="column">
           {redeemablePools.map((pool) => (
             <Flex
@@ -60,6 +60,7 @@ export default function RedeemForm({ pools, from }: { pools: Pool[]; from: strin
               borderColor="gray.200"
               justify="space-between"
               align="center"
+              onClick={() => selectPool(pool)}
               key={`radio-${pool.poolToken.symbol}`}>
               <Radio size="lg" value={pool.poolToken.symbol}>
                 <Text>{pool.poolToken.symbol}</Text>

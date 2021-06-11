@@ -13,7 +13,7 @@ import { Token } from '../../lib/Token';
 import PfxVal from '../atoms/PfxVal';
 import TokenValueChooser from '../molecules/TokenValueChooser';
 
-const predefinedFees = {
+const predefinedFees: Record<string, number> = {
   '0': 0.0,
   '0.05': 0.05,
   '0.3': 0.3,
@@ -36,7 +36,7 @@ export default function AddLiquidityForm({
 
   const [amt1, setAmt1] = useState(0);
   const [amt2, setAmt2] = useState(0);
-  const [newPoolFee, setNewPoolFee] = useState<string | undefined>('0');
+  const [newPoolFee, setNewPoolFee] = useState<string>();
 
   const [pool, setPool] = useState<Pool>();
   const [bestPrice, setBestPrice] = useState({

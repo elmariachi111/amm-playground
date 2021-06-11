@@ -4,14 +4,20 @@ import React, { useEffect, useState } from 'react';
 import { LineSeries, XAxis, XYPlot, YAxis } from 'react-vis';
 import Hint from 'react-vis/es/plot/hint';
 
-import { Pool, PoolInfo } from '../../lib/Pool';
+import { Pool, PoolInfo } from '../../../lib/Pool';
 
 type DataPoint = {
   x: number;
   y: number;
 };
 
-const PoolDiagram = ({ pool, poolInfos }: { pool: Pool; poolInfos: PoolInfo[] }) => {
+const PoolDiagram = ({
+  pool,
+  poolInfos,
+}: {
+  pool: Pool;
+  poolInfos: Array<PoolInfo | null>;
+}) => {
   const [green300] = useToken('colors', ['green.300']);
   const [series, setSeries] = useState<DataPoint[][]>([]);
   const [selectedDataPoint, setSelectedDataPoint] = useState<DataPoint>({
@@ -24,6 +30,7 @@ const PoolDiagram = ({ pool, poolInfos }: { pool: Pool; poolInfos: PoolInfo[] })
     const _series = [];
     const pi = poolInfos.filter((p) => !!p);
     for (const poolInfo of pi) {
+      if (!poolInfo) continue;
       const data = [];
       for (let i = 1; i <= steps; i++) {
         const x = (i / steps) * poolInfo.reserves[0];
@@ -53,9 +60,11 @@ const PoolDiagram = ({ pool, poolInfos }: { pool: Pool; poolInfos: PoolInfo[] })
           <Text color="gray.600">
             {selectedDataPoint.x.toFixed(2)} {pool.token1.symbol}
           </Text>
-          <Text color="gray.600">
-            {(poolInfos[0].k / selectedDataPoint.x).toFixed(2)} {pool.token2.symbol}
-          </Text>
+          {poolInfos[0] && (
+            <Text color="gray.600">
+              {(poolInfos[0].k / selectedDataPoint.x).toFixed(2)} {pool.token2.symbol}
+            </Text>
+          )}
           {poolInfos[1] && (
             <Text color="gray.300">
               {(poolInfos[1].k / selectedDataPoint.x).toFixed(2)} {pool.token2.symbol}
@@ -72,6 +81,7 @@ const PoolDiagram = ({ pool, poolInfos }: { pool: Pool; poolInfos: PoolInfo[] })
           color={green300}
           opacity={(idx + 1) / series.length}
           onNearestX={(datapoint, event) => {
+            //@ts-ignore
             setSelectedDataPoint(datapoint);
           }}
         />

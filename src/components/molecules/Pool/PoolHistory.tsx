@@ -1,7 +1,7 @@
 import { Table, TableCaption, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/table';
 import React from 'react';
 
-import { Pool, PoolInfo } from '../../lib/Pool';
+import { Pool, PoolInfo } from '../../../lib/Pool';
 
 const PoolHistory = ({ pool, history }: { pool: Pool; history: PoolInfo[] }) => {
   return (
