@@ -27,12 +27,6 @@ export default function App() {
     setPools((old) => [...old, pool]);
   };
 
-  const removePool = (pool: Pool) => {
-    const poolSymbol = pool.poolToken.symbol;
-    setTokens((old) => old.filter((o) => o.symbol !== poolSymbol));
-    setPools((old) => old.filter((o) => o.poolToken.symbol !== poolSymbol));
-  };
-
   const setSomeDefaults = async () => {
     setPools([]);
     // const eth = await adaptCoin('eth');
@@ -69,8 +63,7 @@ export default function App() {
   useEffect(() => {
     const off = pools.flatMap((p) =>
       p.poolToken.on('Burnt', () => {
-        if (p.poolToken.totalSupply === 0) {
-          console.log('pool removed');
+        if (p.poolToken.totalSupply < 1e-10) {
           setPools((old) => old.filter((o) => o.poolToken !== p.poolToken));
         }
       }),
@@ -85,7 +78,7 @@ export default function App() {
       t.on('Minted', (e) => includeAccount(e.to)),
       t.on('Transferred', (e) => includeAccount(e.to)),
       t.on('Burnt', (e) => {
-        if (t.totalSupply === 0) {
+        if (t.totalSupply < 1e-10) {
           console.log('removing token after burn');
           setTokens((old) => old.filter((o) => o.symbol != t.symbol));
         }

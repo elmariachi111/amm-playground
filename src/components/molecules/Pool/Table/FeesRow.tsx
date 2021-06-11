@@ -22,7 +22,7 @@ const FeesRow = ({
     <>
       <Tr odd={odd}>
         <Td rowSpan={2} borderColor="gray.300" borderTop="1px solid">
-          <Text>Fees</Text>
+          <Text textAlign="center">Fees</Text>
         </Td>
         <Td borderColor="gray.300" borderTop="1px solid">
           <PfxVal

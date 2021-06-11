@@ -47,7 +47,7 @@ const PoolDiagram = ({
   }, [poolInfos]);
 
   return (
-    <XYPlot width={300} height={300} margin={{ left: 55 }}>
+    <XYPlot width={200} height={200} margin={{ left: 60 }}>
       <XAxis title={pool.token1.symbol} />
       <YAxis title={pool.token2.symbol} />
       <Hint value={selectedDataPoint} align={{ vertical: 'top', horizontal: 'right' }}>

@@ -1,7 +1,7 @@
 import { Button } from '@chakra-ui/button';
 import { Flex, Stack, Text } from '@chakra-ui/layout';
 import { Radio, RadioGroup } from '@chakra-ui/radio';
-import React, { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { FormEvent, useCallback, useEffect, useState } from 'react';
 import { ImExit } from 'react-icons/im';
 
 import { Pool } from '../../lib/Pool';
