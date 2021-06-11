@@ -113,7 +113,7 @@ const TokenView = ({ token }: { token: Token }) => {
             </Text>
           </Flex>
           <Flex direction="column">
-            <PfxVal pfx="supply" val={totalSupply} />
+            <PfxVal pfx="supply" val={totalSupply} justify="end" />
             {marketPrice ? <PfxVal pfx="$" val={marketPrice} /> : ''}
           </Flex>
         </Flex>
