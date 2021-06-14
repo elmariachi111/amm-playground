@@ -1,71 +1,50 @@
-import { IconButton } from '@chakra-ui/button';
 import { useColorModeValue } from '@chakra-ui/color-mode';
-import { FormControl } from '@chakra-ui/form-control';
-import { Input } from '@chakra-ui/input';
 import { Flex, Text } from '@chakra-ui/layout';
-import React, { FormEvent, useEffect, useState } from 'react';
-import { HiArrowRight } from 'react-icons/hi';
+import { Editable, EditableInput, EditablePreview } from '@chakra-ui/react';
+import React, { useEffect, useState } from 'react';
 
-import { colorRange, setField } from '../../../helpers';
+import { colorRange } from '../../../helpers';
 import { Token, TokenFeature } from '../../../lib/Token';
 import PfxVal from '../../atoms/PfxVal';
 import TokenSymbol from '../../atoms/TokenSymbol';
+import MintForm from './MintForm';
 
-const MintForm = ({ token }: { token: Token }) => {
-  const [toMint, setToMint] = useState(0);
-  const [recipient, setRecipient] = useState<string>('');
+const MarketPrice = ({ token }: { token: Token }) => {
+  const [marketPrice, setMarketPrice] = useState<number | undefined>(token.marketPrice);
 
-  const mint = (e: FormEvent) => {
-    e.preventDefault();
-    token.mint(toMint, recipient);
-  };
-  const inputBg = useColorModeValue('white', 'gray.800');
-
+  useEffect(() => {
+    const off = [
+      token.on('MarketPriceUpdated', (args) => {
+        setMarketPrice(args.price);
+      }),
+    ];
+    return () => {
+      off.map((_off) => _off());
+    };
+  }, [token]);
   return (
-    <form onSubmit={mint} autoComplete="off">
-      <Flex px={3} py={2} alignItems="center" gridGap={2}>
-        <Text>Mint</Text>
-        <FormControl id="symbol">
-          <Input
-            size="sm"
-            type="text"
-            name="symbol"
-            variant="flushed"
-            placeholder="Amount"
-            bg={inputBg}
-            onChange={setField((val: string) => {
-              setToMint(parseInt(val));
-            })}
-          />
-        </FormControl>
-        <Text>to</Text>
-        <FormControl id="name">
-          <Input
-            type="text"
-            size="sm"
-            name="name"
-            variant="flushed"
-            placeholder="recipient"
-            bg={inputBg}
-            onChange={setField(setRecipient)}
-          />
-        </FormControl>
-        <IconButton
-          colorScheme="green"
-          size="sm"
-          variant="link"
-          type="submit"
-          aria-label="Submit"
-          icon={<HiArrowRight />}
-        />
-      </Flex>
-    </form>
+    <Flex align="center">
+      <Text color="gray.400" textTransform="uppercase" fontSize="xs" fontWeight="medium">
+        $
+      </Text>
+      <Editable
+        fontSize="x-small"
+        textAlign="right"
+        defaultValue={marketPrice?.toFixed(2)}
+        onSubmit={(nextVal: string) => {
+          const newPrice = parseFloat(nextVal);
+          token.setMarketPrice(newPrice);
+        }}>
+        <EditablePreview />
+        <EditableInput />
+      </Editable>
+    </Flex>
   );
+  //return <PfxVal pfx="$" val={marketPrice} />;
 };
 
 const TokenView = ({ token }: { token: Token }) => {
   const [totalSupply, setTotalSupply] = useState<number>(token.totalSupply);
-  const [marketPrice, setMarketPrice] = useState<number | undefined>(token.marketPrice);
 
   useEffect(() => {
     const off = [
@@ -74,9 +53,6 @@ const TokenView = ({ token }: { token: Token }) => {
       }),
       token.on('Burnt', (args) => {
         setTotalSupply(token.totalSupply);
-      }),
-      token.on('MarketPriceUpdated', (args) => {
-        setMarketPrice(args.price);
       }),
     ];
 
@@ -112,9 +88,9 @@ const TokenView = ({ token }: { token: Token }) => {
               {token.symbol}
             </Text>
           </Flex>
-          <Flex direction="column">
+          <Flex direction="column" align="end">
             <PfxVal pfx="supply" val={totalSupply} justify="end" />
-            {marketPrice ? <PfxVal pfx="$" val={marketPrice} /> : ''}
+            <MarketPrice token={token} />
           </Flex>
         </Flex>
         {token.feature !== TokenFeature.LiquidityToken && (

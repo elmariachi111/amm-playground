@@ -58,6 +58,7 @@ export default function Account({
       t.on('Minted', updateTokens),
       t.on('Burnt', updateTokens),
       t.on('Transferred', updateTokens),
+      t.on('MarketPriceUpdated', updateTokens),
     ]);
 
     return () => {

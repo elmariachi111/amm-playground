@@ -93,8 +93,10 @@ export default function PoolBalance({ address, pool }: { address: string; pool: 
 
   useEffect(() => {
     const off: Array<() => void> = [];
-    off.push(pool.on('ReservesChanged', (e) => updateBalances()));
-    off.push(pool.on('LiquidityChanged', (e) => updateBalances()));
+    off.push(pool.on('ReservesChanged', updateBalances));
+    off.push(pool.on('LiquidityChanged', updateBalances));
+    off.push(pool.token1.on('MarketPriceUpdated', updateBalances));
+    off.push(pool.token2.on('MarketPriceUpdated', updateBalances));
     updateBalances();
     return () => {
       off.map((_off) => _off());
