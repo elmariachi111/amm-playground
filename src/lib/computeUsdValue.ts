@@ -1,11 +1,23 @@
 import { Pool } from './Pool';
 import { Token, TokenFeature } from './Token';
 
-const computePoolShareUsdValue = async (pool: Pool, address: string) => {
+export const poolForToken = (pools: Pool[], token: Token) => {
+  return pools.find((p) => p.poolToken === token);
+};
+
+export const poolShares = (pool: Pool, address: string): number[] => {
   const share = pool.poolToken.shareOf(address);
+  return [
+    pool.token1.balanceOf(pool.account) * share,
+    pool.token2.balanceOf(pool.account) * share,
+  ];
+};
+
+const computePoolShareUsdValue = async (pool: Pool, address: string) => {
+  const shares = poolShares(pool, address);
   return (
-    pool.token1.balanceOf(pool.account) * share * (await pool.token1.fetchMarketPrice()) +
-    pool.token2.balanceOf(pool.account) * share * (await pool.token2.fetchMarketPrice())
+    shares[0] * (await pool.token1.fetchMarketPrice()) +
+    shares[1] * (await pool.token2.fetchMarketPrice())
   );
 };
 
@@ -17,7 +29,7 @@ export const computeUsdValue = async (
   const _promises = tokens.map(
     async (t): Promise<number> => {
       if (t.feature === TokenFeature.LiquidityToken) {
-        const pool = pools.find((p) => p.poolToken === t);
+        const pool = poolForToken(pools, t);
         if (!pool) return 0;
         return computePoolShareUsdValue(pool, address);
       } else {
