@@ -105,7 +105,7 @@ export default function Account({
               {address}
             </Text>
             <Text color={selected ? 'white' : 'gray.400'} fontSize="sm">
-              ${usdValue.toFixed()}
+              ${usdValue.toLocaleString()}
             </Text>
           </Flex>
           {selected ? (

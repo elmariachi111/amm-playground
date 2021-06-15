@@ -37,7 +37,7 @@ export default function TokenBalance({
 
       <Flex direction="column">
         <Text fontWeight="medium" fontSize="sm">
-          {balance.toFixed(2)}
+          {balance.toLocaleString()}
         </Text>
         <Text color="gray.400" fontSize="xs">
           {token.symbol}

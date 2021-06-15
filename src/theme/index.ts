@@ -32,6 +32,15 @@ export default extendTheme({
   },
   components: {
     Button,
+    Input: {
+      variants: {
+        outline: {
+          field: {
+            border: 'none',
+          },
+        },
+      },
+    },
     Link: {
       baseStyle: {
         color: 'linkedin.500',

@@ -1,21 +1,81 @@
 import { Button } from '@chakra-ui/button';
-import { FormControl } from '@chakra-ui/form-control';
+import { FormControl, FormHelperText } from '@chakra-ui/form-control';
+import Icon from '@chakra-ui/icon';
 import { Input, InputGroup } from '@chakra-ui/input';
 import { Flex, Stack, Text } from '@chakra-ui/layout';
+import {
+  Popover,
+  PopoverArrow,
+  PopoverBody,
+  PopoverCloseButton,
+  PopoverContent,
+  PopoverHeader,
+  PopoverTrigger,
+} from '@chakra-ui/popover';
 import { Radio, RadioGroup } from '@chakra-ui/radio';
 import React, { FormEvent, useEffect, useMemo, useState } from 'react';
 import { BsDownload } from 'react-icons/bs';
+import { HiOutlineInformationCircle } from 'react-icons/hi';
 
 import { Pool } from '../../lib/Pool';
 import { Token } from '../../lib/Token';
 import PfxVal from '../atoms/PfxVal';
 import TokenValueChooser from '../molecules/TokenValueChooser';
 
+interface PriceEstimate {
+  pool: number;
+  market: number;
+}
+
 const predefinedFees: Record<string, number> = {
   '0': 0.0,
   '0.05': 0.05,
   '0.3': 0.3,
   '1': 1,
+};
+
+const BestPriceInfo = ({
+  bestPrice,
+  tokens,
+}: {
+  bestPrice: PriceEstimate;
+  tokens: Array<Token | undefined>;
+}) => {
+  return (
+    <Popover trigger="hover">
+      <PopoverTrigger>
+        <Icon
+          as={HiOutlineInformationCircle}
+          position="absolute"
+          right="-2"
+          color="gray.400"
+        />
+      </PopoverTrigger>
+      <PopoverContent>
+        <PopoverArrow />
+        <PopoverCloseButton />
+        <PopoverHeader>Market / Pool Prices</PopoverHeader>
+        <PopoverBody>
+          <Stack direction="column" py={3}>
+            {bestPrice.market > 0 && (
+              <PfxVal
+                pfx="market"
+                val={bestPrice.market}
+                sfx={`${tokens[1]?.symbol}/${tokens[0]?.symbol}`}
+              />
+            )}
+            {bestPrice.pool > 0 && (
+              <PfxVal
+                pfx="pool"
+                val={bestPrice.pool}
+                sfx={`${tokens[1]?.symbol}/${tokens[0]?.symbol}`}
+              />
+            )}
+          </Stack>
+        </PopoverBody>
+      </PopoverContent>
+    </Popover>
+  );
 };
 
 export default function AddLiquidityForm({
@@ -37,10 +97,11 @@ export default function AddLiquidityForm({
   const [newPoolFee, setNewPoolFee] = useState<string>();
 
   const [pool, setPool] = useState<Pool>();
-  const [bestPrice, setBestPrice] = useState({
+  const [bestPrice, setBestPrice] = useState<PriceEstimate>({
     pool: 0,
     market: 0,
   });
+
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (!pool) {
@@ -115,7 +176,7 @@ export default function AddLiquidityForm({
     return () => {
       off.map((o) => o());
     };
-  }, [pool, amt1, secondToken, firstToken]);
+  }, [pool, amt1, firstToken, secondToken]);
 
   const canSubmit = useMemo(() => {
     if (!firstToken || !secondToken) return false;
@@ -148,7 +209,6 @@ export default function AddLiquidityForm({
           <FormControl id="amount1">
             <InputGroup>
               <Input
-                border="none"
                 size="lg"
                 placeholder="0.0"
                 textAlign="right"
@@ -171,8 +231,8 @@ export default function AddLiquidityForm({
           <FormControl id="amount2">
             <InputGroup>
               <Input
-                border="none"
                 size="lg"
+                variant="outline"
                 placeholder="0.0"
                 textAlign="right"
                 type="number"
@@ -182,26 +242,13 @@ export default function AddLiquidityForm({
                 onChange={(e) => setAmt2(e.target.valueAsNumber)}
               />
             </InputGroup>
+            {amt1 > 0 && bestPrice.market != amt2 && (
+              <FormHelperText color="red.300">
+                not choosing the market price may lead to an arbitrage opportunity.
+              </FormHelperText>
+            )}
           </FormControl>
         </TokenValueChooser>
-        <Stack direction="column" py={3}>
-          {bestPrice.market > 0 && (
-            <PfxVal
-              onClick={() => setAmt2(bestPrice.market)}
-              pfx="market"
-              val={bestPrice.market}
-              sfx={`${secondToken?.symbol}/${firstToken?.symbol}`}
-            />
-          )}
-          {bestPrice.pool > 0 && (
-            <PfxVal
-              onClick={() => setAmt2(bestPrice.pool)}
-              pfx="pool"
-              val={bestPrice.pool}
-              sfx={`${secondToken?.symbol}/${firstToken?.symbol}`}
-            />
-          )}
-        </Stack>
       </Stack>
 
       {createsNewPool && (
