@@ -6,10 +6,29 @@ import { FaCaretRight } from 'react-icons/fa';
 import { HiCheck } from 'react-icons/hi';
 
 import { colorRange } from '../../helpers';
-import { computeUsdValue } from '../../lib/computeUsdValue';
+import { computeUsdValue, poolForToken } from '../../lib/computeUsdValue';
 import { Pool } from '../../lib/Pool';
-import { Token } from '../../lib/Token';
+import { Token, TokenFeature } from '../../lib/Token';
+import PoolBalance from './Tokens/PoolBalance';
 import TokenBalance from './Tokens/TokenBalance';
+
+function BalanceWrap({
+  address,
+  token,
+  pools,
+}: {
+  token: Token;
+  address: string;
+  pools: Pool[];
+}) {
+  if (token.feature === TokenFeature.LiquidityToken) {
+    const pool = poolForToken(pools, token);
+
+    return pool ? <PoolBalance address={address} pool={pool} /> : <Text>no pool?!</Text>;
+  } else {
+    return <TokenBalance address={address} token={token} />;
+  }
+}
 
 export default function Account({
   address,
@@ -39,6 +58,7 @@ export default function Account({
       t.on('Minted', updateTokens),
       t.on('Burnt', updateTokens),
       t.on('Transferred', updateTokens),
+      t.on('MarketPriceUpdated', updateTokens),
     ]);
 
     return () => {
@@ -108,7 +128,7 @@ export default function Account({
         <Wrap bgColor="white" p={3}>
           {tokensWithBalance.map((t) => (
             <WrapItem key={`tb-${address}-${t.symbol}`}>
-              <TokenBalance address={address} token={t} />
+              <BalanceWrap address={address} token={t} pools={pools} />
             </WrapItem>
           ))}
         </Wrap>

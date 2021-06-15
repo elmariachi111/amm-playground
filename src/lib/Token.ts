@@ -47,16 +47,21 @@ export class Token extends Emitter<TokenEvents> {
     return token;
   }
 
+  setMarketPrice(price: number) {
+    this.marketPrice = price;
+    this.emit('MarketPriceUpdated', { price });
+  }
+
   async fetchMarketPrice(): Promise<number> {
     if (!this.coinInfo) return this.marketPrice;
     const now = new Date().getTime();
     if ((now - this.lastFetch) / 1000 < 3600) return this.marketPrice;
 
-    this.marketPrice = await coinGeckoApi.getUSDCoinPrice(this.coinInfo.id);
-    this.lastFetch = now;
+    const extPrice = await coinGeckoApi.getUSDCoinPrice(this.coinInfo.id);
     console.log('fetched', this.marketPrice);
-    this.emit('MarketPriceUpdated', { price: this.marketPrice });
-    return this.marketPrice;
+    this.lastFetch = now;
+    this.setMarketPrice(extPrice);
+    return extPrice;
   }
 
   mint(amount: number, to: string) {

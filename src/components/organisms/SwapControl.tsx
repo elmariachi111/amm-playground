@@ -10,7 +10,6 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { ImExit } from 'react-icons/im';
 import { RiArrowLeftRightFill } from 'react-icons/ri';
 
 import { setNumericalField } from '../../helpers';

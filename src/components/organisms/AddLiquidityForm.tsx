@@ -5,9 +5,7 @@ import { Flex, Stack, Text } from '@chakra-ui/layout';
 import { Radio, RadioGroup } from '@chakra-ui/radio';
 import React, { FormEvent, useEffect, useMemo, useState } from 'react';
 import { BsDownload } from 'react-icons/bs';
-import { ImExit } from 'react-icons/im';
 
-import { setField } from '../../helpers';
 import { Pool } from '../../lib/Pool';
 import { Token } from '../../lib/Token';
 import PfxVal from '../atoms/PfxVal';
@@ -79,6 +77,7 @@ export default function AddLiquidityForm({
       setter(newVal);
     };
   };
+
   const predictPriceFromMarket = async (token1: Token, token2: Token, amt: number) => {
     const marketPrices = await Promise.all([
       token1.fetchMarketPrice(),
@@ -103,7 +102,7 @@ export default function AddLiquidityForm({
           market: marketPrice,
         };
         setBestPrice(_price);
-        //setAmt2(marketPrice || poolPrice || 0);
+        setAmt2(pool ? _price.pool : _price.market);
       }
     };
     const off = pool
@@ -153,10 +152,11 @@ export default function AddLiquidityForm({
                 size="lg"
                 placeholder="0.0"
                 textAlign="right"
-                type="text"
+                type="number"
+                step="0.00001"
                 name="amount"
                 value={amt1}
-                onChange={setField(updateAmount(setAmt1))}
+                onChange={(e) => setAmt1(e.target.valueAsNumber)}
               />
             </InputGroup>
           </FormControl>
@@ -175,10 +175,11 @@ export default function AddLiquidityForm({
                 size="lg"
                 placeholder="0.0"
                 textAlign="right"
-                type="text"
+                type="number"
+                step="0.00001"
                 name="amount"
                 value={amt2}
-                onChange={setField(updateAmount(setAmt2))}
+                onChange={(e) => setAmt2(e.target.valueAsNumber)}
               />
             </InputGroup>
           </FormControl>
@@ -208,7 +209,7 @@ export default function AddLiquidityForm({
           <Text color="gray.500" align="start" my={2}>
             choose a pool fee
           </Text>
-          <RadioGroup onChange={setNewPoolFee} value={newPoolFee}>
+          <RadioGroup onChange={setNewPoolFee} value={newPoolFee} defaultValue="0">
             <Stack direction="row" spacing={6}>
               {Object.keys(predefinedFees)
                 .sort()
