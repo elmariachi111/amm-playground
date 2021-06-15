@@ -24,11 +24,16 @@ const MarketPrice = ({ token }: { token: Token }) => {
   }, [token]);
   return (
     <Flex align="center">
-      <Text color="gray.400" textTransform="uppercase" fontSize="xs" fontWeight="medium">
+      <Text
+        color="gray.400"
+        textTransform="uppercase"
+        fontSize="xs"
+        fontWeight="medium"
+        mr={1}>
         $
       </Text>
       <Editable
-        fontSize="x-small"
+        fontSize="xs"
         textAlign="right"
         defaultValue={marketPrice?.toFixed(2)}
         onSubmit={(nextVal: string) => {
