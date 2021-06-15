@@ -9,6 +9,7 @@ import { TokenView } from './components/molecules/Tokens/TokenView';
 import AMM from './components/organisms/AMM';
 import CoinGeckoTokens from './components/organisms/CoinGeckoTokens';
 import { PoolView } from './components/organisms/PoolView';
+import { adaptCoin } from './lib/Coingecko';
 import { Pool } from './lib/Pool';
 import { Token } from './lib/Token';
 
@@ -29,13 +30,12 @@ export default function App() {
 
   const setSomeDefaults = async () => {
     setPools([]);
-    // const eth = await adaptCoin('eth');
-    // const dai = await adaptCoin('dai');
-    // if (!eth || !dai) return;
-    const eth = new Token('ETH', 'Eth');
-    eth.marketPrice = 2000;
-    const dai = new Token('DAI', 'Dai');
-    dai.marketPrice = 1;
+    const eth = await adaptCoin('eth');
+    if (!eth) return;
+    eth.setMarketPrice(2000);
+    const dai = await adaptCoin('dai');
+    if (!dai) return;
+    dai.setMarketPrice(1);
 
     setTokens([eth, dai]);
 
