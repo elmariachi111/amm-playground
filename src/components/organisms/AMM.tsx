@@ -8,8 +8,8 @@ import { RiArrowLeftRightFill } from 'react-icons/ri';
 import { Pool } from '../../lib/Pool';
 import { Token, TokenFeature } from '../../lib/Token';
 import AddLiquidityForm from './AddLiquidityForm';
-import RedeemForm from './RedeemForm';
 import SwapControl from './SwapControl';
+import WithdrawForm from './WithdrawForm';
 
 const AMM = ({
   account,
@@ -82,7 +82,7 @@ const AMM = ({
               Burn your liquidity pool tokens. This will return your share of the pool,
               relative to the current pool reserves.
             </Text>
-            <RedeemForm from={account} pools={pools} />
+            <WithdrawForm from={account} pools={pools} />
           </Flex>
         </SimpleGrid>
       ) : (

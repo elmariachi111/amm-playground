@@ -1,14 +1,49 @@
 import { Button } from '@chakra-ui/button';
+import { Input } from '@chakra-ui/input';
 import { Flex, Stack, Text } from '@chakra-ui/layout';
 import { Radio, RadioGroup } from '@chakra-ui/radio';
-import React, { FormEvent, useCallback, useEffect, useState } from 'react';
+import React, { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { ImExit } from 'react-icons/im';
 
 import { Pool } from '../../lib/Pool';
 
-export default function RedeemForm({ pools, from }: { pools: Pool[]; from: string }) {
-  const [redeemablePools, setRedeemablePools] = useState<Pool[]>([]);
+const WithdrawAmount = ({
+  pool,
+  from,
+  onAmountChanged,
+}: {
+  pool: Pool;
+  from: string;
+  onAmountChanged: (n: number) => void;
+}) => {
+  const [amount, setAmount] = useState<number>(pool.poolToken.balanceOf(from));
+
+  return (
+    <Flex direction="column" align="end">
+      <Input
+        border="none"
+        size="md"
+        textAlign="right"
+        type="number"
+        step="0.00001"
+        placeholder="0.0"
+        p={1}
+        pl={2}
+        onChange={(e) => {
+          const val = e.target.valueAsNumber;
+          setAmount(val);
+          onAmountChanged(val);
+        }}
+        value={amount}
+      />
+    </Flex>
+  );
+};
+
+export default function WithdrawForm({ pools, from }: { pools: Pool[]; from: string }) {
+  const [withdrawablePools, setWithdrawablePools] = useState<Pool[]>([]);
   const [selectedPool, selectPool] = useState<Pool | undefined | null>();
+  const [amountToWithdraw, setAmountToWithdraw] = useState<number>(0);
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -21,7 +56,7 @@ export default function RedeemForm({ pools, from }: { pools: Pool[]; from: strin
   };
 
   const updatePools = useCallback(() => {
-    setRedeemablePools(pools.filter((p) => p.poolToken.balanceOf(from) > 0));
+    setWithdrawablePools(pools.filter((p) => p.poolToken.balanceOf(from) > 0));
     selectPool(null);
   }, [pools, from]);
 
@@ -36,6 +71,12 @@ export default function RedeemForm({ pools, from }: { pools: Pool[]; from: strin
     };
   }, [pools, from]);
 
+  const canSubmit = useMemo(() => {
+    if (!selectedPool) return false;
+    if (amountToWithdraw > selectedPool.poolToken.balanceOf(from)) return false;
+    return true;
+  }, [from, selectedPool, amountToWithdraw]);
+
   return (
     <Flex
       as="form"
@@ -47,11 +88,14 @@ export default function RedeemForm({ pools, from }: { pools: Pool[]; from: strin
       <RadioGroup
         colorScheme="green"
         onChange={(symbol) => {
-          selectPool(redeemablePools.find((p) => p.poolToken.symbol === symbol));
+          const _pool = withdrawablePools.find((p) => p.poolToken.symbol === symbol);
+          if (!_pool) return;
+          setAmountToWithdraw(_pool.poolToken.balanceOf(from));
+          selectPool(_pool);
         }}
         value={selectedPool ? selectedPool.poolToken.symbol : undefined}>
         <Stack spacing={-1} direction="column">
-          {redeemablePools.map((pool) => (
+          {withdrawablePools.map((pool) => (
             <Flex
               bg="white"
               p={4}
@@ -65,7 +109,15 @@ export default function RedeemForm({ pools, from }: { pools: Pool[]; from: strin
               <Radio size="lg" value={pool.poolToken.symbol}>
                 <Text>{pool.poolToken.symbol}</Text>
               </Radio>
-              <Text>{pool.poolToken.balanceOf(from).toFixed(2)}</Text>
+              {pool === selectedPool ? (
+                <WithdrawAmount
+                  from={from}
+                  pool={pool}
+                  onAmountChanged={setAmountToWithdraw}
+                />
+              ) : (
+                <Text>{pool.poolToken.balanceOf(from).toFixed(2)}</Text>
+              )}
             </Flex>
           ))}
         </Stack>
@@ -77,7 +129,7 @@ export default function RedeemForm({ pools, from }: { pools: Pool[]; from: strin
         variant="solid"
         isFullWidth
         leftIcon={<ImExit />}
-        isDisabled={!selectedPool}
+        isDisabled={!canSubmit}
         type="submit">
         Redeem
       </Button>
