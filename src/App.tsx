@@ -94,7 +94,7 @@ export default function App() {
     <>
       <Header />
       <Intro setDefaults={setSomeDefaults} tokens={tokens} addToken={addToken} />
-      <Container maxW="1800px" my={10}>
+      <Container maxW="1800px" my={10} id="amm-app" minH="900px">
         <Grid templateRows="min-content" templateColumns="repeat(12, 1fr)" gap={10}>
           <GridItem rowSpan={1} colSpan={3}>
             <Heading size="xl" mb={4}>
