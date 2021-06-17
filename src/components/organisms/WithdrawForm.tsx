@@ -1,5 +1,5 @@
 import { Button } from '@chakra-ui/button';
-import { Input } from '@chakra-ui/input';
+import { Input, InputGroup, InputRightAddon } from '@chakra-ui/input';
 import { Flex, Stack, Text } from '@chakra-ui/layout';
 import { Radio, RadioGroup } from '@chakra-ui/radio';
 import React, { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
@@ -10,32 +10,48 @@ import { Pool } from '../../lib/Pool';
 const WithdrawAmount = ({
   pool,
   from,
-  onAmountChanged,
+  onShareChanged,
 }: {
   pool: Pool;
   from: string;
-  onAmountChanged: (n: number) => void;
+  onShareChanged: (n: number) => void;
 }) => {
-  const [amount, setAmount] = useState<number>(pool.poolToken.balanceOf(from));
+  const [share, setShare] = useState<number>(100);
+
+  const amtToWithdraw = useMemo(() => {
+    if (share == 0 || share > 100) return;
+    return (share / 100) * pool.poolToken.balanceOf(from);
+  }, [share, pool]);
 
   return (
     <Flex direction="column" align="end">
-      <Input
-        border="none"
-        size="md"
-        textAlign="right"
-        type="number"
-        step="0.00001"
-        placeholder="0.0"
-        p={1}
-        pl={2}
-        onChange={(e) => {
-          const val = e.target.valueAsNumber;
-          setAmount(val);
-          onAmountChanged(val);
-        }}
-        value={amount}
-      />
+      <Flex direction="row" align="center">
+        <Input
+          size="md"
+          textAlign="right"
+          type="number"
+          step="0.1"
+          px={2}
+          height="auto"
+          placeholder="100"
+          value={share}
+          onChange={(e) => {
+            const val = e.target.valueAsNumber;
+            console.log(val);
+            setShare(val);
+            onShareChanged(val);
+          }}
+          onBlur={() => {
+            onShareChanged(share);
+          }}
+        />
+        <Text>%</Text>
+      </Flex>
+      {amtToWithdraw && (
+        <Text fontSize="xs">
+          {amtToWithdraw.toFixed(2)} {pool.poolToken.symbol}
+        </Text>
+      )}
     </Flex>
   );
 };
@@ -43,15 +59,17 @@ const WithdrawAmount = ({
 export default function WithdrawForm({ pools, from }: { pools: Pool[]; from: string }) {
   const [withdrawablePools, setWithdrawablePools] = useState<Pool[]>([]);
   const [selectedPool, selectPool] = useState<Pool | undefined | null>();
-  const [amountToWithdraw, setAmountToWithdraw] = useState<number>(0);
+  const [shareToWithdraw, setShareToWithdraw] = useState<number>(100);
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
+    console.log(shareToWithdraw);
     if (!selectedPool) {
       return;
     }
-
-    selectedPool.withdrawLiquidity(from, amountToWithdraw);
+    const amtToWithdraw =
+      (shareToWithdraw / 100) * selectedPool.poolToken.balanceOf(from);
+    selectedPool.withdrawLiquidity(from, amtToWithdraw);
   };
 
   const updatePools = useCallback(() => {
@@ -71,9 +89,8 @@ export default function WithdrawForm({ pools, from }: { pools: Pool[]; from: str
   }, [pools, from]);
 
   const canSubmit = useMemo(() => {
-    if (!selectedPool) return false;
-    return amountToWithdraw <= selectedPool.poolToken.balanceOf(from);
-  }, [from, selectedPool, amountToWithdraw]);
+    return shareToWithdraw > 0 && shareToWithdraw <= 100;
+  }, [from, selectedPool, shareToWithdraw]);
 
   return (
     <Flex
@@ -88,8 +105,8 @@ export default function WithdrawForm({ pools, from }: { pools: Pool[]; from: str
         onChange={(symbol) => {
           const _pool = withdrawablePools.find((p) => p.poolToken.symbol === symbol);
           if (!_pool) return;
-          setAmountToWithdraw(_pool.poolToken.balanceOf(from));
           selectPool(_pool);
+          setShareToWithdraw(100);
         }}
         value={selectedPool ? selectedPool.poolToken.symbol : undefined}>
         <Stack spacing={-1} direction="column">
@@ -111,7 +128,7 @@ export default function WithdrawForm({ pools, from }: { pools: Pool[]; from: str
                 <WithdrawAmount
                   from={from}
                   pool={pool}
-                  onAmountChanged={setAmountToWithdraw}
+                  onShareChanged={setShareToWithdraw}
                 />
               ) : (
                 <Text>{pool.poolToken.balanceOf(from).toFixed(2)}</Text>

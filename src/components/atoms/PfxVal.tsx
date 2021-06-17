@@ -28,7 +28,7 @@ const PfxVal = (props: {
       break;
     default:
       Val = (
-        <Text fontColor="gray.300" ml={1} fontSize="sm">
+        <Text color="gray.300" ml={1} fontSize="sm">
           -
         </Text>
       );

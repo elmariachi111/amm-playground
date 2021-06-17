@@ -187,10 +187,12 @@ export default function AddLiquidityForm({
                 onChange={setNumericalField(setAmt2)}
               />
             </InputGroup>
-            {amt1 && amt1 > 0 && marketPrice != amt2 && (
+            {amt1 && amt1 > 0 && marketPrice != amt2 ? (
               <Text color="red.300">
                 not choosing the market price may lead to an arbitrage opportunity.
               </Text>
+            ) : (
+              <></>
             )}
             {balanceWarning && <Text color="red.300">insufficient funds</Text>}
           </FormControl>
@@ -215,7 +217,6 @@ export default function AddLiquidityForm({
           </RadioGroup>
         </Flex>
       )}
-
       <Button
         mt={3}
         size="lg"
