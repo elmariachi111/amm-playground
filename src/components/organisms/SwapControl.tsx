@@ -2,14 +2,7 @@ import { Button } from '@chakra-ui/button';
 import { FormControl, FormErrorMessage } from '@chakra-ui/form-control';
 import { Input, InputGroup } from '@chakra-ui/input';
 import { Flex, Stack, Text } from '@chakra-ui/layout';
-import React, {
-  FormEvent,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import React, { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { RiArrowLeftRightFill } from 'react-icons/ri';
 
 import { setNumericalField } from '../../helpers';
@@ -37,7 +30,6 @@ export default function SwapControl({
   const [from, setFrom] = useState<Token>();
   const [to, setTo] = useState<Token>();
   const [pool, setPool] = useState<Pool>();
-  const amtRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     setFromOptions(tokens.filter((t) => t.feature !== TokenFeature.LiquidityToken));
@@ -59,7 +51,7 @@ export default function SwapControl({
       setPrice(0);
       setPrice2(0);
     }
-  }, [amount, pool]);
+  }, [amount, pool, sender]);
 
   useEffect(updateQuote, [amount]);
 
@@ -73,7 +65,7 @@ export default function SwapControl({
         for (const _off of off) _off();
       };
     }
-  }, [pool, updateQuote]);
+  }, [pool, updateQuote, sender]);
 
   useEffect(() => {
     if (from && to) {
@@ -92,9 +84,6 @@ export default function SwapControl({
       setTo(undefined);
       setPool(undefined);
       setAmount(0);
-      if (amtRef.current) {
-        amtRef.current.value = '';
-      }
 
       return;
     } else {
@@ -102,9 +91,6 @@ export default function SwapControl({
       if (to === newFrom) {
         setTo(from);
         setAmount(quote);
-        if (amtRef.current) {
-          amtRef.current.value = quote.toString();
-        }
       }
       setFrom(newFrom);
       updateQuote();
@@ -124,7 +110,7 @@ export default function SwapControl({
   const hasSufficientFunds = useMemo(() => {
     if (!from || !amount) return true;
     return amount <= from.balanceOf(sender);
-  }, [amount, from]);
+  }, [sender, amount, from]);
 
   const canSubmit = useMemo(() => {
     return from && hasSufficientFunds;
@@ -150,9 +136,10 @@ export default function SwapControl({
                 size="lg"
                 placeholder="0.0"
                 textAlign="right"
-                type="text"
+                step="0.00001"
+                type="number"
                 name="amount"
-                ref={amtRef}
+                value={amount}
                 onChange={setNumericalField(setAmount)}
               />
               {from && (
@@ -160,15 +147,12 @@ export default function SwapControl({
                   size="xs"
                   onClick={() => {
                     setAmount(from.balanceOf(sender));
-                    if (amtRef.current) {
-                      amtRef.current.value = from.balanceOf(sender).toString();
-                    }
                   }}>
                   Max
                 </Button>
               )}
             </InputGroup>
-            <FormErrorMessage>not enough funds</FormErrorMessage>
+            <FormErrorMessage>insufficient funds</FormErrorMessage>
           </FormControl>
         </TokenValueChooser>
 
@@ -203,7 +187,7 @@ export default function SwapControl({
 
         {from && to && !pool && (
           <Text color="red.300" align="right" pt={2}>
-            there's no {from.symbol}|{to.symbol} pool
+            there&apos;s no {from.symbol}|{to.symbol} pool
           </Text>
         )}
       </Stack>

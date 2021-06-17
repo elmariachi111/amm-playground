@@ -1,12 +1,10 @@
 import { Button } from '@chakra-ui/button';
-import { useColorModeValue } from '@chakra-ui/color-mode';
 import { useDisclosure } from '@chakra-ui/hooks';
 import {
   Box,
   Code,
   Container,
   Flex,
-  Grid,
   Heading,
   Link,
   Stack,
@@ -29,8 +27,6 @@ export default function Intro({
   tokens: Token[];
   addToken: (t: Token) => void;
 }) {
-  const heroBg = useColorModeValue('gray.200', 'gray.600');
-  const linkColor = useColorModeValue('linkedin.600', 'linkedin.300');
   const { isOpen, onToggle } = useDisclosure({ defaultIsOpen: true });
 
   const createToken = (name: string, symbol: string) => {
@@ -76,7 +72,7 @@ export default function Intro({
                 <Link isExternal href="https://github.com/elmariachi111/amm-playground">
                   built in <b>plain Typescript</b>
                 </Link>
-                , there's no chain, no gas, no tx, no db involved.
+                , there&apos;s no chain, no gas, no tx, no db involved.
               </Text>
             </Box>
 
@@ -90,7 +86,7 @@ export default function Intro({
 
               <Text>
                 1. Mint some Eth. Just use real names as addresses (Mint 10 Eth to
-                "alice")
+                &quot;alice&quot;)
               </Text>
               <Text>
                 2. Create more tokens (e.g.{' '}
@@ -99,7 +95,7 @@ export default function Intro({
                   onClick={() => {
                     createToken('Dai', 'DAI');
                   }}>
-                  "DAI"
+                  &quot;DAI&quot;
                 </Text>
                 or{' '}
                 <Text
@@ -107,7 +103,7 @@ export default function Intro({
                   onClick={() => {
                     createToken('Wrapped Bitcoin', 'wBTC');
                   }}>
-                  "wBTC"
+                  &quot;wBTC&quot;
                 </Text>
                 ).
               </Text>
@@ -138,7 +134,7 @@ export default function Intro({
                   <Link
                     href="https://www.gemini.com/cryptopedia/amm-what-are-automated-market-makers#section-constant-product-formula"
                     isExternal>
-                    What's an Automated Market Maker?
+                    What&apos;s an Automated Market Maker?
                   </Link>{' '}
                   |{' '}
                   <Link

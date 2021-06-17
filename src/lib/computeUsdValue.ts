@@ -39,3 +39,12 @@ export const computeUsdValue = async (
   );
   return (await Promise.all(_promises)).reduce((prvVal, curVal) => prvVal + curVal, 0);
 };
+
+export const predictMarketPrice = async (token1: Token, token2: Token, amt: number) => {
+  const marketPrices = await Promise.all([
+    token1.fetchMarketPrice(),
+    token2.fetchMarketPrice(),
+  ]);
+  if (marketPrices[0] === 0 || marketPrices[1] === 0) return NaN;
+  return amt * (marketPrices[0] / marketPrices[1]);
+};

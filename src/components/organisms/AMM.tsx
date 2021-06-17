@@ -40,10 +40,10 @@ const AMM = ({
               <Icon as={RiArrowLeftRightFill} /> Swap
             </Heading>
             <Text py={4} fontSize="sm" minHeight={DESCR_MIN_HEIGHT}>
-              Exchange one token for another in one atomic swap transaction. You'll have
-              to pay a swap fee that goes into the pool's reserves. Swaps are changing the
-              balance of a pool's reserves and thereby have an effect on the exchange
-              price.
+              Exchange one token for another in one atomic swap transaction. You&apos;ll
+              have to pay a swap fee that goes into the pool&apos;s reserves. Swaps are
+              changing the balance of a pool&apos;s reserves and thereby have an effect on
+              the exchange price.
               {pools.length == 0 &&
                 `To swap, you first need to create a token pair pool and deposit
                     liquidity into it.`}

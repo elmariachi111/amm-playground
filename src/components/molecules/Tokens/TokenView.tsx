@@ -1,4 +1,3 @@
-import { useColorModeValue } from '@chakra-ui/color-mode';
 import { Flex, Text } from '@chakra-ui/layout';
 import { Editable, EditableInput, EditablePreview } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
@@ -45,7 +44,6 @@ const MarketPrice = ({ token }: { token: Token }) => {
       </Editable>
     </Flex>
   );
-  //return <PfxVal pfx="$" val={marketPrice} />;
 };
 
 const TokenView = ({ token }: { token: Token }) => {
@@ -53,10 +51,10 @@ const TokenView = ({ token }: { token: Token }) => {
 
   useEffect(() => {
     const off = [
-      token.on('Minted', (args) => {
+      token.on('Minted', () => {
         setTotalSupply(token.totalSupply);
       }),
-      token.on('Burnt', (args) => {
+      token.on('Burnt', () => {
         setTotalSupply(token.totalSupply);
       }),
     ];
@@ -65,9 +63,6 @@ const TokenView = ({ token }: { token: Token }) => {
       off.map((_off) => _off());
     };
   }, [token]);
-
-  const bgColor = useColorModeValue('twitter.100', 'twitter.800');
-  const headerBg = useColorModeValue('linkedin.200', 'linkedin.600');
 
   const tokenColor = colorRange(token.symbol)[0];
 

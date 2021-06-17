@@ -1,12 +1,11 @@
 import { Button } from '@chakra-ui/button';
-import { useColorModeValue } from '@chakra-ui/color-mode';
-import { FormControl, FormLabel } from '@chakra-ui/form-control';
+import { FormControl } from '@chakra-ui/form-control';
 import { Input } from '@chakra-ui/input';
-import { Box, Flex, Heading, Text } from '@chakra-ui/layout';
-import React, { FormEvent, useCallback, useState } from 'react';
+import { Flex, Text } from '@chakra-ui/layout';
+import React, { FormEvent, useState } from 'react';
 
 import { setField } from '../../../helpers';
-import { default as coingeckoApi, DEFAULT_SYMBOLS } from '../../../lib/Coingecko';
+import { default as coingeckoApi } from '../../../lib/Coingecko';
 import { Token } from '../../../lib/Token';
 import { CoinInfo } from '../../../types/Coingecko';
 import TokenSymbol from '../../atoms/TokenSymbol';
@@ -37,10 +36,6 @@ const NewTokenForm = ({ onNew }: { onNew: (t: Token) => void }) => {
     setUsdPrice(price.toString());
   };
 
-  const inputBg = useColorModeValue('white', 'gray.800');
-  const buttonColor = useColorModeValue('linkedin.200', 'linkedin.600');
-  const bgColor = useColorModeValue('twitter.100', 'twitter.800');
-
   return (
     <Flex
       borderRadius={8}
@@ -68,7 +63,6 @@ const NewTokenForm = ({ onNew }: { onNew: (t: Token) => void }) => {
           <FormControl id="symbol">
             <Input
               variant="flushed"
-              background={inputBg}
               type="text"
               name="symbol"
               placeholder="Symbol"
@@ -80,7 +74,6 @@ const NewTokenForm = ({ onNew }: { onNew: (t: Token) => void }) => {
           <FormControl id="name">
             <Input
               variant="flushed"
-              background={inputBg}
               placeholder="Name"
               type="text"
               name="name"
@@ -91,7 +84,6 @@ const NewTokenForm = ({ onNew }: { onNew: (t: Token) => void }) => {
           <FormControl id="usdprice">
             <Input
               variant="flushed"
-              background={inputBg}
               placeholder="USD Price"
               type="text"
               name="usdprice"

@@ -56,7 +56,7 @@ export default function App() {
 
   const includeAccount = (acc: string) => {
     if (!accounts.includes(acc)) {
-      setAccounts([...accounts, acc].sort((a, b) => (a.startsWith('0x') ? 1 : -1)));
+      setAccounts([...accounts, acc].sort((a) => (a.startsWith('0x') ? 1 : -1)));
     }
   };
 
@@ -77,7 +77,7 @@ export default function App() {
     const off = tokens.flatMap((t) => [
       t.on('Minted', (e) => includeAccount(e.to)),
       t.on('Transferred', (e) => includeAccount(e.to)),
-      t.on('Burnt', (e) => {
+      t.on('Burnt', () => {
         if (t.totalSupply < 1e-10) {
           console.log('removing token after burn');
           setTokens((old) => old.filter((o) => o.symbol != t.symbol));

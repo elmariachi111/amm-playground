@@ -80,7 +80,7 @@ const PoolDiagram = ({
           data={_series}
           color={green300}
           opacity={(idx + 1) / series.length}
-          onNearestX={(datapoint, event) => {
+          onNearestX={(datapoint) => {
             //@ts-ignore
             setSelectedDataPoint(datapoint);
           }}

@@ -51,8 +51,7 @@ export default function WithdrawForm({ pools, from }: { pools: Pool[]; from: str
       return;
     }
 
-    const amount = selectedPool.poolToken.balanceOf(from);
-    selectedPool.withdrawLiquidity(from, amount);
+    selectedPool.withdrawLiquidity(from, amountToWithdraw);
   };
 
   const updatePools = useCallback(() => {
@@ -73,8 +72,7 @@ export default function WithdrawForm({ pools, from }: { pools: Pool[]; from: str
 
   const canSubmit = useMemo(() => {
     if (!selectedPool) return false;
-    if (amountToWithdraw > selectedPool.poolToken.balanceOf(from)) return false;
-    return true;
+    return amountToWithdraw <= selectedPool.poolToken.balanceOf(from);
   }, [from, selectedPool, amountToWithdraw]);
 
   return (

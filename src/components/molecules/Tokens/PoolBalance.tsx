@@ -9,7 +9,7 @@ import {
   PopoverTrigger,
 } from '@chakra-ui/popover';
 import { CircularProgress, CircularProgressLabel } from '@chakra-ui/progress';
-import { Table, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/table';
+import { Table, Tbody, Td, Thead, Tr } from '@chakra-ui/table';
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { colorRange } from '../../../helpers';

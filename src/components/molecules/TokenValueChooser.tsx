@@ -26,13 +26,15 @@ const TokenValueChooser = ({
       borderColor="gray.200"
       align="center"
       {...(isFirst ? { borderTopRadius: 6 } : { borderBottomRadius: 6 })}>
-      <Select w="240px" size="md" border="none" onChange={setField(onTokenChanged)}>
+      <Select
+        w="240px"
+        size="md"
+        border="none"
+        onChange={setField(onTokenChanged)}
+        value={selected?.symbol}>
         <option value={''}>select</option>
         {tokens.map((token) => (
-          <option
-            value={token.symbol}
-            key={`from-${token.symbol}`}
-            selected={selected === token}>
+          <option value={token.symbol} key={`from-${token.symbol}`}>
             {token.symbol}
           </option>
         ))}

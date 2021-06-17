@@ -1,7 +1,6 @@
 import { Flex, Text } from '@chakra-ui/layout';
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { colorRange } from '../../../helpers';
 import { Token } from '../../../lib/Token';
 import TokenSymbol from '../../atoms/TokenSymbol';
 
@@ -20,16 +19,14 @@ export default function TokenBalance({
 
   useEffect(() => {
     const off: Array<() => void> = [];
-    off.push(token.on('Minted', (e) => updateBalances()));
-    off.push(token.on('Transferred', (e) => updateBalances()));
-    off.push(token.on('Burnt', (e) => updateBalances()));
+    off.push(token.on('Minted', updateBalances));
+    off.push(token.on('Transferred', updateBalances));
+    off.push(token.on('Burnt', updateBalances));
     updateBalances();
     return () => {
       off.map((_off) => _off());
     };
   }, []);
-
-  const tokenColor = colorRange(token.symbol)[0];
 
   return (
     <Flex alignItems="center" mr={5}>

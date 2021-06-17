@@ -13,12 +13,11 @@ export const setField = (setter: (val: string) => void) => {
   };
 };
 
-export const setNumericalField = (setter: (val: number | undefined) => void) => {
-  return (e: FormEvent<HTMLInputElement | HTMLSelectElement>) => {
+export const setNumericalField = (setter: (val: number) => void) => {
+  return (e: any) => {
     e.preventDefault();
-    const str = e.currentTarget.value;
-    const fl = parseFloat(str);
-    setter(fl || undefined);
+    const val = e.target.valueAsNumber;
+    setter(val || 0);
   };
 };
 

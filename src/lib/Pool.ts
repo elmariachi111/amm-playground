@@ -56,8 +56,11 @@ export class Pool extends Emitter<PoolEvents> {
 
   withdrawLiquidity(sender: string, liquidity: number) {
     let share = liquidity / this.poolToken.totalSupply;
-    //fixed point arithmetics can lead to weird behaviour.
-    //This hacks around it :D
+
+    if (this.poolToken.balanceOf(sender) < liquidity)
+      throw new Error(`not enough liquidity tokens on your account`);
+
+    //fixed point arithmetics can lead to weird behaviour. This hacks around it :D
     if (share > 1) share = 1;
     const withdraw1 = share * this.token1.balanceOf(this.account);
     const withdraw2 = share * this.token2.balanceOf(this.account);
