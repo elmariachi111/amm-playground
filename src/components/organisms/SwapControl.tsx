@@ -21,9 +21,6 @@ export default function SwapControl({
 }) {
   const [amount, setAmount] = useState<number | undefined>(0);
   const [quote, setQuote] = useState<number>(0);
-  const [price, setPrice] = useState<number>();
-  const [price2, setPrice2] = useState<number>();
-  const [quotePrice, setQuotePrice] = useState<number>();
 
   const [fromOptions, setFromOptions] = useState<Token[]>([]);
   const [toOptions, setToOptions] = useState<Token[]>([]);
@@ -41,15 +38,9 @@ export default function SwapControl({
 
   const updateQuote = useCallback(() => {
     if (amount && pool && from && to) {
-      const _quote = pool.quote(from, to, amount);
-      setQuote(_quote);
-      setPrice(pool.price(from));
-      setPrice2(pool.price(to));
-      setQuotePrice(amount / _quote);
+      setQuote(pool.quote(from, to, amount));
     } else {
       setQuote(0);
-      setPrice(0);
-      setPrice2(0);
     }
   }, [amount, pool, sender]);
 
@@ -83,7 +74,7 @@ export default function SwapControl({
       setFrom(undefined);
       setTo(undefined);
       setPool(undefined);
-      setAmount(0);
+      setAmount(undefined);
 
       return;
     } else {
@@ -162,18 +153,11 @@ export default function SwapControl({
           </InputGroup>
         </TokenValueChooser>
 
-        {from && to && price && price2 && (
-          <>
-            <Text color="gray.500" align="right" pt={2}>
-              1 {from.symbol} = {price.toFixed(4)} {to.symbol}{' '}
-            </Text>
-            <Text color="gray.500" align="right" pt={2}>
-              1 {to.symbol} = {price2.toFixed(4)} {from.symbol}{' '}
-            </Text>
-            <Text color="gray.500" align="right" pt={2}>
-              Quoted Price: {quotePrice?.toFixed(4)}
-            </Text>
-          </>
+        {from && to && amount && quote && (
+          <Text color="gray.500" align="right" pt={2}>
+            {(amount / quote).toFixed(4)} {to.symbol}/{from.symbol} <br />
+            {(quote / amount).toFixed(4)} {from.symbol}/{to.symbol}
+          </Text>
         )}
 
         {pool && pool.feeRate > 0 && (

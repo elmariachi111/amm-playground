@@ -13,11 +13,11 @@ export const setField = (setter: (val: string) => void) => {
   };
 };
 
-export const setNumericalField = (setter: (val: number) => void) => {
+export const setNumericalField = (setter: (val: number | undefined) => void) => {
   return (e: any) => {
     e.preventDefault();
     const val = e.target.valueAsNumber;
-    setter(val || 0);
+    setter(val);
   };
 };
 

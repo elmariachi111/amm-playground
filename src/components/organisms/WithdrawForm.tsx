@@ -129,7 +129,7 @@ export default function WithdrawForm({ pools, from }: { pools: Pool[]; from: str
         leftIcon={<ImExit />}
         isDisabled={!canSubmit}
         type="submit">
-        Redeem
+        Withdraw
       </Button>
     </Flex>
   );

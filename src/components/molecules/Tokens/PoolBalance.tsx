@@ -33,27 +33,27 @@ const ShareTable = ({ pool, shareInfo }: { pool: Pool; shareInfo: ShareInfo }) =
       <Tbody>
         <Tr>
           <Td>Share</Td>
-          <Td>{shareInfo.share} %</Td>
+          <Td>{shareInfo.share.toFixed(2)} %</Td>
         </Tr>
         <Tr>
           <Td>{pool.token1.symbol}</Td>
-          <Td>{shareInfo.token1}</Td>
+          <Td>{shareInfo.token1.toFixed(2)}</Td>
         </Tr>
         <Tr>
           <Td>{pool.token2.symbol}</Td>
-          <Td>{shareInfo.token2}</Td>
+          <Td>{shareInfo.token2.toFixed(2)}</Td>
         </Tr>
         <Tr>
           <Td>{pool.token1.symbol} val</Td>
-          <Td>$ {shareInfo.token1Usd}</Td>
+          <Td>$ {shareInfo.token1Usd.toFixed(2)}</Td>
         </Tr>
         <Tr>
           <Td>{pool.token2.symbol} val</Td>
-          <Td>$ {shareInfo.token2Usd}</Td>
+          <Td>$ {shareInfo.token2Usd.toFixed(2)}</Td>
         </Tr>
         <Tr>
           <Td>Total val</Td>
-          <Td>$ {shareInfo.token1Usd + shareInfo.token2Usd}</Td>
+          <Td>$ {(shareInfo.token1Usd + shareInfo.token2Usd).toFixed(2)}</Td>
         </Tr>
       </Tbody>
     </Table>
