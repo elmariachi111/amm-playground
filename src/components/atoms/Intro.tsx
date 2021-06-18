@@ -144,7 +144,7 @@ export default function Intro({
               </Link>
               <Box whiteSpace="nowrap">
                 Uniswap Docs:{' '}
-                <Link isExternal href="https://uniswap.org/docs/v2/">
+                <Link isExternal href="https://uniswap.org/docs/v2/core-concepts/swaps/">
                   V2
                 </Link>{' '}
                 |{' '}

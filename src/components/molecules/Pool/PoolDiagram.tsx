@@ -32,12 +32,14 @@ const PoolDiagram = ({
     for (const poolInfo of pi) {
       if (!poolInfo) continue;
       const data = [];
-      for (let i = 1; i <= steps; i++) {
-        const x = (i / steps) * poolInfo.reserves[0];
+      for (let i = 0; i <= steps; i++) {
+        const x = 1 + (i / steps) * poolInfo.reserves[0] * 3;
         //const y = poolInfo.reserves[1] - poolInfo.k / (x + poolInfo.reserves[0]);
-        //const price = poolInfo.reserves[1] / x;
-        //const y = Math.sqrt(poolInfo.k / price); //Math.sqrt();
         const y = poolInfo.k / x;
+        //const y = poolInfo.reserves[1] / x;
+
+        //const _y = pool.quote(pool.token1, pool.token2, x);
+        //const y = _y / x;
         data.push({ x, y });
       }
       _series.push(data);
@@ -62,12 +64,13 @@ const PoolDiagram = ({
           </Text>
           {poolInfos[0] && (
             <Text color="gray.600">
-              {(poolInfos[0].k / selectedDataPoint.x).toFixed(2)} {pool.token2.symbol}
+              {selectedDataPoint.y.toLocaleString()} {pool.token2.symbol}
             </Text>
           )}
           {poolInfos[1] && (
             <Text color="gray.300">
-              {(poolInfos[1].k / selectedDataPoint.x).toFixed(2)} {pool.token2.symbol}
+              {(poolInfos[1].k / selectedDataPoint.x).toLocaleString()}{' '}
+              {pool.token2.symbol}
             </Text>
           )}
         </Box>

@@ -155,8 +155,13 @@ export default function SwapControl({
 
         {from && to && amount && quote && (
           <Text color="gray.500" align="right" pt={2}>
-            {(amount / quote).toFixed(4)} {to.symbol}/{from.symbol} <br />
-            {(quote / amount).toFixed(4)} {from.symbol}/{to.symbol}
+            1 {from.symbol} = {(quote / amount).toFixed(8)} {to.symbol}
+            <Text title={`${(amount / quote).toFixed(8)} ${from.symbol}/${to.symbol}`}>
+              {(amount / quote).toFixed(8)} {from.symbol}/{to.symbol} <br />
+            </Text>
+            <Text title={`${(quote / amount).toFixed(8)} ${to.symbol}/${from.symbol}`}>
+              {(quote / amount).toFixed(2)} {to.symbol}/{from.symbol}
+            </Text>
           </Text>
         )}
 

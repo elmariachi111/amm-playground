@@ -80,11 +80,11 @@ const PoolView = ({ pool }: { pool: Pool }) => {
                 <Text textAlign="center">Const</Text>
               </Td>
               <Td>
-                <PfxVal pfx="k" val={poolInfo.k.toFixed()} />
+                <PfxVal pfx="k" val={poolInfo.k.toLocaleString()} />
               </Td>
               <Td></Td>
               <Td>
-                <PfxVal pfx="k" val={lastPoolInfo?.k.toFixed()} />
+                <PfxVal pfx="k" val={lastPoolInfo?.k.toLocaleString()} />
               </Td>
             </Tr>
           </Tbody>
