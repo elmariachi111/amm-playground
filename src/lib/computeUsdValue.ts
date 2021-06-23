@@ -23,7 +23,6 @@ export const computeUsdValue = async (
   tokens: Token[],
   pools: Pool[],
 ) => {
-  console.log('cusd');
   const _promises = tokens.map(
     async (t): Promise<number> => {
       if (t.feature === TokenFeature.LiquidityToken) {
