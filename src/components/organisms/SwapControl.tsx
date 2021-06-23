@@ -1,5 +1,5 @@
 import { Button } from '@chakra-ui/button';
-import { FormControl, FormErrorMessage } from '@chakra-ui/form-control';
+import { FormControl } from '@chakra-ui/form-control';
 import { Input, InputGroup } from '@chakra-ui/input';
 import { Flex, Stack, Text } from '@chakra-ui/layout';
 import React, { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
@@ -41,6 +41,7 @@ export default function SwapControl({
   }, [from]);
 
   const updateQuote = useCallback(() => {
+    console.log(amount, pool?.poolToken.symbol, from?.symbol, to?.symbol);
     if (amount && pool && from && to) {
       setQuote(pool.quote(from, to, amount));
     } else {
@@ -48,7 +49,7 @@ export default function SwapControl({
     }
   }, [amount, pool, sender]);
 
-  useEffect(updateQuote, [amount]);
+  useEffect(() => updateQuote(), [amount]);
 
   useEffect(() => {
     if (pool) {
@@ -60,7 +61,7 @@ export default function SwapControl({
         for (const _off of off) _off();
       };
     }
-  }, [pool, sender]);
+  }, [pool, sender, from, to, amount]);
 
   useEffect(() => {
     if (from && to) {
@@ -70,6 +71,7 @@ export default function SwapControl({
         if (from === tokens[1] && to === tokens[0]) return true;
       });
       setPool(_pool);
+      setAmount(0);
     }
   }, [pools, from, to]);
 
@@ -107,8 +109,20 @@ export default function SwapControl({
     return amount <= from.balanceOf(sender);
   }, [sender, amount, from]);
 
+  const fromUsdValue = useMemo(() => {
+    if (!amount || !from) return '';
+    const val = amount * from.marketPrice;
+    return val;
+  }, [amount, from]);
+
+  const toUsdValue = useMemo(() => {
+    if (!quote || !to) return '';
+    const val = quote * to.marketPrice;
+    return val;
+  }, [quote, to]);
+
   const canSubmit = useMemo(() => {
-    return from && hasSufficientFunds;
+    return from && amount && amount > 0 && hasSufficientFunds;
   }, [amount, hasSufficientFunds]);
 
   return (
@@ -124,9 +138,14 @@ export default function SwapControl({
           onTokenChanged={onFromChanged}
           tokens={fromOptions}
           selected={from}
+          footer={
+            <Text color="gray.400" fontSize="xs">
+              {fromUsdValue ? `$ ${fromUsdValue.toFixed(2)}` : <span>&nbsp;</span>}
+            </Text>
+          }
           isFirst>
           <FormControl id="amount" isInvalid={!hasSufficientFunds}>
-            <InputGroup alignItems="center">
+            <InputGroup>
               <Input
                 size="lg"
                 placeholder="0.0"
@@ -135,46 +154,50 @@ export default function SwapControl({
                 type="number"
                 name="amount"
                 value={amount}
-                disabled={!from}
+                disabled={!from || !pool}
                 onChange={setNumericalField(setAmount)}
               />
-              {from && (
-                <Button
-                  size="xs"
-                  onClick={() => {
-                    setAmount(from.balanceOf(sender));
-                  }}>
-                  Max
-                </Button>
-              )}
             </InputGroup>
-            <FormErrorMessage>insufficient funds</FormErrorMessage>
           </FormControl>
         </TokenValueChooser>
 
-        <TokenValueChooser onTokenChanged={onToChanged} tokens={toOptions} selected={to}>
-          <InputGroup justifyContent="end" width="100%" p={3}>
+        <TokenValueChooser
+          onTokenChanged={onToChanged}
+          tokens={toOptions}
+          selected={to}
+          footer={
+            <Text color="gray.400" fontSize="xs">
+              {fromUsdValue && toUsdValue ? (
+                `$ ${toUsdValue.toFixed(2)} (-${(
+                  100 -
+                  (100 * toUsdValue) / fromUsdValue
+                ).toFixed(2)} %)`
+              ) : (
+                <span>&nbsp;</span>
+              )}
+            </Text>
+          }>
+          <Flex justifyContent="end" width="100%" py={0} px={1}>
             <Text fontSize="lg">{quote?.toFixed(2)}</Text>
-          </InputGroup>
+          </Flex>
         </TokenValueChooser>
 
         {from && to && amount && quote && (
-          <Text color="gray.500" align="right" pt={2}>
-            1 {from.symbol} = {(quote / amount).toFixed(8)} {to.symbol}
-            <Text title={`${(amount / quote).toFixed(8)} ${from.symbol}/${to.symbol}`}>
-              {(amount / quote).toFixed(8)} {from.symbol}/{to.symbol} <br />
+          <>
+            <Text color="gray.500" align="right" pt={2} fontSize="sm">
+              1 {from.symbol} = {(quote / amount).toFixed(4)} {to.symbol}
             </Text>
-            <Text title={`${(quote / amount).toFixed(8)} ${to.symbol}/${from.symbol}`}>
-              {(quote / amount).toFixed(2)} {to.symbol}/{from.symbol}
+            <Text color="gray.500" align="right" pt={2} fontSize="sm">
+              1 {to.symbol} = {(amount / quote).toFixed(4)} {from.symbol}
             </Text>
-          </Text>
+          </>
         )}
 
         {pool && pool.feeRate > 0 && (
-          <Text color="gray.500" align="right">
+          <Text color="gray.500" align="right" fontSize="small" pt={2}>
             pool takes a {pool.feeRate * 100}% swap fee
             {amount && amount > 0 && from && (
-              <Text fontSize="xs"> ({`${amount * pool.feeRate} ${from.symbol}`})</Text>
+              <span> ({`${amount * pool.feeRate} ${from.symbol}`})</span>
             )}
           </Text>
         )}
