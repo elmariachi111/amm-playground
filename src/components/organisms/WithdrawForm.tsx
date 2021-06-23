@@ -37,7 +37,6 @@ const WithdrawAmount = ({
           value={share}
           onChange={(e) => {
             const val = e.target.valueAsNumber;
-            console.log(val);
             setShare(val);
             onShareChanged(val);
           }}
@@ -74,7 +73,7 @@ export default function WithdrawForm({ pools, from }: { pools: Pool[]; from: str
 
   const updatePools = useCallback(() => {
     setWithdrawablePools(pools.filter((p) => p.poolToken.balanceOf(from) > 0));
-    selectPool(null);
+    //selectPool(null);
   }, [pools, from]);
 
   useEffect(() => {

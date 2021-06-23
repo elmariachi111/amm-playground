@@ -77,11 +77,10 @@ export default function AddLiquidityForm({
   useEffect(() => {
     if (!secondToken) return;
 
-    const updateBestPrice = async () => {
-      console.log('upbp', firstToken?.symbol, secondToken.symbol);
+    const updateBestPrice = () => {
       if (firstToken) {
         if (firstToken !== secondToken && amt1) {
-          const marketPrice = await predictMarketPrice(firstToken, secondToken, amt1);
+          const marketPrice = predictMarketPrice(firstToken, secondToken, amt1);
           setMarketPrice(marketPrice);
           setAmt2(marketPrice);
         } else {
@@ -101,7 +100,6 @@ export default function AddLiquidityForm({
 
     updateBestPrice();
     return () => {
-      console.log('off');
       off.map((o) => o && o());
     };
   }, [pool, amt1, firstToken, secondToken]);

@@ -19,7 +19,7 @@ export default function SwapControl({
   pools: Pool[];
   tokens: Token[];
 }) {
-  const [amount, setAmount] = useState<number | undefined>(0);
+  const [amount, setAmount] = useState<number | undefined>();
   const [quote, setQuote] = useState<number>(0);
 
   const [fromOptions, setFromOptions] = useState<Token[]>([]);
@@ -56,7 +56,7 @@ export default function SwapControl({
         for (const _off of off) _off();
       };
     }
-  }, [pool, updateQuote, sender]);
+  }, [pool, sender]);
 
   useEffect(() => {
     if (from && to) {

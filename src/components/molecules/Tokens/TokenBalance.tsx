@@ -30,9 +30,9 @@ export default function TokenBalance({
 
   return (
     <Flex alignItems="center" mr={5}>
-      <TokenSymbol token={token} mr={1} title={`${balance} ${token.name}`} size={15} />
+      <TokenSymbol token={token} size={15} />
 
-      <Flex direction="column">
+      <Flex direction="column" ml={1}>
         <Text fontWeight="medium" fontSize="sm">
           {balance.toLocaleString()}
         </Text>

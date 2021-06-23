@@ -22,7 +22,7 @@ const AMM = ({
   pools: Pool[];
   poolAdded: (p: Pool) => void;
 }) => {
-  const DESCR_MIN_HEIGHT = 120;
+  const DESCR_MIN_HEIGHT = 140;
 
   return (
     <Box
