@@ -29,6 +29,10 @@ export default function SwapControl({
   const [pool, setPool] = useState<Pool>();
 
   useEffect(() => {
+    setAmount(0);
+  }, [sender]);
+
+  useEffect(() => {
     setFromOptions(tokens.filter((t) => t.feature !== TokenFeature.LiquidityToken));
   }, [tokens]);
 
@@ -131,6 +135,7 @@ export default function SwapControl({
                 type="number"
                 name="amount"
                 value={amount}
+                disabled={!from}
                 onChange={setNumericalField(setAmount)}
               />
               {from && (
