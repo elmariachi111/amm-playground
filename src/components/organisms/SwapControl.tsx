@@ -139,7 +139,7 @@ export default function SwapControl({
           tokens={fromOptions}
           selected={from}
           footer={
-            <Text color="gray.400" fontSize="xs">
+            <Text color="gray.400" fontSize="small">
               {fromUsdValue ? `$ ${fromUsdValue.toFixed(2)}` : <span>&nbsp;</span>}
             </Text>
           }
@@ -166,12 +166,12 @@ export default function SwapControl({
           tokens={toOptions}
           selected={to}
           footer={
-            <Text color="gray.400" fontSize="xs">
+            <Text color="gray.400" fontSize="small">
               {fromUsdValue && toUsdValue ? (
-                `$ ${toUsdValue.toFixed(2)} (-${(
+                `$ ${toUsdValue.toFixed(2)} (${(-(
                   100 -
                   (100 * toUsdValue) / fromUsdValue
-                ).toFixed(2)} %)`
+                )).toFixed(2)} %)`
               ) : (
                 <span>&nbsp;</span>
               )}
