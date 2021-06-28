@@ -13,38 +13,27 @@ export const poolShares = (pool: Pool, address: string): number[] => {
   ];
 };
 
-const computePoolShareUsdValue = async (pool: Pool, address: string) => {
+const computePoolShareUsdValue = (pool: Pool, address: string) => {
   const shares = poolShares(pool, address);
-  return (
-    shares[0] * (await pool.token1.fetchMarketPrice()) +
-    shares[1] * (await pool.token2.fetchMarketPrice())
-  );
+  return shares[0] * pool.token1.marketPrice + shares[1] * pool.token2.marketPrice;
 };
 
-export const computeUsdValue = async (
-  address: string,
-  tokens: Token[],
-  pools: Pool[],
-) => {
-  const _promises = tokens.map(
-    async (t): Promise<number> => {
-      if (t.feature === TokenFeature.LiquidityToken) {
-        const pool = poolForToken(pools, t);
-        if (!pool) return 0;
-        return computePoolShareUsdValue(pool, address);
-      } else {
-        return t.balanceOf(address) * (await t.fetchMarketPrice());
-      }
-    },
-  );
-  return (await Promise.all(_promises)).reduce((prvVal, curVal) => prvVal + curVal, 0);
+export const computeUsdValue = (address: string, tokens: Token[], pools: Pool[]) => {
+  const allVals = tokens.map((t): number => {
+    if (t.feature === TokenFeature.LiquidityToken) {
+      const pool = poolForToken(pools, t);
+      if (!pool) return 0;
+      return computePoolShareUsdValue(pool, address);
+    } else {
+      return t.balanceOf(address) * t.marketPrice;
+    }
+  });
+  const sum = allVals.reduce((prvVal, curVal) => prvVal + curVal, 0);
+  return sum;
 };
 
-export const predictMarketPrice = async (token1: Token, token2: Token, amt: number) => {
-  const marketPrices = await Promise.all([
-    token1.fetchMarketPrice(),
-    token2.fetchMarketPrice(),
-  ]);
+export const predictMarketPrice = (token1: Token, token2: Token, amt: number) => {
+  const marketPrices = [token1.marketPrice, token2.marketPrice];
   if (marketPrices[0] === 0 || marketPrices[1] === 0) return NaN;
   return amt * (marketPrices[0] / marketPrices[1]);
 };

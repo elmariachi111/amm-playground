@@ -3,7 +3,7 @@ import { FormControl, FormHelperText } from '@chakra-ui/form-control';
 import { Input, InputGroup } from '@chakra-ui/input';
 import { Flex, Stack, Text } from '@chakra-ui/layout';
 import { Radio, RadioGroup } from '@chakra-ui/radio';
-import React, { FormEvent, useEffect, useMemo, useState } from 'react';
+import React, { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { BsDownload } from 'react-icons/bs';
 
 import { setNumericalField } from '../../helpers';
@@ -32,6 +32,7 @@ export default function AddLiquidityForm({
 }) {
   const [firstToken, setFirstToken] = useState<Token>();
   const [secondToken, setSecondToken] = useState<Token>();
+  const [balances, setBalances] = useState<{ [sym: string]: number }>({});
 
   const [amt1, setAmt1] = useState<number>();
   const [amt2, setAmt2] = useState<number>();
@@ -59,11 +60,12 @@ export default function AddLiquidityForm({
     } else {
       pool.addLiquidity(address, amt1, amt2);
     }
+    updateBalances();
   };
 
   useEffect(() => {
-    setAmt1(undefined);
-    setAmt2(undefined);
+    setAmt1(0);
+    updateBalances();
   }, [address]);
 
   useEffect(() => {
@@ -77,11 +79,10 @@ export default function AddLiquidityForm({
   useEffect(() => {
     if (!secondToken) return;
 
-    const updateBestPrice = async () => {
-      console.log('upbp', firstToken?.symbol, secondToken.symbol);
+    const updateBestPrice = () => {
       if (firstToken) {
         if (firstToken !== secondToken && amt1) {
-          const marketPrice = await predictMarketPrice(firstToken, secondToken, amt1);
+          const marketPrice = predictMarketPrice(firstToken, secondToken, amt1);
           setMarketPrice(marketPrice);
           setAmt2(marketPrice);
         } else {
@@ -101,23 +102,44 @@ export default function AddLiquidityForm({
 
     updateBestPrice();
     return () => {
-      console.log('off');
       off.map((o) => o && o());
     };
   }, [pool, amt1, firstToken, secondToken]);
 
-  const canSubmit = useMemo(() => {
+  const updateBalances = useCallback(() => {
     if (!firstToken || !secondToken) return false;
-    if (!amt1 || !amt2) return false;
+    const bal = {
+      [firstToken?.symbol]: firstToken.balanceOf(address),
+      [secondToken?.symbol]: secondToken.balanceOf(address),
+    };
+    setBalances(bal);
+  }, [address, firstToken, secondToken]);
 
-    if (amt1 <= firstToken.balanceOf(address) && amt2 <= secondToken.balanceOf(address)) {
+  useEffect(() => {
+    const off = [
+      firstToken?.on('Minted', updateBalances),
+      secondToken?.on('Minted', updateBalances),
+    ];
+    updateBalances();
+    return () => {
+      off.map((o) => o && o());
+    };
+  }, [firstToken, secondToken]);
+
+  const canSubmit = useMemo(() => {
+    if (!amt1 || !amt2 || !firstToken || !secondToken) {
+      setBalanceWarning(undefined);
+      return false;
+    }
+
+    if (amt1 <= balances[firstToken?.symbol] && amt2 <= balances[secondToken?.symbol]) {
       setBalanceWarning(undefined);
       return true;
     } else {
       setBalanceWarning('insufficient funds');
       return false;
     }
-  }, [firstToken, secondToken, amt1, amt2]);
+  }, [firstToken, secondToken, amt1, amt2, balances]);
 
   const createsNewPool = useMemo<boolean | undefined>(() => {
     return firstToken && secondToken && !pool;
@@ -155,6 +177,7 @@ export default function AddLiquidityForm({
                 step="0.00001"
                 name="amount"
                 value={amt1}
+                isInvalid={firstToken && balances[firstToken.symbol] < amt1!}
                 onChange={setNumericalField(setAmt1)}
               />
             </InputGroup>
@@ -184,28 +207,38 @@ export default function AddLiquidityForm({
                 step="0.00001"
                 name="amount"
                 value={amt2}
+                disabled={!secondToken}
+                isInvalid={secondToken && balances[secondToken.symbol] < amt2!}
                 onChange={setNumericalField(setAmt2)}
               />
             </InputGroup>
-            {amt1 && amt1 > 0 && marketPrice != amt2 ? (
-              <Text color="red.300">
-                not choosing the market price may lead to an arbitrage opportunity.
+            {balanceWarning && (
+              <Text color="red.300" fontSize="xs" align="right">
+                insufficient funds
               </Text>
-            ) : (
-              <></>
             )}
-            {balanceWarning && <Text color="red.300">insufficient funds</Text>}
           </FormControl>
         </TokenValueChooser>
       </Stack>
 
+      {amt1 && amt1 > 0 && marketPrice != amt2 ? (
+        <Text color="orange.400" fontSize="sm" align="right">
+          not providing at market price leads to arbitrage opportunity.
+        </Text>
+      ) : (
+        <></>
+      )}
       {createsNewPool && (
         <Flex direction="column">
           <Text color="gray.500" align="start" my={2}>
             choose a pool fee
           </Text>
-          <RadioGroup onChange={setNewPoolFee} value={newPoolFee} defaultValue="0">
-            <Stack direction="row" spacing={6}>
+          <RadioGroup
+            onChange={setNewPoolFee}
+            value={newPoolFee}
+            defaultValue="0"
+            colorScheme="green">
+            <Stack direction="row" spacing={3} justify="center">
               {Object.keys(predefinedFees)
                 .sort()
                 .map((fee) => (

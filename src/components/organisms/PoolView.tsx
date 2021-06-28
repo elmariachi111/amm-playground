@@ -1,4 +1,6 @@
-import { Box, Stack, Text } from '@chakra-ui/layout';
+import { Box, Flex, Stack, Text } from '@chakra-ui/layout';
+import { Heading } from '@chakra-ui/layout';
+import { useToken } from '@chakra-ui/react';
 import { Table, Tbody, Td, Th, Thead } from '@chakra-ui/table';
 import React, { useCallback, useEffect, useState } from 'react';
 
@@ -14,6 +16,8 @@ const PoolView = ({ pool }: { pool: Pool }) => {
   const [poolInfo, setPoolInfo] = useState<PoolInfo>(pool.poolInfo());
   //const [history, setHistory] = useState<PoolInfo[]>([pool.poolInfo()]);
   const [lastPoolInfo, setLastPoolInfo] = useState<PoolInfo | null>(null);
+
+  const [pink300, purple300] = useToken('colors', ['pink.300', 'purple.300']);
 
   const updatePoolInfo = useCallback(() => {
     setPoolInfo((old) => {
@@ -41,9 +45,27 @@ const PoolView = ({ pool }: { pool: Pool }) => {
           <Thead>
             <Tr odd={true}>
               <Th w="80px"></Th>
-              <Th whiteSpace="nowrap">Current Values</Th>
+              <Th whiteSpace="nowrap" justifyItems="center">
+                Current Values{' '}
+                <Text
+                  color={pink300}
+                  d="inline"
+                  fontSize="xx-large"
+                  verticalAlign="middle">
+                  •
+                </Text>
+              </Th>
               <Th>Delta</Th>
-              <Th>Last</Th>
+              <Th>
+                Last{' '}
+                <Text
+                  color={purple300}
+                  d="inline"
+                  fontSize="xx-large"
+                  verticalAlign="middle">
+                  •
+                </Text>
+              </Th>
             </Tr>
           </Thead>
           <Tbody>
@@ -80,20 +102,23 @@ const PoolView = ({ pool }: { pool: Pool }) => {
                 <Text textAlign="center">Const</Text>
               </Td>
               <Td>
-                <PfxVal pfx="k" val={poolInfo.k.toFixed()} />
+                <PfxVal pfx="k" val={poolInfo.k.toLocaleString()} />
               </Td>
               <Td></Td>
               <Td>
-                <PfxVal pfx="k" val={lastPoolInfo?.k.toFixed()} />
+                <PfxVal pfx="k" val={lastPoolInfo?.k.toLocaleString()} />
               </Td>
             </Tr>
           </Tbody>
         </Table>
-        <Box p={3}>
-          {poolInfo.reserves[0] + poolInfo.reserves[1] > 0 && (
-            <PoolDiagram pool={pool} poolInfos={[poolInfo, lastPoolInfo]} />
-          )}
-        </Box>
+        <Flex width="50%" direction="column">
+          <Flex width="100%" height="100%" p={1}>
+            {poolInfo.reserves[0] + poolInfo.reserves[1] > 0 && (
+              <PoolDiagram pool={pool} poolInfos={[poolInfo, lastPoolInfo]} />
+            )}
+          </Flex>
+          <Flex direction="column"></Flex>
+        </Flex>
       </Stack>
     </CardBox>
   );

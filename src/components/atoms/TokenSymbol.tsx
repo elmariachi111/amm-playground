@@ -7,15 +7,12 @@ import Identicon from 'react-identicons';
 import { Token } from '../../lib/Token';
 import { CoinInfo } from '../../types/Coingecko';
 
-const TokenSymbol = (
-  props: {
-    token?: Token;
-    coinInfo?: CoinInfo;
-    symbol?: string;
-    size?: number;
-    shares?: number;
-  } & BoxProps,
-) => {
+const TokenSymbol = (props: {
+  token?: Token;
+  coinInfo?: CoinInfo;
+  symbol?: string;
+  size?: number;
+}) => {
   const bg = useColorModeValue('white', 'gray.800');
   const borderColor = useColorModeValue('gray.200', 'gray.600');
 
@@ -39,13 +36,7 @@ const TokenSymbol = (
   }
 
   return (
-    <Box
-      borderRadius="full"
-      border="1px solid"
-      borderColor={borderColor}
-      bg={bg}
-      p={2}
-      {...props}>
+    <Box borderRadius="full" border="1px solid" borderColor={borderColor} bg={bg} p={2}>
       {image}
     </Box>
   );

@@ -2,9 +2,10 @@ import { Emitter } from '@servie/events';
 
 import { Token, TokenFeature } from './Token';
 
-interface PoolEvents {
+export interface PoolEvents {
   LiquidityChanged: [{ token1amt: number; token2amt: number }];
   ReservesChanged: [{ token1bal: number; token2bal: number }];
+  Quoted: [{ from: Token; to: Token; amount: number; quote: number }];
 }
 
 export interface PoolInfo {
@@ -82,7 +83,10 @@ export class Pool extends Emitter<PoolEvents> {
     const fromReserve = from.balanceOf(this.account);
     const toReserve = to.balanceOf(this.account);
 
-    return toReserve - this.k() / (amount - this.feeRate * amount + fromReserve);
+    const quote = toReserve - this.k() / (amount - this.feeRate * amount + fromReserve);
+
+    this.emit('Quoted', { from, to, amount, quote });
+    return quote;
   }
 
   buy(sender: string, from: Token, to: Token, amount: number) {

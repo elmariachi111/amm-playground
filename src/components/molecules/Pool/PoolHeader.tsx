@@ -10,8 +10,12 @@ const PoolHeader = ({ pool }: { pool: Pool }) => {
     <Flex bg="gray.100" p={4}>
       <Flex align="center" gridGap={4}>
         <Box position="relative" h="40px" w="50px">
-          <TokenSymbol size={20} token={pool.token1} position="absolute" />
-          <TokenSymbol size={20} token={pool.token2} position="absolute" left="20px" />
+          <Box position="absolute">
+            <TokenSymbol size={20} token={pool.token1} />
+          </Box>
+          <Box position="absolute" left="20px">
+            <TokenSymbol size={20} token={pool.token2} />
+          </Box>
         </Box>
         <Heading size="md">{pool.poolToken.symbol} Pool</Heading>
         <Text color="gray.400" fontSize="md">

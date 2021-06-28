@@ -15,6 +15,11 @@ const Button = {
       px: 6,
       py: 5,
     },
+    lg: {
+      fontSize: 'md',
+      px: 6,
+      py: 5,
+    },
   },
   // Two variants: outline and solid
   variants: {

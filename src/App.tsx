@@ -131,13 +131,6 @@ export default function App() {
               <TokenView token={t} key={`token-${t.symbol}`} />
             ))}
             {<NewToken onNew={addToken} />}
-            <Heading size="md" mt={16} whiteSpace="nowrap" textAlign="center">
-              Adopt a token from
-              <Link d="inline" isExternal href="https://www.coingecko.com/en" ml={1}>
-                CoinGecko
-              </Link>
-            </Heading>
-            {<CoinGeckoTokens onNew={addToken} tokens={tokens} />}
           </GridItem>
           {pools.length > 0 && (
             <GridItem colSpan={10} rowSpan={1} alignSelf="start">

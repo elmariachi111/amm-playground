@@ -22,26 +22,36 @@ const MarketPrice = ({ token }: { token: Token }) => {
     };
   }, [token]);
   return (
-    <Flex align="center">
-      <Text
-        color="gray.400"
-        textTransform="uppercase"
-        fontSize="xs"
-        fontWeight="medium"
-        mr={1}>
-        $
-      </Text>
+    <Flex align="flex-end">
       <Editable
-        fontSize="xs"
+        width="4rem"
+        fontSize="sm"
+        color="blue.400"
+        fontWeight="medium"
         textAlign="right"
         defaultValue={marketPrice?.toFixed(2)}
+        submitOnBlur={true}
         onSubmit={(nextVal: string) => {
           const newPrice = parseFloat(nextVal);
           token.setMarketPrice(newPrice);
         }}>
-        <EditablePreview />
+        <EditablePreview
+          cursor="pointer"
+          borderBottom="1px solid "
+          borderBottomColor="blue.400"
+          pb={0}
+          borderRadius={0}
+        />
         <EditableInput />
       </Editable>
+      <Text
+        color="gray.400"
+        textTransform="uppercase"
+        fontSize="sm"
+        fontWeight="medium"
+        ml={1}>
+        $
+      </Text>
     </Flex>
   );
 };
@@ -88,9 +98,11 @@ const TokenView = ({ token }: { token: Token }) => {
               {token.symbol}
             </Text>
           </Flex>
-          <Flex direction="column" align="end">
-            <PfxVal pfx="supply" val={totalSupply} justify="end" />
-            <MarketPrice token={token} />
+          <Flex direction="column" align="flex-end">
+            <PfxVal pfx="supply" val={totalSupply} />
+            {token.feature !== TokenFeature.LiquidityToken && (
+              <MarketPrice token={token} />
+            )}
           </Flex>
         </Flex>
         {token.feature !== TokenFeature.LiquidityToken && (

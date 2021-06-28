@@ -11,36 +11,40 @@ const TokenValueChooser = ({
   onTokenChanged,
   children,
   isFirst,
+  footer,
 }: {
   tokens: Token[];
   selected: Token | null | undefined;
   onTokenChanged: (symbol: string) => void;
   children: React.ReactNode;
   isFirst?: boolean;
+  footer?: React.ReactNode;
 }) => {
   return (
     <Flex
       bg="white"
-      p={2}
       border="1px solid"
       borderColor="gray.200"
-      align="center"
+      direction="column"
+      p={2}
       {...(isFirst ? { borderTopRadius: 6 } : { borderBottomRadius: 6 })}>
-      <Select
-        w="240px"
-        size="md"
-        border="none"
-        onChange={setField(onTokenChanged)}
-        value={selected?.symbol}>
-        <option value={''}>select</option>
-        {tokens.map((token) => (
-          <option value={token.symbol} key={`from-${token.symbol}`}>
-            {token.symbol}
-          </option>
-        ))}
-      </Select>
-
-      {children}
+      <Flex direction="row" align="center">
+        <Select
+          w="240px"
+          size="md"
+          border="none"
+          onChange={setField(onTokenChanged)}
+          value={selected?.symbol}>
+          <option value={''}>select</option>
+          {tokens.map((token) => (
+            <option value={token.symbol} key={`from-${token.symbol}`}>
+              {token.symbol}
+            </option>
+          ))}
+        </Select>
+        {children}
+      </Flex>
+      <Flex justify="flex-end">{footer}</Flex>
     </Flex>
   );
 };

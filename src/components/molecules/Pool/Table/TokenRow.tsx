@@ -38,7 +38,7 @@ const TokenRow = ({
           </Flex>
         </Td>
         <Td borderColor="gray.300" borderTop="1px solid">
-          <PfxVal pfx="vol" val={poolInfoCur.reserves[tokenIdx]} />
+          <PfxVal pfx="vol" val={poolInfoCur.reserves[tokenIdx].toLocaleString()} />
         </Td>
         <Td borderColor="gray.300" borderTop="1px solid">
           <Diff
@@ -48,7 +48,7 @@ const TokenRow = ({
           />
         </Td>
         <Td borderColor="gray.300" borderTop="1px solid">
-          <PfxVal pfx="vol" val={poolInfoLast?.reserves[tokenIdx]} />
+          <PfxVal pfx="vol" val={poolInfoLast?.reserves[tokenIdx].toLocaleString()} />
         </Td>
       </Tr>
       <Tr odd={odd}>

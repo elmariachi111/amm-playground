@@ -70,16 +70,14 @@ export default function PoolBalance({ address, pool }: { address: string; pool: 
     token2Usd: 0,
   });
 
-  const updateBalances = useCallback(async () => {
+  const updateBalances = useCallback(() => {
     if (!pool) return;
     const newBalance = pool.poolToken.balanceOf(address);
     setBalance(newBalance);
     const _shares = poolShares(pool, address);
 
-    const usdValues = await Promise.all([
-      pool.token1.fetchMarketPrice(),
-      pool.token2.fetchMarketPrice(),
-    ]);
+    const usdValues = [pool.token1.marketPrice, pool.token2.marketPrice];
+
     const newState = {
       share: 100 * (newBalance / pool.poolToken.totalSupply),
       token1: _shares[0],
@@ -87,7 +85,6 @@ export default function PoolBalance({ address, pool }: { address: string; pool: 
       token1Usd: _shares[0] * usdValues[0],
       token2Usd: _shares[1] * usdValues[1],
     };
-    console.log(newState);
     setShareInfo(newState);
   }, [pool.poolToken]);
 

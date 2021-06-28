@@ -10,11 +10,12 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/layout';
-import React from 'react';
+import React, { useState } from 'react';
 import { HiChevronDoubleDown, HiRefresh } from 'react-icons/hi';
 import { RiHandCoinFill } from 'react-icons/ri';
 import { scroller } from 'react-scroll';
 
+import { adaptCoin } from '../../lib/Coingecko';
 import { Token } from '../../lib/Token';
 
 export default function Intro({
@@ -26,10 +27,18 @@ export default function Intro({
   tokens: Token[];
   addToken: (t: Token) => void;
 }) {
-  const createToken = (name: string, symbol: string) => {
+  const [defaultsSet, setDefaultsSet] = useState<boolean>(false);
+
+  const createToken = async (name: string, symbol: string) => {
     if (tokens.filter((t) => t.symbol === symbol).length > 0) return;
-    const tok = new Token(symbol, name);
-    addToken(tok);
+    const tok = await adaptCoin(symbol);
+    console.log(tok);
+    addToken(tok || new Token(symbol, name));
+  };
+
+  const setSomeDefaults = async () => {
+    setDefaultsSet(true);
+    await setDefaults();
   };
 
   return (
@@ -76,16 +85,20 @@ export default function Intro({
             <Box mb={4}>
               <Heading size="lg">Get started</Heading>
               <Text fontSize="md" color="gray.500">
-                some simple instructions{' '}
+                some instructions{' '}
               </Text>
             </Box>
 
             <Text>
-              1. Mint some Eth. Just use real names as addresses (Mint 10 Eth to
-              &quot;alice&quot;)
-            </Text>
-            <Text>
-              2. Create more tokens (e.g.{' '}
+              1. Create some tokens (e.g.{' '}
+              <Text
+                as={Link}
+                onClick={() => {
+                  createToken('Eth', 'ETH');
+                }}>
+                &quot;ETH&quot;
+              </Text>
+              ,
               <Text
                 as={Link}
                 onClick={() => {
@@ -101,20 +114,27 @@ export default function Intro({
                 }}>
                 &quot;wBTC&quot;
               </Text>
-              ).
+              )
             </Text>
             <Text>
-              3. <b>Provide liquidity</b> using two tokens and choosing a pool fee
+              2. <b>Mint</b> some of those tokens to account. Just use real names as
+              addresses (Mint 10 Eth to &quot;alice&quot;)
             </Text>
             <Text>
-              4. Provide more liquidity from another account and watch the pool shares
+              3. Create a new liquidity pool by <b>depositing</b> two tokens. This action
+              effectively mints new <b>liquidity pair tokens</b> to the provider.
             </Text>
             <Text>
-              5. <b>swap</b> one token for another using another account
+              4. choose another account and <b>swap</b> one token for another
+            </Text>
+
+            <Text>
+              5. Change the "real world" market price on tokens to simulate arbitrage
+              opportunities
             </Text>
             <Text>
-              6. <b>redeem</b> your position to get back your value + your share of
-              accrued pool fees.
+              6. <b>Withdraw</b> a percentage your position to get back your value + your
+              share of accrued pool fees.
             </Text>
           </Box>
 
@@ -144,7 +164,7 @@ export default function Intro({
               </Link>
               <Box whiteSpace="nowrap">
                 Uniswap Docs:{' '}
-                <Link isExternal href="https://uniswap.org/docs/v2/">
+                <Link isExternal href="https://uniswap.org/docs/v2/core-concepts/swaps/">
                   V2
                 </Link>{' '}
                 |{' '}
@@ -191,13 +211,15 @@ export default function Intro({
             leftIcon={<HiChevronDoubleDown />}>
             scroll to app
           </Button>
-          <Button
-            colorScheme="green"
-            variant="link"
-            onClick={setDefaults}
-            leftIcon={<RiHandCoinFill />}>
-            Set some defaults
-          </Button>
+          {!defaultsSet && (
+            <Button
+              colorScheme="green"
+              variant="link"
+              onClick={setSomeDefaults}
+              leftIcon={<RiHandCoinFill />}>
+              Set some defaults
+            </Button>
+          )}
           <Button
             leftIcon={<HiRefresh />}
             colorScheme="green"

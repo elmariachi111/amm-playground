@@ -22,7 +22,7 @@ const AMM = ({
   pools: Pool[];
   poolAdded: (p: Pool) => void;
 }) => {
-  const DESCR_MIN_HEIGHT = 120;
+  const DESCR_MIN_HEIGHT = 140;
 
   return (
     <Box
@@ -41,9 +41,9 @@ const AMM = ({
             </Heading>
             <Text py={4} fontSize="sm" minHeight={DESCR_MIN_HEIGHT}>
               Exchange one token for another in one atomic swap transaction. You&apos;ll
-              have to pay a swap fee that goes into the pool&apos;s reserves. Swaps are
-              changing the balance of a pool&apos;s reserves and thereby have an effect on
-              the exchange price.
+              have to pay a swap fee that goes into the pool&apos;s reserves. Swaps have
+              an effect on the pool reserves&apos; equilibrium and therefore affect the
+              quoted exchange price.
               {pools.length == 0 &&
                 `To swap, you first need to create a token pair pool and deposit
                     liquidity into it.`}
@@ -59,10 +59,10 @@ const AMM = ({
             </Heading>
 
             <Text py={4} fontSize="sm" minHeight={DESCR_MIN_HEIGHT}>
-              Create new or add tokens to pools. Ensure to provide liquidity with an equal{' '}
-              <b>value</b>, otherwise your position is in risk of being arbitraged. As the
-              first liquidity provider, you may choose a pool fee that swap transactions
-              must pay to the pool.
+              Add tokens to / create new pools. Ensure to deposit tokens at an equal{' '}
+              <b>$ value</b>, otherwise your position is in risk of being arbitraged. As
+              the first liquidity provider, you may choose a pool fee that swap
+              transactions must pay to the pool.
             </Text>
 
             <AddLiquidityForm

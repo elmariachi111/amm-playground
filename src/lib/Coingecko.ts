@@ -76,7 +76,12 @@ export const DEFAULT_SYMBOLS = [
   {
     id: 'weth',
     symbol: 'weth',
-    name: 'WETH',
+    name: 'Wrapped ETH',
+  },
+  {
+    id: 'wrapped-bitcoin',
+    symbol: 'wbtc',
+    name: 'Wrapped Bitcoin',
   },
   {
     id: 'wrapped-filecoin',
@@ -97,7 +102,7 @@ export const DEFAULT_SYMBOLS = [
 
 class API {
   async getCachedDefaulTokens(): Promise<CoinInfo[]> {
-    const ids = DEFAULT_SYMBOLS.slice(0, 12).map((s) => s.id);
+    const ids = DEFAULT_SYMBOLS.map((s) => s.id);
     const cacheKey = `coininfo[${ids.join(',')}]`;
     const cached = localStorage.getItem(cacheKey);
     if (cached) {
