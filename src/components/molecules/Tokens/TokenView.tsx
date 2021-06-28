@@ -90,8 +90,8 @@ const TokenView = ({ token }: { token: Token }) => {
               {token.symbol}
             </Text>
           </Flex>
-          <Flex direction="column" align="end">
-            <PfxVal pfx="supply" val={totalSupply} justify="end" />
+          <Flex direction="column" align="flex-end">
+            <PfxVal pfx="supply" val={totalSupply} />
             {token.feature !== TokenFeature.LiquidityToken && (
               <MarketPrice token={token} />
             )}

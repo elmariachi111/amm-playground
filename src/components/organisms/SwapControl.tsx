@@ -177,7 +177,7 @@ export default function SwapControl({
               )}
             </Text>
           }>
-          <Flex justifyContent="end" width="100%" py={0} px={1}>
+          <Flex justifyContent="flex-end" width="100%" py={0} px={1}>
             <Text fontSize="lg">{quote?.toFixed(2)}</Text>
           </Flex>
         </TokenValueChooser>

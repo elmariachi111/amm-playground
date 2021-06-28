@@ -30,7 +30,7 @@ const WithdrawAmount = ({
   }, [share, pool, balance]);
 
   return (
-    <Flex direction="column" align="end">
+    <Flex direction="column" align="flex-end">
       <Flex direction="row" align="center">
         <Input
           size="md"

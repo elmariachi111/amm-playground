@@ -44,9 +44,7 @@ const TokenValueChooser = ({
         </Select>
         {children}
       </Flex>
-      <Flex align="end" justify="end">
-        {footer}
-      </Flex>
+      <Flex justify="flex-end">{footer}</Flex>
     </Flex>
   );
 };
