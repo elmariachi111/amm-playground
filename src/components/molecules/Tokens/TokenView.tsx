@@ -22,10 +22,12 @@ const MarketPrice = ({ token }: { token: Token }) => {
     };
   }, [token]);
   return (
-    <Flex align="center">
+    <Flex align="flex-end">
       <Editable
-        width="5rem"
-        fontSize="xs"
+        width="4rem"
+        fontSize="sm"
+        color="blue.400"
+        fontWeight="medium"
         textAlign="right"
         defaultValue={marketPrice?.toFixed(2)}
         submitOnBlur={true}
@@ -33,13 +35,19 @@ const MarketPrice = ({ token }: { token: Token }) => {
           const newPrice = parseFloat(nextVal);
           token.setMarketPrice(newPrice);
         }}>
-        <EditablePreview />
+        <EditablePreview
+          cursor="pointer"
+          borderBottom="1px solid "
+          borderBottomColor="blue.400"
+          pb={0}
+          borderRadius={0}
+        />
         <EditableInput />
       </Editable>
       <Text
         color="gray.400"
         textTransform="uppercase"
-        fontSize="xs"
+        fontSize="sm"
         fontWeight="medium"
         ml={1}>
         $

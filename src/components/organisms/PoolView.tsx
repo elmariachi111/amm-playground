@@ -112,9 +112,6 @@ const PoolView = ({ pool }: { pool: Pool }) => {
           </Tbody>
         </Table>
         <Flex width="50%" direction="column">
-          <Heading size="sm" p={2}>
-            Pool balance vs Price
-          </Heading>
           <Flex width="100%" height="100%" p={1}>
             {poolInfo.reserves[0] + poolInfo.reserves[1] > 0 && (
               <PoolDiagram pool={pool} poolInfos={[poolInfo, lastPoolInfo]} />
