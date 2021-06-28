@@ -23,15 +23,8 @@ const MarketPrice = ({ token }: { token: Token }) => {
   }, [token]);
   return (
     <Flex align="center">
-      <Text
-        color="gray.400"
-        textTransform="uppercase"
-        fontSize="xs"
-        fontWeight="medium"
-        mr={1}>
-        $
-      </Text>
       <Editable
+        width="5rem"
         fontSize="xs"
         textAlign="right"
         defaultValue={marketPrice?.toFixed(2)}
@@ -43,6 +36,14 @@ const MarketPrice = ({ token }: { token: Token }) => {
         <EditablePreview />
         <EditableInput />
       </Editable>
+      <Text
+        color="gray.400"
+        textTransform="uppercase"
+        fontSize="xs"
+        fontWeight="medium"
+        ml={1}>
+        $
+      </Text>
     </Flex>
   );
 };
@@ -91,7 +92,9 @@ const TokenView = ({ token }: { token: Token }) => {
           </Flex>
           <Flex direction="column" align="end">
             <PfxVal pfx="supply" val={totalSupply} justify="end" />
-            <MarketPrice token={token} />
+            {token.feature !== TokenFeature.LiquidityToken && (
+              <MarketPrice token={token} />
+            )}
           </Flex>
         </Flex>
         {token.feature !== TokenFeature.LiquidityToken && (

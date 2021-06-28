@@ -212,25 +212,33 @@ export default function AddLiquidityForm({
                 onChange={setNumericalField(setAmt2)}
               />
             </InputGroup>
-            {amt1 && amt1 > 0 && marketPrice != amt2 ? (
-              <Text color="red.300">
-                not choosing the market price may lead to an arbitrage opportunity.
+            {balanceWarning && (
+              <Text color="red.300" fontSize="xs" align="right">
+                insufficient funds
               </Text>
-            ) : (
-              <></>
             )}
-            {balanceWarning && <Text color="red.300">insufficient funds</Text>}
           </FormControl>
         </TokenValueChooser>
       </Stack>
 
+      {amt1 && amt1 > 0 && marketPrice != amt2 ? (
+        <Text color="orange.400" fontSize="sm" align="right">
+          not providing at market price leads to arbitrage opportunity.
+        </Text>
+      ) : (
+        <></>
+      )}
       {createsNewPool && (
         <Flex direction="column">
           <Text color="gray.500" align="start" my={2}>
             choose a pool fee
           </Text>
-          <RadioGroup onChange={setNewPoolFee} value={newPoolFee} defaultValue="0">
-            <Stack direction="row" spacing={6}>
+          <RadioGroup
+            onChange={setNewPoolFee}
+            value={newPoolFee}
+            defaultValue="0"
+            colorScheme="green">
+            <Stack direction="row" spacing={3} justify="center">
               {Object.keys(predefinedFees)
                 .sort()
                 .map((fee) => (

@@ -181,8 +181,18 @@ export default function SwapControl({
             <Text fontSize="lg">{quote?.toFixed(2)}</Text>
           </Flex>
         </TokenValueChooser>
+        {pool && pool.feeRate > 0 && (
+          <Text color="gray.500" align="right" fontSize="small" pt={2}>
+            pool takes a {pool.feeRate * 100}% swap fee
+            {from && amount && amount > 0 ? (
+              <span> ({`${amount * pool.feeRate} ${from.symbol}`})</span>
+            ) : (
+              <span></span>
+            )}
+          </Text>
+        )}
 
-        {from && to && amount && quote && (
+        {from && to && amount && quote ? (
           <>
             <Text color="gray.500" align="right" pt={2} fontSize="sm">
               1 {from.symbol} = {(quote / amount).toFixed(4)} {to.symbol}
@@ -191,15 +201,15 @@ export default function SwapControl({
               1 {to.symbol} = {(amount / quote).toFixed(4)} {from.symbol}
             </Text>
           </>
-        )}
-
-        {pool && pool.feeRate > 0 && (
-          <Text color="gray.500" align="right" fontSize="small" pt={2}>
-            pool takes a {pool.feeRate * 100}% swap fee
-            {amount && amount > 0 && from && (
-              <span> ({`${amount * pool.feeRate} ${from.symbol}`})</span>
-            )}
-          </Text>
+        ) : (
+          <>
+            <Text pt={2} fontSize="sm">
+              &nbsp;
+            </Text>
+            <Text pt={2} fontSize="sm">
+              &nbsp;
+            </Text>
+          </>
         )}
 
         {from && to && !pool && (
