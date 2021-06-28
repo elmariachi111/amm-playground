@@ -59,14 +59,12 @@ export class Token extends Emitter<TokenEvents> {
     if (!this.coinInfo) return this.marketPrice;
 
     const now = new Date().getTime();
-    console.log(this.lastFetch, (now - this.lastFetch) / 1000);
     if ((now - this.lastFetch) / 1000 < 3600) return this.marketPrice;
 
     this.fetchPromise =
       this.fetchPromise ?? coinGeckoApi.getUSDCoinPrice(this.coinInfo.id);
     const extPrice = await this.fetchPromise;
 
-    console.log('fetched', this.marketPrice);
     this.fetchPromise = null;
     this.lastFetch = now;
     this.setMarketPrice(extPrice);
@@ -92,7 +90,6 @@ export class Token extends Emitter<TokenEvents> {
     }
     this.balances[from] -= amount;
     this.balances[to] += amount;
-
     this.emit('Transferred', { from, to, amount });
   }
 

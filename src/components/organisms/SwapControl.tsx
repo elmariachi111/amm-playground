@@ -41,15 +41,15 @@ export default function SwapControl({
   }, [from]);
 
   const updateQuote = useCallback(() => {
-    console.log(amount, pool?.poolToken.symbol, from?.symbol, to?.symbol);
     if (amount && pool && from && to) {
       setQuote(pool.quote(from, to, amount));
     } else {
+      if (from && pool && to) pool.quote(from, to, 0);
       setQuote(0);
     }
-  }, [amount, pool, sender]);
+  }, [amount, pool, from, to, sender]);
 
-  useEffect(() => updateQuote(), [amount]);
+  useEffect(updateQuote, [amount]);
 
   useEffect(() => {
     if (pool) {
@@ -61,7 +61,7 @@ export default function SwapControl({
         for (const _off of off) _off();
       };
     }
-  }, [pool, sender, from, to, amount]);
+  }, [pool, updateQuote]);
 
   useEffect(() => {
     if (from && to) {

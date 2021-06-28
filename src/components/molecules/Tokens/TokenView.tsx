@@ -35,6 +35,7 @@ const MarketPrice = ({ token }: { token: Token }) => {
         fontSize="xs"
         textAlign="right"
         defaultValue={marketPrice?.toFixed(2)}
+        submitOnBlur={true}
         onSubmit={(nextVal: string) => {
           const newPrice = parseFloat(nextVal);
           token.setMarketPrice(newPrice);
