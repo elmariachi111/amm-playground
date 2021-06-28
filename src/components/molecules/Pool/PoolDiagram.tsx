@@ -1,6 +1,8 @@
-import { Box, Text } from '@chakra-ui/layout';
+import { Box, Flex, Text } from '@chakra-ui/layout';
+import { Icon } from '@chakra-ui/react';
 import { useToken } from '@chakra-ui/system';
 import React, { useCallback, useEffect, useState } from 'react';
+import { GoPrimitiveDot } from 'react-icons/go';
 import {
   FlexibleXYPlot,
   LineSeries,
@@ -30,7 +32,7 @@ const PoolDiagram = ({
   ]);
   const [series, setSeries] = useState<LineSeriesPoint[][]>([]);
   const [markers, setMarkers] = useState<MarkSeriesPoint[]>([]);
-  const [selectedDataPoint, setSelectedDataPoint] = useState<LineSeriesPoint>({
+  const [selectedDataPoint, setSelectedDataPoint] = useState<LineSeriesPoint | null>({
     x: 0,
     y: 0,
   });
@@ -89,8 +91,8 @@ const PoolDiagram = ({
     const _series: LineSeriesPoint[][] = [];
     const _markers: MarkSeriesPoint[] = [];
     const pi = poolInfos.filter((p): boolean => !!p) as PoolInfo[];
-    console.log(quote);
-    pi.reverse().forEach((poolInfo, idx) => {
+
+    pi.forEach((poolInfo, idx) => {
       const data = [];
       const base = poolInfo.reserves[0];
       const range = base / 2;
@@ -109,9 +111,13 @@ const PoolDiagram = ({
         y: poolInfo.reserves[1],
         color: markColors[idx],
         size: '4',
+        note: idx === 0 ? 'current price' : 'last price',
       });
       if (quote) {
-        _markers.push(quote);
+        _markers.push({
+          note: 'pool after quote',
+          ...quote,
+        });
       }
     });
     setSeries(_series);
@@ -119,7 +125,7 @@ const PoolDiagram = ({
   }, [poolInfos, quote]);
 
   return (
-    <FlexibleXYPlot margin={{ left: 50 }}>
+    <FlexibleXYPlot margin={{ left: 50 }} onMouseLeave={() => setSelectedDataPoint(null)}>
       {series.map((_series, idx) => (
         <LineSeries
           key={`hist-${idx}`}
@@ -127,10 +133,6 @@ const PoolDiagram = ({
           data={_series}
           color={green300}
           opacity={(series.length - idx) / series.length}
-          onNearestX={(datapoint) => {
-            //@ts-ignore
-            setSelectedDataPoint(datapoint);
-          }}
         />
       ))}
       <MarkSeries
@@ -138,36 +140,48 @@ const PoolDiagram = ({
         stroke="transparent"
         colorType="literal"
         sizeType="literal"
+        onNearestXY={(datapoint) => {
+          //@ts-ignore
+          setSelectedDataPoint(datapoint);
+        }}
       />
       <XAxis title={pool.token1.symbol} tickLabelAngle={-90} />
       <YAxis title={pool.token2.symbol} />
-      <Hint value={selectedDataPoint} align={{ vertical: 'top', horizontal: 'right' }}>
-        <Box
-          bg="rgba(255,255,255,0.6)"
-          rounded="md"
-          border="1px solid"
-          borderColor="gray.200"
-          fontSize="xs"
-          minW="10rem"
-          p={2}>
-          <Text color="gray.600">
-            1 {pool.token1.symbol} ={' '}
-            {(selectedDataPoint.y / (selectedDataPoint.x as number)).toFixed(4)}{' '}
-            {pool.token2.symbol}
-          </Text>
-          <Text color="gray.400">
-            {(selectedDataPoint.x as number).toFixed(2)} {pool.token1.symbol} |{' '}
-            {selectedDataPoint.y.toFixed(2)} {pool.token2.symbol}
-          </Text>
+      {selectedDataPoint && (
+        <Hint value={selectedDataPoint} align={{ vertical: 'top', horizontal: 'right' }}>
+          <Box
+            bg="rgba(255,255,255,0.6)"
+            rounded="md"
+            border="1px solid"
+            borderColor="gray.200"
+            fontSize="xs"
+            minW="10rem"
+            p={2}>
+            <Flex direction="row">
+              <Text color={selectedDataPoint.color as any}>
+                <Icon as={GoPrimitiveDot} boxSize="1.2rem" />
+                {selectedDataPoint.note}
+              </Text>
+            </Flex>
+            <Text color="gray.600">
+              1 {pool.token1.symbol} ={' '}
+              {(selectedDataPoint.y / (selectedDataPoint.x as number)).toFixed(4)}{' '}
+              {pool.token2.symbol}
+            </Text>
+            <Text color="gray.400">
+              {(selectedDataPoint.x as number).toFixed(2)} {pool.token1.symbol} |{' '}
+              {selectedDataPoint.y.toFixed(2)} {pool.token2.symbol}
+            </Text>
 
-          {/* {poolInfos[1] && (
+            {/* {poolInfos[1] && (
             <Text color="gray.300">
               {(poolInfos[1].k / selectedDataPoint.x).toLocaleString()}{' '}
               {pool.token2.symbol}
             </Text>
           )} */}
-        </Box>
-      </Hint>
+          </Box>
+        </Hint>
+      )}
     </FlexibleXYPlot>
   );
 };
