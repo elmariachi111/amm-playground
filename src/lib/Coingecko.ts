@@ -2,9 +2,9 @@ import { CoinInfo } from '../types/Coingecko';
 import { Token } from './Token';
 
 //https://www.coingecko.com/en/api#explore-api
-const BASE_URL = 'https://api.coingecko.com/api/v3';
+export const BASE_URL = 'https://api.coingecko.com/api/v3';
 const COIN_QUERY_PARAMS =
-  'curl -X GET "https://api.coingecko.com/api/v3/coins/decentraland?localization=false&tickers=false&market_data=false&community_data=false&developer_data=false';
+  'localization=false&tickers=false&market_data=false&community_data=false&developer_data=false';
 
 export const DEFAULT_SYMBOLS = [
   {

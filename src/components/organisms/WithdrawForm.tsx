@@ -10,13 +10,11 @@ import { Pool } from '../../lib/Pool';
 
 const WithdrawAmount = ({
   pool,
-  from,
   share,
   balance,
   onShareChanged,
 }: {
   pool: Pool;
-  from: string;
   share: number;
   balance: number | undefined;
   onShareChanged: (n: number) => void;
@@ -161,7 +159,6 @@ export default function WithdrawForm({ pools, from }: { pools: Pool[]; from: str
               {...radio}>
               {selectedPool === pool ? (
                 <WithdrawAmount
-                  from={from}
                   pool={pool}
                   share={shareToWithdraw}
                   onShareChanged={setShareToWithdraw}

@@ -1,5 +1,4 @@
-import { Box, Flex, Stack, Text } from '@chakra-ui/layout';
-import { Heading } from '@chakra-ui/layout';
+import { Flex, Stack, Text } from '@chakra-ui/layout';
 import { useToken } from '@chakra-ui/react';
 import { Table, Tbody, Td, Th, Thead } from '@chakra-ui/table';
 import React, { useCallback, useEffect, useState } from 'react';
