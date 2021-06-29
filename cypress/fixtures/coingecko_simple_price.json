@@ -1,0 +1,74 @@
+{
+  "dai": {
+    "usd": 1,
+    "eur": 0.840579
+  },
+  "compound-governance-token": {
+    "usd": 313.39,
+    "eur": 263.24
+  },
+  "wrapped-filecoin": {
+    "usd": 62.76,
+    "eur": 52.71
+  },
+  "basic-attention-token": {
+    "usd": 0.592745,
+    "eur": 0.497876
+  },
+  "usd-coin": {
+    "usd": 0.999842,
+    "eur": 0.839817
+  },
+  "havven": {
+    "usd": 7.27,
+    "eur": 6.11
+  },
+  "matic-network": {
+    "usd": 1.2,
+    "eur": 1.01
+  },
+  "internet-computer": {
+    "usd": 55.06,
+    "eur": 46.25
+  },
+  "chainlink": {
+    "usd": 19.97,
+    "eur": 16.78
+  },
+  "ethereum": {
+    "usd": 2216.89,
+    "eur": 1862.08
+  },
+  "uniswap": {
+    "usd": 18.84,
+    "eur": 15.83
+  },
+  "sushi": {
+    "usd": 8.24,
+    "eur": 6.92
+  },
+  "the-graph": {
+    "usd": 0.589656,
+    "eur": 0.495281
+  },
+  "wrapped-bitcoin": {
+    "usd": 36252,
+    "eur": 30450
+  },
+  "maker": {
+    "usd": 2445.82,
+    "eur": 2054.37
+  },
+  "weth": {
+    "usd": 2223.6,
+    "eur": 1867.71
+  },
+  "pooltogether": {
+    "usd": 12.07,
+    "eur": 10.14
+  },
+  "decentraland": {
+    "usd": 0.552785,
+    "eur": 0.464312
+  }
+}

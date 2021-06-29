@@ -3,18 +3,24 @@
   "version": "1.0.0",
   "license": "MIT",
   "devDependencies": {
+    "@cypress/react": "^5.9.1",
+    "@cypress/webpack-dev-server": "^1.4.0",
+    "@types/mocha": "^8.2.2",
     "@types/react": "^17.0.4",
     "@types/react-dom": "^17.0.3",
     "@types/react-scroll": "^1.8.2",
-    "@typescript-eslint/eslint-plugin": "^4.22.1",
-    "@typescript-eslint/parser": "^4.22.1",
+    "@typescript-eslint/eslint-plugin": "^4.28.1",
+    "@typescript-eslint/parser": "^4.28.1",
+    "cypress": "^7.6.0",
     "eslint": "^7.25.0",
+    "eslint-plugin-cypress": "^2.11.3",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-react": "^7.23.2",
     "eslint-plugin-simple-import-sort": "^7.0.0",
+    "html-webpack-plugin": "4",
     "prettier": "^2.2.1",
     "react-scripts": "^4.0.1",
     "react-vis-types": "^0.0.6",
@@ -66,6 +72,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "cy:ct": "cypress open-ct",
+    "cy:open": "cypress open",
+    "lint": "eslint src --ext .jsx,.js,.tsx,.ts --max-warnings 5"
   }
 }
