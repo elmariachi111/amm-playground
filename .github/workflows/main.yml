@@ -1,0 +1,22 @@
+name: Cypress Tests
+
+on: [push]
+
+jobs:
+
+  cypress-run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: lint
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      - run: yarn
+      - run: yarn lint
+      - name: Cypress run
+        uses: cypress-io/github-action@v2
+        with:
+          start: yarn start
+          wait-on: 'http://localhost:3000'

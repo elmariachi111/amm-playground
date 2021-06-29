@@ -2,6 +2,7 @@
   "compilerOptions": {
     "target": "es5",
     "lib": [
+      "es5",
       "dom",
       "dom.iterable",
       "esnext"
@@ -19,11 +20,15 @@
     "isolatedModules": true,
     "noEmit": true,
     "downlevelIteration": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "types": ["cypress"]
+
   },
   "include": [
+    "cypress/integration/*.ts",
+    "cypress/integration/**/*.ts",
     "src/**/*"
-  ],
+, "tests"  ],
   "exclude": [
     "node_modules/**/*"
   ]

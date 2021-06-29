@@ -129,8 +129,8 @@ export default function Intro({
             </Text>
 
             <Text>
-              5. Change the "real world" market price on tokens to simulate arbitrage
-              opportunities
+              5. Change the &quot;real world&quot; market price on tokens to simulate
+              arbitrage opportunities
             </Text>
             <Text>
               6. <b>Withdraw</b> a percentage your position to get back your value + your

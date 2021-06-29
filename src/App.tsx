@@ -1,4 +1,15 @@
-import { Container, Grid, GridItem, Heading, Link, SimpleGrid } from '@chakra-ui/layout';
+/// <reference types="react-vis-types" />
+
+import 'react-vis/dist/style.css';
+import '@fontsource/roboto/100.css';
+import '@fontsource/roboto/300.css';
+import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/500.css';
+import '@fontsource/roboto/700.css';
+import '@fontsource/roboto/900.css';
+
+import { Container, Grid, GridItem, Heading, SimpleGrid } from '@chakra-ui/layout';
+import { ChakraProvider } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 
 import { Header } from './components/atoms/Header';
@@ -7,12 +18,11 @@ import Account from './components/molecules/Account';
 import NewToken from './components/molecules/Tokens/NewToken';
 import { TokenView } from './components/molecules/Tokens/TokenView';
 import AMM from './components/organisms/AMM';
-import CoinGeckoTokens from './components/organisms/CoinGeckoTokens';
 import { PoolView } from './components/organisms/PoolView';
 import { adaptCoin } from './lib/Coingecko';
 import { Pool } from './lib/Pool';
 import { Token } from './lib/Token';
-
+import theme from './theme';
 export default function App() {
   const [tokens, setTokens] = useState<Token[]>([]);
   const [pools, setPools] = useState<Pool[]>([]);
@@ -32,9 +42,10 @@ export default function App() {
     setPools([]);
     const eth = await adaptCoin('eth');
     if (!eth) return;
-    eth.setMarketPrice(2000);
     const dai = await adaptCoin('dai');
     if (!dai) return;
+
+    eth.setMarketPrice(2000);
     dai.setMarketPrice(1);
 
     setTokens([eth, dai]);
@@ -45,13 +56,11 @@ export default function App() {
     dai.mint(10000, 'bob');
     eth.mint(10, 'bob');
 
-    // const pool = new Pool('0xethdaipool', eth, dai, 1);
-    // pool.addLiquidity('alice', 10, 2000 * 10);
-    // pool.addLiquidity('bob', 5, 2000 * 5);
+    const pool = new Pool('0xethdaipool', eth, dai, 1);
+    pool.addLiquidity('alice', 10, 2000 * 10);
 
-    //dai.mint(10000, 'charlie');
     setAccounts(['alice', 'bob']);
-    //addPool(pool);
+    addPool(pool);
   };
 
   const includeAccount = (acc: string) => {
@@ -91,10 +100,10 @@ export default function App() {
   }, [tokens, includeAccount]);
 
   return (
-    <>
+    <ChakraProvider theme={theme}>
       <Header />
       <Intro setDefaults={setSomeDefaults} tokens={tokens} addToken={addToken} />
-      <Container maxW="1800px" my={10} id="amm-app" minH="900px">
+      <Container maxW="1800px" my={10} id="amm-app" minH="1200px">
         <Grid templateRows="min-content" templateColumns="repeat(12, 1fr)" gap={10}>
           <GridItem rowSpan={1} colSpan={3}>
             <Heading size="xl" mb={4}>
@@ -147,6 +156,6 @@ export default function App() {
         </Grid>
       </Container>
       <Header />
-    </>
+    </ChakraProvider>
   );
 }
