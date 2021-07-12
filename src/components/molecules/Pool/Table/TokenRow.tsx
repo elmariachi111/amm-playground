@@ -1,4 +1,5 @@
 import { Flex, Text } from '@chakra-ui/layout';
+import { useColorModeValue } from '@chakra-ui/react';
 import { Td } from '@chakra-ui/table';
 import React from 'react';
 
@@ -23,13 +24,14 @@ const TokenRow = ({
 }) => {
   const token = tokenIdx === 0 ? pool.token1 : pool.token2;
   const otherToken = tokenIdx === 0 ? pool.token2 : pool.token1;
+  const border = useColorModeValue('gray.300', 'gray.500');
 
   return (
     <>
       <Tr odd={odd}>
         <Td
           rowSpan={2}
-          borderColor="gray.300"
+          borderColor={border}
           borderTop="1px solid"
           borderBottom="1px solid">
           <Flex align="center" gridGap={2} overflow="hidden">
@@ -37,32 +39,32 @@ const TokenRow = ({
             <Text fontSize="xs">{token.symbol}</Text>
           </Flex>
         </Td>
-        <Td borderColor="gray.300" borderTop="1px solid">
+        <Td borderColor={border} borderTop="1px solid">
           <PfxVal pfx="vol" val={poolInfoCur.reserves[tokenIdx].toLocaleString()} />
         </Td>
-        <Td borderColor="gray.300" borderTop="1px solid">
+        <Td borderColor={border} borderTop="1px solid">
           <Diff
             cur={poolInfoCur.reserves[tokenIdx]}
             last={poolInfoLast?.reserves[tokenIdx]}
             type="abs"
           />
         </Td>
-        <Td borderColor="gray.300" borderTop="1px solid">
+        <Td borderColor={border} borderTop="1px solid">
           <PfxVal pfx="vol" val={poolInfoLast?.reserves[tokenIdx].toLocaleString()} />
         </Td>
       </Tr>
       <Tr odd={odd}>
-        <Td borderColor="gray.300" borderTop="1px solid">
+        <Td borderColor={border} borderTop="1px solid">
           <PfxVal pfx="pri" val={poolInfoCur.prices[tokenIdx]} sfx={otherToken.symbol} />
         </Td>
-        <Td borderColor="gray.300" borderTop="1px solid">
+        <Td borderColor={border} borderTop="1px solid">
           <Diff
             cur={poolInfoCur.prices[tokenIdx]}
             last={poolInfoLast?.prices[tokenIdx]}
             type="rel"
           />
         </Td>
-        <Td borderColor="gray.300" borderTop="1px solid">
+        <Td borderColor={border} borderTop="1px solid">
           <PfxVal
             pfx="pri"
             val={poolInfoLast?.prices[tokenIdx]}

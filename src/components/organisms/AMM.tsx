@@ -7,6 +7,7 @@ import {
   TabPanels,
   Tabs,
   useBreakpointValue,
+  useColorModeValue,
 } from '@chakra-ui/react';
 import React from 'react';
 
@@ -32,10 +33,11 @@ interface PanelProps {
 const SwapPanel = (props: PanelProps) => {
   const { pools } = props;
   const minHeight = useBreakpointValue({ xl: DESCR_MIN_HEIGHT, md: 'auto' });
+  const iconCol = useColorModeValue('gray.800', 'gray.200');
   return (
     <Flex direction="column">
       <Heading size="lg" mb={3} d={{ xl: 'inline', md: 'none' }}>
-        <SwapIcon /> Swap
+        <SwapIcon color={iconCol} /> Swap
       </Heading>
       <Text py={4} fontSize="sm" minHeight={minHeight}>
         Exchange one token for another in one atomic swap transaction. You&apos;ll have to
@@ -54,10 +56,11 @@ const SwapPanel = (props: PanelProps) => {
 
 const DepositPanel = (props: PanelProps) => {
   const minHeight = useBreakpointValue({ xl: DESCR_MIN_HEIGHT, md: 'auto' });
+  const iconCol = useColorModeValue('gray.800', 'gray.200');
   return (
     <Flex direction="column">
       <Heading size="lg" mb={3} d={{ xl: 'inline', md: 'none' }}>
-        <DepositIcon /> Deposit
+        <DepositIcon color={iconCol} /> Deposit
       </Heading>
 
       <Text py={4} fontSize="sm" minHeight={minHeight}>
@@ -79,10 +82,11 @@ const DepositPanel = (props: PanelProps) => {
 
 const WithdrawPanel = (props: PanelProps) => {
   const minHeight = useBreakpointValue({ xl: DESCR_MIN_HEIGHT, md: 'auto' });
+  const iconCol = useColorModeValue('gray.800', 'gray.200');
   return (
     <Flex direction="column" pr={4}>
       <Heading size="lg" mb={3} d={{ xl: 'inline', md: 'none' }}>
-        <WithdrawIcon /> Withdraw
+        <WithdrawIcon color={iconCol} /> Withdraw
       </Heading>
       <Text py={4} fontSize="sm" minHeight={minHeight}>
         Burn your liquidity pool tokens. This will return your share of the pool, relative
@@ -96,15 +100,18 @@ const WithdrawPanel = (props: PanelProps) => {
 const AMM = (props: Omit<PanelProps, 'account'> & { account?: string | undefined }) => {
   const displayType = useBreakpointValue({ xl: 'grid', md: 'tabs' });
 
+  const border = useColorModeValue('gray.200', 'gray.700');
+  const bg = useColorModeValue('gray.100', 'gray.600');
+
   return (
     <Box
       rounded="md"
       px={4}
       py={6}
-      background="gray.100"
+      background={bg}
       boxShadow="base"
       border="1px solid"
-      borderColor="gray.200">
+      borderColor={border}>
       {props.account ? (
         displayType === 'grid' ? (
           <SimpleGrid columns={3} spacing={10} pl={4}>

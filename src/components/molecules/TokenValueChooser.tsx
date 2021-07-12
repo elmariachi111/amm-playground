@@ -1,4 +1,5 @@
 import { Flex } from '@chakra-ui/layout';
+import { useColorModeValue } from '@chakra-ui/react';
 import { Select } from '@chakra-ui/select';
 import React from 'react';
 
@@ -20,11 +21,13 @@ const TokenValueChooser = ({
   isFirst?: boolean;
   footer?: React.ReactNode;
 }) => {
+  const bg = useColorModeValue('white', 'gray.700');
+  const border = useColorModeValue('gray.200', 'gray.700');
   return (
     <Flex
-      bg="white"
+      bg={bg}
       border="1px solid"
-      borderColor="gray.200"
+      borderColor={border}
       direction="column"
       p={2}
       {...(isFirst ? { borderTopRadius: 6 } : { borderBottomRadius: 6 })}>

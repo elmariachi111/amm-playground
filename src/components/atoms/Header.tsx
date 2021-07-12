@@ -2,6 +2,7 @@ import { useColorMode } from '@chakra-ui/color-mode';
 import Icon from '@chakra-ui/icon';
 import { Image } from '@chakra-ui/image';
 import { Box, Container, Flex, Link, Text } from '@chakra-ui/layout';
+import { useColorModeValue } from '@chakra-ui/react';
 import { Switch } from '@chakra-ui/switch';
 import React from 'react';
 import { FaGithub } from 'react-icons/fa';
@@ -10,9 +11,10 @@ import TXBLogo from './logo_txb_black.svg';
 
 export function Header() {
   const { colorMode, toggleColorMode } = useColorMode();
-
+  const bg = useColorModeValue('gray.100', 'gray.600');
+  const border = useColorModeValue('gray.200', 'gray.500');
   return (
-    <Box bg="gray.100" borderBottom="1px solid" borderColor="gray.200">
+    <Box bg={bg} borderBottom="1px solid" borderColor={border}>
       <Container maxW="1800px" py={5}>
         <Flex
           maxW="50%"

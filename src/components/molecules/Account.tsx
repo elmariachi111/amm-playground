@@ -1,6 +1,7 @@
 import { Button } from '@chakra-ui/button';
 import Icon from '@chakra-ui/icon';
 import { Flex, Text, Wrap, WrapItem } from '@chakra-ui/layout';
+import { useColorModeValue } from '@chakra-ui/react';
 import React, { useCallback, useEffect, useState } from 'react';
 import { FaCaretRight } from 'react-icons/fa';
 import { HiCheck } from 'react-icons/hi';
@@ -69,7 +70,9 @@ export default function Account({
   const accountColors = colorRange(address);
 
   const isPool = !!pools.find((p) => p.account === address);
-
+  const border = useColorModeValue('gray.200', 'gray.700');
+  const bg = useColorModeValue('white', 'gray.600');
+  const headerBg = useColorModeValue('gray.100', 'gray.500');
   return (
     <Flex
       rounded="md"
@@ -77,7 +80,7 @@ export default function Account({
       width="100%"
       boxShadow="sm"
       border="1px solid"
-      borderColor="gray.200"
+      borderColor={border}
       overflow="hidden"
       {...(selected ? { width: '110%' } : {})}>
       {!isPool && (
@@ -94,21 +97,21 @@ export default function Account({
           ? {
               bgGradient: `linear(to-r, ${accountColors[0]}, ${accountColors[1]})`,
             }
-          : { bg: 'gray.100' })}>
+          : { bg: headerBg })}>
         <Flex
           p={2}
           px={4}
           justifyContent="space-between"
           align="center"
           borderBottom="1px solid"
-          borderColor="gray.200">
+          borderColor={border}>
           <Flex align="center" gridGap={3}>
             <Text
               fontSize="xl"
               fontWeight="normal"
               maxW="400px"
               isTruncated
-              color={selected ? 'white' : 'gray.800'}>
+              color={selected ? 'white' : ''}>
               {address}
             </Text>
             <Text color={selected ? 'white' : 'gray.400'} fontSize="sm">
@@ -132,7 +135,7 @@ export default function Account({
             <></>
           )}
         </Flex>
-        <Wrap bgColor="white" p={3}>
+        <Wrap p={3} bg={bg}>
           {tokensWithBalance.map((t) => (
             <WrapItem key={`tb-${address}-${t.symbol}`}>
               <BalanceWrap address={address} token={t} pools={pools} />

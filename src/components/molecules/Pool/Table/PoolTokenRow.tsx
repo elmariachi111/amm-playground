@@ -1,4 +1,5 @@
 import { Flex, Text } from '@chakra-ui/layout';
+import { useColorModeValue } from '@chakra-ui/react';
 import { Td } from '@chakra-ui/table';
 import React from 'react';
 
@@ -19,9 +20,10 @@ const PoolTokenRow = ({
   pool: Pool;
   odd?: boolean | undefined;
 }) => {
+  const border = useColorModeValue('gray.300', 'gray.500');
   return (
     <Tr odd={odd}>
-      <Td borderColor="gray.300" borderTop="1px solid">
+      <Td borderColor={border} borderTop="1px solid">
         <Flex align="center" gridGap={2}>
           <TokenSymbol token={pool.poolToken} size={10} />
           <Flex direction="column">
@@ -30,17 +32,17 @@ const PoolTokenRow = ({
           </Flex>
         </Flex>
       </Td>
-      <Td borderColor="gray.300" borderTop="1px solid">
+      <Td borderColor={border} borderTop="1px solid">
         <PfxVal pfx="sup" val={poolInfoCur.liqTokenSupply} />
       </Td>
-      <Td borderColor="gray.300" borderTop="1px solid">
+      <Td borderColor={border} borderTop="1px solid">
         <Diff
           cur={poolInfoCur.liqTokenSupply}
           last={poolInfoLast?.liqTokenSupply}
           type="abs"
         />
       </Td>
-      <Td borderColor="gray.300" borderTop="1px solid">
+      <Td borderColor={border} borderTop="1px solid">
         <PfxVal pfx="sup" val={poolInfoLast?.liqTokenSupply} />
       </Td>
     </Tr>

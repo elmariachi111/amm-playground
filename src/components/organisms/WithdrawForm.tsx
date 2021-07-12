@@ -2,7 +2,7 @@ import { Button } from '@chakra-ui/button';
 import { Input } from '@chakra-ui/input';
 import { Flex, Stack, Text } from '@chakra-ui/layout';
 import { useRadio, UseRadioProps } from '@chakra-ui/radio';
-import { Box, Icon, useRadioGroup } from '@chakra-ui/react';
+import { Box, Icon, useColorModeValue, useRadioGroup } from '@chakra-ui/react';
 import React, { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { ImRadioChecked2, ImRadioUnchecked } from 'react-icons/im';
 
@@ -61,17 +61,20 @@ const WithdrawRadioCard = (props: UseRadioProps & { pool: Pool; children: any })
   const checkbox = getCheckboxProps();
   const { pool, children } = props;
 
+  const bg = useColorModeValue('white', 'gray.700');
+  const border = useColorModeValue('gray.200', 'gray.700');
+
   return (
     <Box as="label">
       <input {...input} />
       <Flex
         {...checkbox}
-        bg="white"
+        bg={bg}
         px={4}
         py={state.isChecked ? 4 : 6}
         borderRadius={4}
         border="1px solid"
-        borderColor="gray.200"
+        borderColor={border}
         justify="space-between"
         align="center">
         <Flex direction="row" align="center">
@@ -123,14 +126,22 @@ export default function WithdrawForm({
   };
 
   const updatePools = useCallback(() => {
-    setWithdrawablePools(pools.filter((p) => p.poolToken.balanceOf(account) > 0));
+    const _withdrawablePools = pools.filter((p) => p.poolToken.balanceOf(account) > 0);
+    if (_withdrawablePools.length === 0) {
+      selectPool(undefined);
+    }
+    setWithdrawablePools(_withdrawablePools);
     const _bal: Record<string, number> = {};
     pools.forEach((p) => (_bal[p.poolToken.symbol] = p.poolToken.balanceOf(account)));
     setBalances(_bal);
   }, [pools, account]);
 
   useEffect(() => {
+    selectPool(null);
     updatePools();
+  }, [account]);
+
+  useEffect(() => {
     const off = pools.flatMap((pool) => [
       pool.on('LiquidityChanged', updatePools),
       pool.on('ReservesChanged', updatePools),
@@ -138,10 +149,11 @@ export default function WithdrawForm({
     return () => {
       off.map((_off) => _off());
     };
-  }, [pools, account]);
+  }, [pools]);
 
   const canSubmit = useMemo(() => {
-    return shareToWithdraw > 0 && shareToWithdraw <= 100;
+    console.log(selectedPool, shareToWithdraw, account);
+    return selectedPool && shareToWithdraw > 0 && shareToWithdraw <= 100;
   }, [account, selectedPool, shareToWithdraw]);
 
   const group = getRootProps();

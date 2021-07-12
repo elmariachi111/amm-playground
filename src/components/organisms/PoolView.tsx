@@ -1,5 +1,5 @@
 import { Flex, Stack, Text } from '@chakra-ui/layout';
-import { useToken } from '@chakra-ui/react';
+import { useColorModeValue, useToken } from '@chakra-ui/react';
 import { Table, Tbody, Td, Th, Thead } from '@chakra-ui/table';
 import React, { useCallback, useEffect, useState } from 'react';
 
@@ -36,11 +36,19 @@ const PoolView = ({ pool }: { pool: Pool }) => {
     };
   }, []);
 
+  const border = useColorModeValue('gray.200', 'gray.700');
+  const bg = useColorModeValue('white', 'gray.600');
+
   return (
     <CardBox>
       <PoolHeader pool={pool} />
       <Stack direction="row">
-        <Table variant="simple" size="sm" borderRight="1px solid" borderColor="gray.200">
+        <Table
+          bg={bg}
+          variant="simple"
+          size="sm"
+          borderRight="1px solid"
+          borderColor={border}>
           <Thead>
             <Tr odd={true}>
               <Th w="80px"></Th>

@@ -1,5 +1,10 @@
 import { Flex, Text } from '@chakra-ui/layout';
-import { Editable, EditableInput, EditablePreview } from '@chakra-ui/react';
+import {
+  Editable,
+  EditableInput,
+  EditablePreview,
+  useColorModeValue,
+} from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 
 import { colorRange } from '../../../helpers';
@@ -58,6 +63,9 @@ const MarketPrice = ({ token }: { token: Token }) => {
 
 const TokenView = ({ token }: { token: Token }) => {
   const [totalSupply, setTotalSupply] = useState<number>(token.totalSupply);
+  const border = useColorModeValue('gray.200', 'gray.700');
+  const bg = useColorModeValue('white', 'gray.600');
+  const headerBg = useColorModeValue('gray.100', 'gray.500');
 
   useEffect(() => {
     const off = [
@@ -83,7 +91,7 @@ const TokenView = ({ token }: { token: Token }) => {
       width="100%"
       boxShadow="sm"
       border="1px solid"
-      borderColor="gray.200"
+      borderColor={border}
       overflow="hidden">
       <Flex backgroundColor={tokenColor} width="5px"></Flex>
       <Flex direction="column" width="100%">
@@ -91,9 +99,9 @@ const TokenView = ({ token }: { token: Token }) => {
           p={3}
           align="center"
           borderBottom="1px solid"
-          borderColor="gray.200"
+          borderColor={border}
           justifyContent="space-between"
-          bg="gray.100">
+          bg={headerBg}>
           <Flex align="center">
             <TokenSymbol token={token} size={15} />
             <Text
@@ -113,7 +121,7 @@ const TokenView = ({ token }: { token: Token }) => {
           </Flex>
         </Flex>
         {token.feature !== TokenFeature.LiquidityToken && (
-          <Flex bgColor="white" p={3} borderBottomRadius={4}>
+          <Flex bgColor={bg} p={3} borderBottomRadius={4}>
             <MintForm token={token} />
           </Flex>
         )}

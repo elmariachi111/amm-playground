@@ -1,8 +1,11 @@
 import { extendTheme } from '@chakra-ui/react';
+import { mode } from '@chakra-ui/theme-tools';
 
 import Button from './components/Button';
 
 export default extendTheme({
+  initialColorMode: 'light',
+  useSystemColorMode: true,
   styles: {
     global: {
       html: {

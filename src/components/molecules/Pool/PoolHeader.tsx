@@ -1,4 +1,5 @@
 import { Box, Flex, Heading, Spacer, Text } from '@chakra-ui/layout';
+import { useColorModeValue } from '@chakra-ui/react';
 import { Tag } from '@chakra-ui/tag';
 import React from 'react';
 
@@ -6,8 +7,11 @@ import { Pool } from '../../../lib/Pool';
 import TokenSymbol from '../../atoms/TokenSymbol';
 
 const PoolHeader = ({ pool }: { pool: Pool }) => {
+  const border = useColorModeValue('gray.200', 'gray.700');
+  const headerBg = useColorModeValue('gray.100', 'gray.500');
+
   return (
-    <Flex bg="gray.100" p={2} borderBottom="1px solid" borderColor="gray.200">
+    <Flex bg={headerBg} p={2} borderBottom="1px solid" borderColor={border}>
       <Flex align="center" gridGap={4}>
         <Box position="relative" w="80px">
           <Flex position="absolute">

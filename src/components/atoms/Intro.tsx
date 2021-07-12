@@ -10,6 +10,7 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/layout';
+import { useColorModeValue } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { HiChevronDoubleDown, HiRefresh } from 'react-icons/hi';
 import { RiHandCoinFill } from 'react-icons/ri';
@@ -41,8 +42,10 @@ export default function Intro({
     await setDefaults();
   };
 
+  const bg = useColorModeValue('gray.75', 'gray.700');
+
   return (
-    <Box bg="gray.75" fontSize="lg">
+    <Box bg={bg} fontSize="lg">
       <Container maxW="1800px">
         <Stack gridGap={20} pt={8} direction={['column', 'row']} align="start" mb={6}>
           <Box flex="2">
