@@ -48,6 +48,6 @@ describe('My First Test', () => {
   });
   it('can create defaults', () => {
     cy.visit('http://localhost:3000');
-    cy.contains('Set some defaults').click();
+    cy.contains('scroll to app').click();
   });
 });
