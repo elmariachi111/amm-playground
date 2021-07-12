@@ -1,10 +1,10 @@
 import { useColorMode } from '@chakra-ui/color-mode';
 import Icon from '@chakra-ui/icon';
 import { Image } from '@chakra-ui/image';
-import { Box, Container, Flex, Link, Text } from '@chakra-ui/layout';
-import { useColorModeValue } from '@chakra-ui/react';
-import { Switch } from '@chakra-ui/switch';
+import { Box, Container, Flex, Link, Spacer, Text } from '@chakra-ui/layout';
+import { IconButton, useColorModeValue } from '@chakra-ui/react';
 import React from 'react';
+import { BiMoon, BiSun } from 'react-icons/bi';
 import { FaGithub } from 'react-icons/fa';
 
 import TXBLogo from './logo_txb_black.svg';
@@ -15,14 +15,8 @@ export function Header() {
   const border = useColorModeValue('gray.200', 'gray.500');
   return (
     <Box bg={bg} borderBottom="1px solid" borderColor={border}>
-      <Container maxW="1800px" py={5}>
-        <Flex
-          maxW="50%"
-          color="gray.400"
-          direction="row"
-          alignItems="start"
-          gridGap={8}
-          justify="start">
+      <Container maxW="1800px">
+        <Flex color="gray.400" direction="row" alignItems="center" gridGap={8} py={3}>
           <Flex>
             <Text>built by </Text>
             <Link isExternal href="https://turbinekreuzberg.com">
@@ -44,7 +38,16 @@ export function Header() {
               email
             </Link>
           </Text>
-          <Switch size="md" isChecked={colorMode == 'dark'} onChange={toggleColorMode} />
+          <Spacer />
+          <Flex>
+            <IconButton
+              size="sm"
+              aria-label="Switch Color Mode"
+              variant="ghost"
+              icon={colorMode == 'dark' ? <BiSun /> : <BiMoon />}
+              onClick={toggleColorMode}
+            />
+          </Flex>
         </Flex>
       </Container>
     </Box>
