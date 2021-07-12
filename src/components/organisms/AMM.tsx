@@ -27,13 +27,13 @@ const AMM = ({
 
   return (
     <Box
-      borderRadius={8}
+      rounded="md"
       px={4}
       py={6}
       background="gray.100"
+      boxShadow="base"
       border="1px solid"
-      boxShadow="lg"
-      borderColor="gray.300">
+      borderColor="gray.200">
       {account ? (
         <SimpleGrid columns={3} spacing={10}>
           <Flex direction="column" pl={4}>

@@ -72,9 +72,10 @@ export default function Account({
 
   return (
     <Flex
-      borderRadius={8}
+      rounded="md"
       mb={3}
       width="100%"
+      boxShadow="sm"
       border="1px solid"
       borderColor="gray.200"
       overflow="hidden"
@@ -94,7 +95,13 @@ export default function Account({
               bgGradient: `linear(to-r, ${accountColors[0]}, ${accountColors[1]})`,
             }
           : { bg: 'gray.100' })}>
-        <Flex p={2} px={4} justifyContent="space-between" align="center">
+        <Flex
+          p={2}
+          px={4}
+          justifyContent="space-between"
+          align="center"
+          borderBottom="1px solid"
+          borderColor="gray.200">
           <Flex align="center" gridGap={3}>
             <Text
               fontSize="xl"

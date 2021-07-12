@@ -78,15 +78,22 @@ const TokenView = ({ token }: { token: Token }) => {
 
   return (
     <Flex
-      borderRadius={8}
+      rounded="md"
       mb={3}
       width="100%"
+      boxShadow="sm"
       border="1px solid"
       borderColor="gray.200"
       overflow="hidden">
       <Flex backgroundColor={tokenColor} width="5px"></Flex>
       <Flex direction="column" width="100%">
-        <Flex p={3} align="center" justifyContent="space-between" bg="gray.100">
+        <Flex
+          p={3}
+          align="center"
+          borderBottom="1px solid"
+          borderColor="gray.200"
+          justifyContent="space-between"
+          bg="gray.100">
           <Flex align="center">
             <TokenSymbol token={token} size={15} />
             <Text

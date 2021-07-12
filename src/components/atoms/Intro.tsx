@@ -145,7 +145,7 @@ export default function Intro({
                 links to get you started{' '}
               </Text>
             </Box>
-            <VStack alignItems="start" spacing={0} mt={2} fontSize=".9em">
+            <VStack alignItems="start" spacing={0} mt={2}>
               <Box>
                 <Link
                   href="https://www.gemini.com/cryptopedia/amm-what-are-automated-market-makers#section-constant-product-formula"
