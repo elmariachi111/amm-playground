@@ -5,7 +5,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { FaCaretRight } from 'react-icons/fa';
 import { HiCheck } from 'react-icons/hi';
 
-import { colorRange } from '../../helpers';
+import { colorRange, currency } from '../../helpers';
 import { computeUsdValue, poolForToken } from '../../lib/computeUsdValue';
 import { Pool } from '../../lib/Pool';
 import { Token, TokenFeature } from '../../lib/Token';
@@ -112,7 +112,7 @@ export default function Account({
               {address}
             </Text>
             <Text color={selected ? 'white' : 'gray.400'} fontSize="sm">
-              ${usdValue.toLocaleString()}
+              {currency(usdValue, true)}
             </Text>
           </Flex>
           {selected ? (

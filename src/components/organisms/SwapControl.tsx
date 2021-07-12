@@ -4,7 +4,7 @@ import { Input, InputGroup } from '@chakra-ui/input';
 import { Flex, Stack, Text } from '@chakra-ui/layout';
 import React, { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
 
-import { setNumericalField } from '../../helpers';
+import { currency, setNumericalField } from '../../helpers';
 import { Pool } from '../../lib/Pool';
 import { Token, TokenFeature } from '../../lib/Token';
 import TokenValueChooser from '../molecules/TokenValueChooser';
@@ -41,6 +41,7 @@ export default function SwapControl({
   }, [from]);
 
   const updateQuote = useCallback(() => {
+    //console.log(amount, pool?.poolToken.symbol, from?.symbol, to?.symbol, account);
     if (amount && pool && from && to) {
       setQuote(pool.quote(from, to, amount));
     } else {
@@ -78,10 +79,6 @@ export default function SwapControl({
   const onFromChanged = (symbol: string) => {
     if (!symbol) {
       setFrom(undefined);
-      setTo(undefined);
-      setPool(undefined);
-      setAmount(undefined);
-
       return;
     } else {
       const newFrom = tokens.find((t) => t.symbol === symbol);
@@ -122,8 +119,8 @@ export default function SwapControl({
   }, [quote, to]);
 
   const canSubmit = useMemo(() => {
-    return from && amount && amount > 0 && hasSufficientFunds;
-  }, [amount, hasSufficientFunds]);
+    return pool && from && to && amount && amount > 0 && hasSufficientFunds;
+  }, [amount, from, to, amount, hasSufficientFunds, pool]);
 
   return (
     <Flex
@@ -140,7 +137,7 @@ export default function SwapControl({
           selected={from}
           footer={
             <Text color="gray.400" fontSize="small">
-              {fromUsdValue ? `$ ${fromUsdValue.toFixed(2)}` : <span>&nbsp;</span>}
+              {fromUsdValue ? `${currency(fromUsdValue, true)}` : <span>&nbsp;</span>}
             </Text>
           }
           isFirst>
@@ -154,7 +151,7 @@ export default function SwapControl({
                 type="number"
                 name="amount"
                 value={amount}
-                disabled={!from || !pool}
+                disabled={!from}
                 onChange={setNumericalField(setAmount)}
               />
             </InputGroup>
@@ -168,7 +165,7 @@ export default function SwapControl({
           footer={
             <Text color="gray.400" fontSize="small">
               {fromUsdValue && toUsdValue ? (
-                `$ ${toUsdValue.toFixed(2)} (${(-(
+                `${currency(toUsdValue, true)} (${(-(
                   100 -
                   (100 * toUsdValue) / fromUsdValue
                 )).toFixed(2)} %)`
@@ -201,10 +198,10 @@ export default function SwapControl({
         {from && to && amount && quote ? (
           <>
             <Text color="gray.500" align="right" pt={2} fontSize="sm">
-              1 {from.symbol} = {(quote / amount).toFixed(4)} {to.symbol}
+              1 {from.symbol} = {currency(quote / amount)} {to.symbol}
             </Text>
             <Text color="gray.500" align="right" pt={2} fontSize="sm">
-              1 {to.symbol} = {(amount / quote).toFixed(4)} {from.symbol}
+              1 {to.symbol} = {currency(amount / quote)} {from.symbol}
             </Text>
           </>
         ) : (

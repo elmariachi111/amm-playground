@@ -1,6 +1,8 @@
 import { Flex, Text } from '@chakra-ui/layout';
 import React from 'react';
 
+import { currency } from '../../helpers';
+
 const PfxVal = (props: {
   pfx: string;
   val: string | number | undefined;
@@ -15,7 +17,7 @@ const PfxVal = (props: {
     case 'number':
       Val = (
         <Text title={val.toString()} ml={1} fontSize="sm">
-          {val.toFixed(2)}
+          {currency(val, false)}
         </Text>
       );
       break;
@@ -35,7 +37,7 @@ const PfxVal = (props: {
   }
 
   return (
-    <Flex align="center" {...restProps} onClick={onClick}>
+    <Flex {...restProps} onClick={onClick} align="baseline">
       <Text color="gray.400" textTransform="uppercase" fontSize="xs" fontWeight="medium">
         {pfx}
       </Text>

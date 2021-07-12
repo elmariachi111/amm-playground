@@ -14,6 +14,7 @@ import {
 import Hint from 'react-vis/es/plot/hint';
 import MarkSeries from 'react-vis/es/plot/series/mark-series';
 
+import { currency } from '../../../helpers';
 import { Pool, PoolInfo } from '../../../lib/Pool';
 import { Token } from '../../../lib/Token';
 
@@ -148,7 +149,7 @@ const PoolDiagram = ({
       <XAxis title={pool.token1.symbol} tickLabelAngle={-90} />
       <YAxis title={pool.token2.symbol} />
       {selectedDataPoint && (
-        <Hint value={selectedDataPoint} align={{ vertical: 'top', horizontal: 'left' }}>
+        <Hint value={selectedDataPoint} align={{ vertical: 'auto', horizontal: 'auto' }}>
           <Box
             bg="rgba(255,255,255,0.8)"
             rounded="md"
@@ -165,12 +166,12 @@ const PoolDiagram = ({
             </Flex>
             <Text color="gray.600">
               1 {pool.token1.symbol} ={' '}
-              {(selectedDataPoint.y / (selectedDataPoint.x as number)).toFixed(4)}{' '}
+              {currency(selectedDataPoint.y / (selectedDataPoint.x as number))}{' '}
               {pool.token2.symbol}
             </Text>
             <Text color="gray.400">
-              {(selectedDataPoint.x as number).toFixed(2)} {pool.token1.symbol} |{' '}
-              {selectedDataPoint.y.toFixed(2)} {pool.token2.symbol}
+              {currency(selectedDataPoint.x as number)} {pool.token1.symbol} |{' '}
+              {currency(selectedDataPoint.y)} {pool.token2.symbol}
             </Text>
 
             {/* {poolInfos[1] && (

@@ -12,7 +12,7 @@ import { CircularProgress, CircularProgressLabel } from '@chakra-ui/progress';
 import { Table, Tbody, Td, Thead, Tr } from '@chakra-ui/table';
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { colorRange } from '../../../helpers';
+import { colorRange, currency } from '../../../helpers';
 import { poolShares } from '../../../lib/computeUsdValue';
 import { Pool } from '../../../lib/Pool';
 
@@ -33,27 +33,27 @@ const ShareTable = ({ pool, shareInfo }: { pool: Pool; shareInfo: ShareInfo }) =
       <Tbody>
         <Tr>
           <Td>Share</Td>
-          <Td>{shareInfo.share.toFixed(2)} %</Td>
+          <Td>{currency(shareInfo.share)} %</Td>
         </Tr>
         <Tr>
           <Td>{pool.token1.symbol}</Td>
-          <Td>{shareInfo.token1.toFixed(2)}</Td>
+          <Td>{currency(shareInfo.token1)}</Td>
         </Tr>
         <Tr>
           <Td>{pool.token2.symbol}</Td>
-          <Td>{shareInfo.token2.toFixed(2)}</Td>
+          <Td>{currency(shareInfo.token2)}</Td>
         </Tr>
         <Tr>
           <Td>{pool.token1.symbol} val</Td>
-          <Td>$ {shareInfo.token1Usd.toFixed(2)}</Td>
+          <Td>{currency(shareInfo.token1Usd, true)}</Td>
         </Tr>
         <Tr>
           <Td>{pool.token2.symbol} val</Td>
-          <Td>$ {shareInfo.token2Usd.toFixed(2)}</Td>
+          <Td>{currency(shareInfo.token2Usd, true)}</Td>
         </Tr>
         <Tr>
           <Td>Total val</Td>
-          <Td>$ {(shareInfo.token1Usd + shareInfo.token2Usd).toFixed(2)}</Td>
+          <Td>{currency(shareInfo.token1Usd + shareInfo.token2Usd, true)}</Td>
         </Tr>
       </Tbody>
     </Table>
@@ -117,7 +117,7 @@ export default function PoolBalance({ address, pool }: { address: string; pool: 
 
           <Flex direction="column">
             <Text fontWeight="medium" fontSize="sm">
-              {balance.toFixed(2)}
+              {currency(balance)}
             </Text>
             <Text color="gray.400" fontSize="xs">
               {pool.poolToken.symbol}

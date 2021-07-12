@@ -1,6 +1,7 @@
 import { Flex, Text } from '@chakra-ui/layout';
 import React, { useCallback, useEffect, useState } from 'react';
 
+import { currency } from '../../../helpers';
 import { Token } from '../../../lib/Token';
 import TokenSymbol from '../../atoms/TokenSymbol';
 
@@ -34,7 +35,7 @@ export default function TokenBalance({
 
       <Flex direction="column" ml={1}>
         <Text fontWeight="medium" fontSize="sm">
-          {balance.toLocaleString()}
+          {currency(balance)}
         </Text>
         <Text color="gray.400" fontSize="xs">
           {token.symbol}

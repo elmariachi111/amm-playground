@@ -5,6 +5,7 @@ import rgbHex from 'rgb-hex';
 import stringHash from 'string-hash';
 
 const encoder = new TextEncoder();
+const navigatorLanguage = navigator.language;
 
 export const setField = (setter: (val: string) => void) => {
   return (e: FormEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -43,4 +44,21 @@ export const colorRange = (str: string): string[] => {
   const color1str = `#${rgbHex(color1[0], color1[1], color1[2])}`;
   const color2str = `#${rgbHex(color2[0], color2[1], color2[2])}`;
   return [color1str, color2str];
+};
+
+export const currency = (val: number, fiat: boolean = false): string => {
+  return fiat
+    ? val.toLocaleString(navigatorLanguage, {
+        style: 'currency',
+        useGrouping: true,
+        currency: 'USD',
+        currencyDisplay: 'narrowSymbol',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 4,
+      })
+    : val.toLocaleString('en-GB', {
+        useGrouping: true,
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 4,
+      });
 };
