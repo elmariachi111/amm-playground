@@ -27,7 +27,7 @@ export default function Intro({
   tokens: Token[];
   addToken: (t: Token) => void;
 }) {
-  const [defaultsSet, setDefaultsSet] = useState<boolean>(false);
+  const [defaultsSet, setDefaultsSet] = useState<boolean>(true);
 
   const createToken = async (name: string, symbol: string) => {
     if (tokens.filter((t) => t.symbol === symbol).length > 0) return;

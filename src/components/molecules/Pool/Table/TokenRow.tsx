@@ -32,9 +32,9 @@ const TokenRow = ({
           borderColor="gray.300"
           borderTop="1px solid"
           borderBottom="1px solid">
-          <Flex align="center" gridGap={2}>
-            <TokenSymbol token={token} size={10} />
-            <Text>{token.symbol}</Text>
+          <Flex align="center" gridGap={2} overflow="hidden">
+            <TokenSymbol token={token} size={3} />
+            <Text fontSize="xs">{token.symbol}</Text>
           </Flex>
         </Td>
         <Td borderColor="gray.300" borderTop="1px solid">

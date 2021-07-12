@@ -142,9 +142,8 @@ export const adaptCoin = async (symbol: string): Promise<Token | undefined> => {
   const coinInfo = await api.fetchCoinInfo(symbol);
   if (!coinInfo) return undefined;
 
-  const token = Token.fromCoinInfo(coinInfo);
-  await token.fetchMarketPrice();
-  return token;
+  return Token.fromCoinInfo(coinInfo);
+  //await token.fetchMarketPrice();
 };
 
 export default api;

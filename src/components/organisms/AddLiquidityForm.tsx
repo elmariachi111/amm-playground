@@ -4,13 +4,13 @@ import { Input, InputGroup } from '@chakra-ui/input';
 import { Flex, Stack, Text } from '@chakra-ui/layout';
 import { Radio, RadioGroup } from '@chakra-ui/radio';
 import React, { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
-import { BsDownload } from 'react-icons/bs';
 
 import { setNumericalField } from '../../helpers';
 import { predictMarketPrice } from '../../lib/computeUsdValue';
 import { Pool } from '../../lib/Pool';
 import { Token } from '../../lib/Token';
 import TokenValueChooser from '../molecules/TokenValueChooser';
+import { DepositIcon } from './AMM/Icons';
 
 const predefinedFees: Record<string, number> = {
   '0': 0.0,
@@ -257,7 +257,7 @@ export default function AddLiquidityForm({
         variant="solid"
         isFullWidth
         isDisabled={!canSubmit}
-        leftIcon={<BsDownload />}
+        leftIcon={<DepositIcon color="white" />}
         type="submit">
         Mint Liquidity
       </Button>

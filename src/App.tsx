@@ -56,12 +56,17 @@ export default function App() {
     dai.mint(10000, 'bob');
     eth.mint(10, 'bob');
 
-    const pool = new Pool('0xethdaipool', eth, dai, 1);
-    pool.addLiquidity('alice', 10, 2000 * 10);
+    // const pool = new Pool('0xethdaipool', eth, dai, 1);
+    // pool.addLiquidity('alice', 10, 2000 * 10);
+    //addPool(pool);
 
     setAccounts(['alice', 'bob']);
-    addPool(pool);
   };
+
+  useEffect(() => {
+    setSomeDefaults();
+    return () => {};
+  }, []);
 
   const includeAccount = (acc: string) => {
     if (!accounts.includes(acc)) {

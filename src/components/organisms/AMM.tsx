@@ -1,13 +1,14 @@
 import Icon from '@chakra-ui/icon';
 import { Box, Flex, Heading, SimpleGrid, Text } from '@chakra-ui/layout';
 import React from 'react';
-import { BsDownload } from 'react-icons/bs';
-import { ImExit } from 'react-icons/im';
-import { RiArrowLeftRightFill } from 'react-icons/ri';
 
+// import { BsDownload } from 'react-icons/bs';
+// import { ImExit } from 'react-icons/im';
+// import { RiArrowLeftRightFill } from 'react-icons/ri';
 import { Pool } from '../../lib/Pool';
 import { Token, TokenFeature } from '../../lib/Token';
 import AddLiquidityForm from './AddLiquidityForm';
+import { DepositIcon, SwapIcon, WithdrawIcon } from './AMM/Icons';
 import SwapControl from './SwapControl';
 import WithdrawForm from './WithdrawForm';
 
@@ -37,7 +38,7 @@ const AMM = ({
         <SimpleGrid columns={3} spacing={10}>
           <Flex direction="column" pl={4}>
             <Heading size="lg" mb={3}>
-              <Icon as={RiArrowLeftRightFill} /> Swap
+              <SwapIcon /> Swap
             </Heading>
             <Text py={4} fontSize="sm" minHeight={DESCR_MIN_HEIGHT}>
               Exchange one token for another in one atomic swap transaction. You&apos;ll
@@ -55,7 +56,7 @@ const AMM = ({
           </Flex>
           <Flex direction="column">
             <Heading size="lg" mb={3}>
-              <Icon as={BsDownload} /> Deposit
+              <DepositIcon /> Deposit
             </Heading>
 
             <Text py={4} fontSize="sm" minHeight={DESCR_MIN_HEIGHT}>
@@ -76,7 +77,7 @@ const AMM = ({
           </Flex>
           <Flex direction="column" pr={4}>
             <Heading size="lg" mb={3}>
-              <Icon as={ImExit} /> Withdraw
+              <WithdrawIcon /> Withdraw
             </Heading>
             <Text py={4} fontSize="sm" minHeight={DESCR_MIN_HEIGHT}>
               Burn your liquidity pool tokens. This will return your share of the pool,

@@ -3,12 +3,12 @@ import { FormControl } from '@chakra-ui/form-control';
 import { Input, InputGroup } from '@chakra-ui/input';
 import { Flex, Stack, Text } from '@chakra-ui/layout';
 import React, { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
-import { RiArrowLeftRightFill } from 'react-icons/ri';
 
 import { setNumericalField } from '../../helpers';
 import { Pool } from '../../lib/Pool';
 import { Token, TokenFeature } from '../../lib/Token';
 import TokenValueChooser from '../molecules/TokenValueChooser';
+import { SwapIcon } from './AMM/Icons';
 
 export default function SwapControl({
   sender,
@@ -225,7 +225,7 @@ export default function SwapControl({
         colorScheme="green"
         variant="solid"
         isFullWidth
-        leftIcon={<RiArrowLeftRightFill />}
+        leftIcon={<SwapIcon color="white" />}
         disabled={!canSubmit}
         type="submit">
         Swap

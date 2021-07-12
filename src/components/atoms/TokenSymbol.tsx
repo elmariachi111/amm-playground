@@ -1,6 +1,6 @@
 import { useColorModeValue } from '@chakra-ui/color-mode';
 import { Image } from '@chakra-ui/image';
-import { Box } from '@chakra-ui/layout';
+import { Flex } from '@chakra-ui/layout';
 import React from 'react';
 import Identicon from 'react-identicons';
 
@@ -22,23 +22,35 @@ const TokenSymbol = (props: {
   if (token) {
     if (token.coinInfo) {
       image = (
-        <Image src={token.coinInfo.image.thumb} size={size || 30} alt={token.name} />
+        <Image
+          src={token.coinInfo.image.large}
+          objectFit="contain"
+          boxSize={size || 30}
+          alt={token.name}
+        />
       );
     } else {
       image = <Identicon string={token.symbol} size={size || 30} />;
     }
   } else {
     if (coinInfo) {
-      image = <Image src={coinInfo.image.thumb} size={size || 30} alt={coinInfo.name} />;
+      image = (
+        <Image
+          src={coinInfo.image.thumb}
+          objectFit="contain"
+          boxSize={size || 30}
+          alt={coinInfo.name}
+        />
+      );
     } else {
       image = <Identicon string={symbol} size={size || 30} />;
     }
   }
 
   return (
-    <Box borderRadius="full" border="1px solid" borderColor={borderColor} bg={bg} p={2}>
+    <Flex borderRadius="full" border="1px solid" borderColor={borderColor} bg={bg} p={2}>
       {image}
-    </Box>
+    </Flex>
   );
 };
 

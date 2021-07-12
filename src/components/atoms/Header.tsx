@@ -6,7 +6,7 @@ import { Switch } from '@chakra-ui/switch';
 import React from 'react';
 import { FaGithub } from 'react-icons/fa';
 
-import TXBLogo from './logo_txb_black.png';
+import TXBLogo from './logo_txb_black.svg';
 
 export function Header() {
   const { colorMode, toggleColorMode } = useColorMode();

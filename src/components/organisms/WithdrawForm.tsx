@@ -4,9 +4,10 @@ import { Flex, Stack, Text } from '@chakra-ui/layout';
 import { useRadio, UseRadioProps } from '@chakra-ui/radio';
 import { Box, Icon, useRadioGroup } from '@chakra-ui/react';
 import React, { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
-import { ImExit, ImRadioChecked2, ImRadioUnchecked } from 'react-icons/im';
+import { ImRadioChecked2, ImRadioUnchecked } from 'react-icons/im';
 
 import { Pool } from '../../lib/Pool';
+import { WithdrawIcon } from './AMM/Icons';
 
 const WithdrawAmount = ({
   pool,
@@ -178,7 +179,7 @@ export default function WithdrawForm({ pools, from }: { pools: Pool[]; from: str
         colorScheme="green"
         variant="solid"
         isFullWidth
-        leftIcon={<ImExit />}
+        leftIcon={<WithdrawIcon color="white" />}
         isDisabled={!canSubmit}
         type="submit">
         Withdraw
