@@ -110,7 +110,7 @@ export default function App() {
       <Intro setDefaults={setSomeDefaults} tokens={tokens} addToken={addToken} />
       <Container maxW="1800px" my={10} id="amm-app" minH="1200px">
         <Grid templateRows="min-content" templateColumns="repeat(12, 1fr)" gap={10}>
-          <GridItem rowSpan={1} colSpan={3}>
+          <GridItem rowSpan={1} colSpan={{ xl: 3, md: 3 }}>
             <Heading size="xl" mb={4}>
               Accounts
             </Heading>
@@ -126,7 +126,7 @@ export default function App() {
               />
             ))}
           </GridItem>
-          <GridItem rowSpan={1} colSpan={7}>
+          <GridItem rowSpan={1} colSpan={{ xl: 7, md: 6 }}>
             <Heading size="xl" mb={3}>
               Interact
             </Heading>
@@ -137,7 +137,7 @@ export default function App() {
               poolAdded={addPool}
             />
           </GridItem>
-          <GridItem colSpan={2} rowSpan={2}>
+          <GridItem rowSpan={2} colSpan={{ xl: 2, md: 3 }}>
             <Heading size="xl" mb={3}>
               Tokens
             </Heading>
@@ -151,7 +151,7 @@ export default function App() {
               <Heading mt={5} mb={3}>
                 Pools
               </Heading>
-              <SimpleGrid columns={2} spacing={5} mt={5} align="start">
+              <SimpleGrid columns={{ xl: 2, md: 1 }} spacing={5} mt={5} align="start">
                 {pools.map((p) => (
                   <PoolView pool={p} key={`pool-${p.poolToken.symbol}`} />
                 ))}

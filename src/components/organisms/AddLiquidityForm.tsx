@@ -20,12 +20,12 @@ const predefinedFees: Record<string, number> = {
 };
 
 export default function AddLiquidityForm({
-  address,
+  account,
   tokens,
   pools,
   poolAdded,
 }: {
-  address: string;
+  account: string;
   tokens: Token[];
   pools: Pool[];
   poolAdded: (p: Pool) => void;
@@ -54,11 +54,11 @@ export default function AddLiquidityForm({
         secondToken!,
         poolFee,
       );
-      p.addLiquidity(address, amt1, amt2);
+      p.addLiquidity(account, amt1, amt2);
       poolAdded(p);
       setPool(p);
     } else {
-      pool.addLiquidity(address, amt1, amt2);
+      pool.addLiquidity(account, amt1, amt2);
     }
     updateBalances();
   };
@@ -66,7 +66,7 @@ export default function AddLiquidityForm({
   useEffect(() => {
     setAmt1(0);
     updateBalances();
-  }, [address]);
+  }, [account]);
 
   useEffect(() => {
     const pool = pools.find((pool) => {
@@ -109,11 +109,11 @@ export default function AddLiquidityForm({
   const updateBalances = useCallback(() => {
     if (!firstToken || !secondToken) return false;
     const bal = {
-      [firstToken?.symbol]: firstToken.balanceOf(address),
-      [secondToken?.symbol]: secondToken.balanceOf(address),
+      [firstToken?.symbol]: firstToken.balanceOf(account),
+      [secondToken?.symbol]: secondToken.balanceOf(account),
     };
     setBalances(bal);
-  }, [address, firstToken, secondToken]);
+  }, [account, firstToken, secondToken]);
 
   useEffect(() => {
     const off = [
@@ -213,24 +213,26 @@ export default function AddLiquidityForm({
               />
             </InputGroup>
             {balanceWarning && (
-              <Text color="red.300" fontSize="xs" align="right">
+              <Text color="red.300" fontSize="xs" align="right" my={1}>
                 insufficient funds
               </Text>
             )}
           </FormControl>
         </TokenValueChooser>
+        <Flex>
+          {amt1 && amt1 > 0 && marketPrice != amt2 ? (
+            <Text color="orange.400" fontSize="sm" align="right" mt={2}>
+              not providing at market price leads to arbitrage opportunity.
+            </Text>
+          ) : (
+            <></>
+          )}
+        </Flex>
       </Stack>
 
-      {amt1 && amt1 > 0 && marketPrice != amt2 ? (
-        <Text color="orange.400" fontSize="sm" align="right">
-          not providing at market price leads to arbitrage opportunity.
-        </Text>
-      ) : (
-        <></>
-      )}
       {createsNewPool && (
-        <Flex direction="column">
-          <Text color="gray.500" align="start" my={2}>
+        <Flex direction="column" mt={4}>
+          <Text color="gray.500" align="start" mt={2}>
             choose a pool fee
           </Text>
           <RadioGroup
@@ -238,7 +240,7 @@ export default function AddLiquidityForm({
             value={newPoolFee}
             defaultValue="0"
             colorScheme="green">
-            <Stack direction="row" spacing={3} justify="center">
+            <Stack direction="row" spacing={3} justify="space-between">
               {Object.keys(predefinedFees)
                 .sort()
                 .map((fee) => (

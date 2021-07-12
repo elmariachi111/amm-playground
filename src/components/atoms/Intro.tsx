@@ -45,7 +45,7 @@ export default function Intro({
     <Box bg="gray.75" fontSize="lg">
       <Container maxW="1800px">
         <Stack gridGap={20} pt={8} direction={['column', 'row']} align="start" mb={6}>
-          <Box flex="3">
+          <Box flex="2">
             <Box mb={4}>
               <Heading size="lg">
                 The{' '}

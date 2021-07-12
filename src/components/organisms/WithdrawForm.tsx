@@ -89,7 +89,13 @@ const WithdrawRadioCard = (props: UseRadioProps & { pool: Pool; children: any })
   );
 };
 
-export default function WithdrawForm({ pools, from }: { pools: Pool[]; from: string }) {
+export default function WithdrawForm({
+  pools,
+  account,
+}: {
+  pools: Pool[];
+  account: string;
+}) {
   const [withdrawablePools, setWithdrawablePools] = useState<Pool[]>([]);
   const [selectedPool, selectPool] = useState<Pool | undefined | null>();
   const [shareToWithdraw, setShareToWithdraw] = useState<number>(100);
@@ -112,16 +118,16 @@ export default function WithdrawForm({ pools, from }: { pools: Pool[]; from: str
       return;
     }
     const amtToWithdraw =
-      (shareToWithdraw / 100) * selectedPool.poolToken.balanceOf(from);
-    selectedPool.withdrawLiquidity(from, amtToWithdraw);
+      (shareToWithdraw / 100) * selectedPool.poolToken.balanceOf(account);
+    selectedPool.withdrawLiquidity(account, amtToWithdraw);
   };
 
   const updatePools = useCallback(() => {
-    setWithdrawablePools(pools.filter((p) => p.poolToken.balanceOf(from) > 0));
+    setWithdrawablePools(pools.filter((p) => p.poolToken.balanceOf(account) > 0));
     const _bal: Record<string, number> = {};
-    pools.forEach((p) => (_bal[p.poolToken.symbol] = p.poolToken.balanceOf(from)));
+    pools.forEach((p) => (_bal[p.poolToken.symbol] = p.poolToken.balanceOf(account)));
     setBalances(_bal);
-  }, [pools, from]);
+  }, [pools, account]);
 
   useEffect(() => {
     updatePools();
@@ -132,11 +138,11 @@ export default function WithdrawForm({ pools, from }: { pools: Pool[]; from: str
     return () => {
       off.map((_off) => _off());
     };
-  }, [pools, from]);
+  }, [pools, account]);
 
   const canSubmit = useMemo(() => {
     return shareToWithdraw > 0 && shareToWithdraw <= 100;
-  }, [from, selectedPool, shareToWithdraw]);
+  }, [account, selectedPool, shareToWithdraw]);
 
   const group = getRootProps();
 
@@ -166,7 +172,7 @@ export default function WithdrawForm({ pools, from }: { pools: Pool[]; from: str
                   balance={balances[pool.poolToken.symbol]}
                 />
               ) : (
-                <Text>{pool.poolToken.balanceOf(from).toFixed(2)}</Text>
+                <Text>{pool.poolToken.balanceOf(account).toFixed(2)}</Text>
               )}
             </WithdrawRadioCard>
           );

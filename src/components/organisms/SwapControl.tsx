@@ -11,11 +11,11 @@ import TokenValueChooser from '../molecules/TokenValueChooser';
 import { SwapIcon } from './AMM/Icons';
 
 export default function SwapControl({
-  sender,
+  account,
   pools,
   tokens,
 }: {
-  sender: string;
+  account: string;
   pools: Pool[];
   tokens: Token[];
 }) {
@@ -30,7 +30,7 @@ export default function SwapControl({
 
   useEffect(() => {
     setAmount(0);
-  }, [sender]);
+  }, [account]);
 
   useEffect(() => {
     setFromOptions(tokens.filter((t) => t.feature !== TokenFeature.LiquidityToken));
@@ -47,7 +47,7 @@ export default function SwapControl({
       if (from && pool && to) pool.quote(from, to, 0);
       setQuote(0);
     }
-  }, [amount, pool, from, to, sender]);
+  }, [amount, pool, from, to, account]);
 
   useEffect(updateQuote, [amount]);
 
@@ -101,13 +101,13 @@ export default function SwapControl({
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (!from || !to || !pool) return;
-    pool.buy(sender, from, to, amount!);
+    pool.buy(account, from, to, amount!);
   };
 
   const hasSufficientFunds = useMemo(() => {
     if (!from || !amount) return true;
-    return amount <= from.balanceOf(sender);
-  }, [sender, amount, from]);
+    return amount <= from.balanceOf(account);
+  }, [account, amount, from]);
 
   const fromUsdValue = useMemo(() => {
     if (!amount || !from) return '';
@@ -181,6 +181,12 @@ export default function SwapControl({
             <Text fontSize="lg">{quote?.toFixed(2)}</Text>
           </Flex>
         </TokenValueChooser>
+        {from && to && !pool && (
+          <Text color="red.300" align="right" pt={2} fontSize="sm">
+            there&apos;s no {from.symbol}|{to.symbol} pool
+          </Text>
+        )}
+
         {pool && pool.feeRate > 0 && (
           <Text color="gray.500" align="right" fontSize="small" pt={2}>
             pool takes a {pool.feeRate * 100}% swap fee
@@ -210,12 +216,6 @@ export default function SwapControl({
               &nbsp;
             </Text>
           </>
-        )}
-
-        {from && to && !pool && (
-          <Text color="red.300" align="right" pt={2}>
-            there&apos;s no {from.symbol}|{to.symbol} pool
-          </Text>
         )}
       </Stack>
 

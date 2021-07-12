@@ -148,9 +148,9 @@ const PoolDiagram = ({
       <XAxis title={pool.token1.symbol} tickLabelAngle={-90} />
       <YAxis title={pool.token2.symbol} />
       {selectedDataPoint && (
-        <Hint value={selectedDataPoint} align={{ vertical: 'top', horizontal: 'right' }}>
+        <Hint value={selectedDataPoint} align={{ vertical: 'top', horizontal: 'left' }}>
           <Box
-            bg="rgba(255,255,255,0.6)"
+            bg="rgba(255,255,255,0.8)"
             rounded="md"
             border="1px solid"
             borderColor="gray.200"
