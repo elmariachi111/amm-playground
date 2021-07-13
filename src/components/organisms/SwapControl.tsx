@@ -72,7 +72,7 @@ export default function SwapControl({
         if (from === tokens[1] && to === tokens[0]) return true;
       });
       setPool(_pool);
-      setAmount(0);
+      //setAmount(0);
     }
   }, [pools, from, to]);
 

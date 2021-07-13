@@ -58,7 +58,7 @@ export default function App() {
 
     // const pool = new Pool('0xethdaipool', eth, dai, 1);
     // pool.addLiquidity('alice', 10, 2000 * 10);
-    //addPool(pool);
+    // addPool(pool);
 
     setAccounts(['alice', 'bob']);
   };
@@ -70,7 +70,12 @@ export default function App() {
 
   const includeAccount = (acc: string) => {
     if (!accounts.includes(acc)) {
-      setAccounts([...accounts, acc].sort((a) => (a.startsWith('0x') ? 1 : -1)));
+      const newAccounts = [...accounts, acc];
+
+      const poolAccounts = newAccounts.filter((a) => a.startsWith('0x'));
+      const eoaAccounts = newAccounts.filter((a) => !a.startsWith('0x')).sort();
+
+      setAccounts([...eoaAccounts, ...poolAccounts]);
     }
   };
 
@@ -151,7 +156,7 @@ export default function App() {
               <Heading mt={5} mb={3}>
                 Pools
               </Heading>
-              <SimpleGrid columns={{ xl: 2, md: 1 }} spacing={5} mt={5} align="start">
+              <SimpleGrid columns={{ xl: 2, lg: 1 }} spacing={5} mt={5} align="start">
                 {pools.map((p) => (
                   <PoolView pool={p} key={`pool-${p.poolToken.symbol}`} />
                 ))}
