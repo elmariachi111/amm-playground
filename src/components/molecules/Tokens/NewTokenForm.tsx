@@ -1,11 +1,13 @@
-import { Button } from '@chakra-ui/button';
+import { IconButton } from '@chakra-ui/button';
 import { FormControl } from '@chakra-ui/form-control';
 import { Input } from '@chakra-ui/input';
 import { Flex, Text } from '@chakra-ui/layout';
+import { useColorModeValue } from '@chakra-ui/react';
 import React, { FormEvent, useState } from 'react';
+import { HiArrowRight } from 'react-icons/hi';
 
-import { setField } from '../../../helpers';
-import { default as coingeckoApi } from '../../../lib/Coingecko';
+import { colorRange, setField, setNumericalField } from '../../../helpers';
+import { default as coingeckoApi, DEFAULT_SYMBOLS } from '../../../lib/Coingecko';
 import { Token } from '../../../lib/Token';
 import { CoinInfo } from '../../../types/Coingecko';
 import TokenSymbol from '../../atoms/TokenSymbol';
@@ -13,18 +15,23 @@ import TokenSymbol from '../../atoms/TokenSymbol';
 const NewTokenForm = ({ onNew }: { onNew: (t: Token) => void }) => {
   const [symbol, setSymbol] = useState('');
   const [name, setName] = useState('');
-  const [usdPrice, setUsdPrice] = useState('');
+  const [usdPrice, setUsdPrice] = useState<number | undefined>();
   const [coinInfo, setCoinInfo] = useState<CoinInfo | undefined>();
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
     const token = coinInfo ? Token.fromCoinInfo(coinInfo) : new Token(symbol, name);
     if (usdPrice) {
-      token.marketPrice = parseFloat(usdPrice);
+      token.marketPrice = usdPrice;
     }
     onNew(token);
   };
-
+  const tryFetchCoingeckoInfo = async (symbol: string) => {
+    const known = DEFAULT_SYMBOLS.find((s) => s.symbol === symbol.toLowerCase());
+    if (known) {
+      return fetchCoingeckoInfo(symbol);
+    }
+  };
   const fetchCoingeckoInfo = async (symbol: string) => {
     if (!symbol) return;
     const ci = await coingeckoApi.fetchCoinInfo(symbol);
@@ -33,67 +40,79 @@ const NewTokenForm = ({ onNew }: { onNew: (t: Token) => void }) => {
     setCoinInfo(ci);
     setSymbol(ci.symbol.toUpperCase());
     setName(ci.name);
-    setUsdPrice(price.toString());
+    setUsdPrice(price);
   };
+  const border = useColorModeValue('gray.200', 'gray.700');
+  const bg = useColorModeValue('white', 'gray.600');
+  const inputBg = useColorModeValue('white', 'gray.800');
+  const headerBg = useColorModeValue('gray.100', 'gray.500');
+
+  const tokenColor = colorRange(symbol)[0];
 
   return (
     <Flex
-      borderRadius={8}
+      rounded="md"
       mb={3}
       width="100%"
+      boxShadow="sm"
       border="1px solid"
-      borderColor="gray.200"
-      direction="column"
+      borderColor={border}
       overflow="hidden">
-      <Flex direction="column">
-        <Flex p={3} align="center" bg="gray.100">
-          <TokenSymbol coinInfo={coinInfo} symbol={symbol} size={30} />
-          <Text fontSize="xl" fontWeight="normal" maxW="400px" ml={2}>
+      <Flex backgroundColor={tokenColor} width="5px"></Flex>
+      <Flex direction="column" width="100%">
+        <Flex p={2} align="center" bg={headerBg}>
+          <TokenSymbol coinInfo={coinInfo} symbol={symbol} size={15} />
+          <Text fontSize="lg" fontWeight="normal" maxW="400px" ml={2}>
             {symbol}
           </Text>
         </Flex>
-
-        <Flex
-          as="form"
-          onSubmit={onSubmit}
-          autoComplete="off"
-          direction="column"
-          p={3}
-          gridGap={4}>
-          <FormControl id="symbol">
-            <Input
-              variant="flushed"
-              type="text"
-              name="symbol"
-              placeholder="Symbol"
-              value={symbol}
-              onBlur={() => fetchCoingeckoInfo(symbol)}
-              onChange={setField(setSymbol)}
+        <Flex p={1} bgColor={bg}>
+          <Flex
+            as="form"
+            onSubmit={onSubmit}
+            autoComplete="off"
+            direction="row"
+            p={2}
+            align="baseline"
+            gridGap={4}>
+            <FormControl id="symbol">
+              <Input
+                size="sm"
+                variant="flushed"
+                type="text"
+                name="symbol"
+                placeholder="Symbol"
+                value={symbol}
+                bg={inputBg}
+                onBlur={() => fetchCoingeckoInfo(symbol)}
+                onChange={(e) => {
+                  setField(setSymbol)(e);
+                  tryFetchCoingeckoInfo(e.target.value);
+                }}
+              />
+            </FormControl>
+            <FormControl id="usdprice">
+              <Input
+                size="sm"
+                type="number"
+                step="0.00001"
+                variant="flushed"
+                placeholder="USD Price"
+                name="usdprice"
+                value={usdPrice}
+                bg={inputBg}
+                onChange={setNumericalField(setUsdPrice)}
+              />
+            </FormControl>
+            <IconButton
+              colorScheme="green"
+              size="sm"
+              variant="link"
+              type="submit"
+              aria-label="Submit"
+              icon={<HiArrowRight />}
             />
-          </FormControl>
-          <FormControl id="name">
-            <Input
-              variant="flushed"
-              placeholder="Name"
-              type="text"
-              name="name"
-              value={name}
-              onChange={setField(setName)}
-            />
-          </FormControl>
-          <FormControl id="usdprice">
-            <Input
-              variant="flushed"
-              placeholder="USD Price"
-              type="text"
-              name="usdprice"
-              value={usdPrice}
-              onChange={setField(setUsdPrice)}
-            />
-          </FormControl>
-          <Button mt={3} type="submit" colorScheme="green" variant="solid" isFullWidth>
-            Create {symbol}
-          </Button>
+          </Flex>
         </Flex>
       </Flex>
     </Flex>

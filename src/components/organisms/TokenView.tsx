@@ -2,12 +2,12 @@ import { Flex, Text } from '@chakra-ui/layout';
 import { useColorModeValue } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 
-import { colorRange, currency } from '../../../helpers';
-import { Token, TokenFeature } from '../../../lib/Token';
-import { PfxText } from '../../atoms/PfxText';
-import TokenSymbol from '../../atoms/TokenSymbol';
-import MarketPriceForm from './MarketPriceForm';
-import MintForm from './MintForm';
+import { colorRange, currency } from '../../helpers';
+import { Token, TokenFeature } from '../../lib/Token';
+import { PfxText } from '../atoms/PfxText';
+import TokenSymbol from '../atoms/TokenSymbol';
+import MarketPriceForm from '../molecules/Tokens/MarketPriceForm';
+import MintForm from '../molecules/Tokens/MintForm';
 
 const TokenHeader = ({ token }: { token: Token }) => {
   const [totalSupply, setTotalSupply] = useState<number>(token.totalSupply);
