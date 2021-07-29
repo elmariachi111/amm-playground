@@ -103,10 +103,18 @@ export default function PoolBalance({ address, pool }: { address: string; pool: 
   const tokenColor = colorRange(pool.poolToken.symbol)[0];
 
   return (
-    <Popover closeOnBlur={false}>
+    <Popover closeOnBlur={true}>
       <PopoverTrigger>
-        <Flex alignItems="center" mr={5} sx={{ cursor: 'pointer' }}>
+        <Flex
+          alignItems="center"
+          mr={5}
+          sx={{ cursor: 'pointer' }}
+          className="pool-indicator">
           <CircularProgress
+            sx={{
+              transition: 'ease all .2s',
+              '.pool-indicator:hover &': { transform: 'scale(1.2)' },
+            }}
             value={shareInfo.share}
             color={tokenColor}
             capIsRound={false}
