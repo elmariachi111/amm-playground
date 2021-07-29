@@ -1,12 +1,12 @@
-import { IconButton } from '@chakra-ui/button';
 import { useColorModeValue } from '@chakra-ui/color-mode';
 import { FormControl } from '@chakra-ui/form-control';
 import { Input } from '@chakra-ui/input';
 import { Flex, Text } from '@chakra-ui/layout';
+import { Select } from '@chakra-ui/react';
 import React, { FormEvent, useState } from 'react';
-import { HiArrowRight } from 'react-icons/hi';
 
 import { setField } from '../../../helpers';
+import accounts from '../../../lib/Accounts';
 import { Token } from '../../../lib/Token';
 
 const MintForm = ({ token }: { token: Token }) => {
@@ -15,7 +15,9 @@ const MintForm = ({ token }: { token: Token }) => {
 
   const mint = (e: FormEvent) => {
     e.preventDefault();
+    if (!recipient) return;
     token.mint(toMint, recipient);
+    setRecipient('');
   };
   const inputBg = useColorModeValue('white', 'gray.800');
 
@@ -38,24 +40,25 @@ const MintForm = ({ token }: { token: Token }) => {
         </FormControl>
         <Text>to</Text>
         <FormControl id="name">
-          <Input
-            type="text"
+          <Select
             size="sm"
             name="name"
             variant="flushed"
-            placeholder="recipient"
             bg={inputBg}
             onChange={setField(setRecipient)}
-          />
+            onKeyUp={(e) => {
+              console.log(e.key);
+              if (e.key === 'Enter') mint(e);
+            }}
+            value={recipient}>
+            <option value={''}></option>
+            {accounts.map((account) => (
+              <option value={account} key={`mint-to-${account}`}>
+                {account}
+              </option>
+            ))}
+          </Select>
         </FormControl>
-        <IconButton
-          colorScheme="green"
-          size="sm"
-          variant="link"
-          type="submit"
-          aria-label="Submit"
-          icon={<HiArrowRight />}
-        />
       </Flex>
     </form>
   );
