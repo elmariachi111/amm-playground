@@ -1,20 +1,18 @@
 import { Flex, Text } from '@chakra-ui/layout';
-import {
-  Editable,
-  EditableInput,
-  EditablePreview,
-  useColorModeValue,
-} from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
+import { Icon, Input, useColorModeValue } from '@chakra-ui/react';
+import React, { useEffect, useRef, useState } from 'react';
+import { MdEdit } from 'react-icons/md';
 
-import { colorRange } from '../../../helpers';
+import { colorRange, currency, setNumericalField } from '../../../helpers';
 import { Token, TokenFeature } from '../../../lib/Token';
-import PfxVal from '../../atoms/PfxVal';
+import { PfxText } from '../../atoms/PfxText';
 import TokenSymbol from '../../atoms/TokenSymbol';
 import MintForm from './MintForm';
 
 const MarketPrice = ({ token }: { token: Token }) => {
   const [marketPrice, setMarketPrice] = useState<number | undefined>(token.marketPrice);
+  const [isEditor, setEditor] = useState<boolean>(false);
+  const inp = useRef(null);
 
   useEffect(() => {
     const off = [
@@ -26,47 +24,57 @@ const MarketPrice = ({ token }: { token: Token }) => {
       off.map((_off) => _off());
     };
   }, [token]);
+
+  const submit = () => {
+    if (!marketPrice) return;
+    token.setMarketPrice(marketPrice);
+    setEditor(false);
+  };
+
   return (
-    <Flex align="flex-end">
-      <Editable
-        width="4rem"
-        fontSize="sm"
-        color="blue.400"
-        fontWeight="medium"
-        textAlign="right"
-        defaultValue={marketPrice?.toFixed(2)}
-        submitOnBlur={true}
-        onSubmit={(nextVal: string) => {
-          const newPrice = parseFloat(nextVal);
-          token.setMarketPrice(newPrice);
+    <Flex direction="column">
+      <Flex
+        gridGap={2}
+        onClick={() => {
+          setEditor(true);
         }}>
-        <EditablePreview
-          cursor="pointer"
-          borderBottom="1px solid "
-          borderBottomColor="blue.400"
-          pb={0}
-          borderRadius={0}
-        />
-        <EditableInput />
-      </Editable>
-      <Text
-        color="gray.400"
-        textTransform="uppercase"
-        fontSize="sm"
-        fontWeight="medium"
-        ml={1}>
-        $
-      </Text>
+        <PfxText>Price</PfxText>
+        <Icon as={MdEdit} w={3} color="gray.400" />
+      </Flex>
+      {isEditor ? (
+        <Flex as="form" onSubmit={submit} direction="row" align="baseline">
+          <Text fontSize="sm">$</Text>
+          <Input
+            // eslint-disable-next-line jsx-a11y/no-autofocus
+            autoFocus
+            ref={inp}
+            step="0.00001"
+            type="number"
+            variant="flushed"
+            placeholder="price"
+            width="10"
+            fontSize="sm"
+            size="xs"
+            value={marketPrice}
+            onBlur={submit}
+            onChange={setNumericalField(setMarketPrice)}
+          />
+        </Flex>
+      ) : (
+        <Text
+          fontSize="sm"
+          onClick={() => {
+            setEditor(true);
+          }}>
+          {marketPrice && currency(marketPrice, true)}
+        </Text>
+      )}
     </Flex>
   );
 };
 
-const TokenView = ({ token }: { token: Token }) => {
+const TokenHeader = ({ token }: { token: Token }) => {
   const [totalSupply, setTotalSupply] = useState<number>(token.totalSupply);
-  const border = useColorModeValue('gray.200', 'gray.700');
-  const bg = useColorModeValue('white', 'gray.600');
-  const headerBg = useColorModeValue('gray.100', 'gray.500');
-
   useEffect(() => {
     const off = [
       token.on('Minted', () => {
@@ -82,6 +90,43 @@ const TokenView = ({ token }: { token: Token }) => {
     };
   }, [token]);
 
+  const border = useColorModeValue('gray.200', 'gray.700');
+  const headerBg = useColorModeValue('gray.100', 'gray.500');
+
+  return (
+    <Flex
+      p={2}
+      align="center"
+      borderBottom="1px solid"
+      borderColor={border}
+      justifyContent="space-between"
+      bg={headerBg}>
+      <Flex align="center">
+        <TokenSymbol token={token} size={5} />
+        <Text
+          fontSize="lg"
+          fontWeight="normal"
+          maxW="400px"
+          ml={2}
+          title={token.coinInfo?.id || token.name}>
+          {token.symbol}
+        </Text>
+      </Flex>
+      <Flex direction="row" align="center" gridGap={5}>
+        <Flex direction="column">
+          <PfxText>Supply</PfxText>
+          <Text fontSize="sm">{currency(totalSupply)}</Text>
+        </Flex>
+        {token.feature !== TokenFeature.LiquidityToken && <MarketPrice token={token} />}
+      </Flex>
+    </Flex>
+  );
+};
+
+const TokenView = ({ token }: { token: Token }) => {
+  const border = useColorModeValue('gray.200', 'gray.700');
+  const bg = useColorModeValue('white', 'gray.600');
+
   const tokenColor = colorRange(token.symbol)[0];
 
   return (
@@ -95,33 +140,9 @@ const TokenView = ({ token }: { token: Token }) => {
       overflow="hidden">
       <Flex backgroundColor={tokenColor} width="5px"></Flex>
       <Flex direction="column" width="100%">
-        <Flex
-          p={3}
-          align="center"
-          borderBottom="1px solid"
-          borderColor={border}
-          justifyContent="space-between"
-          bg={headerBg}>
-          <Flex align="center">
-            <TokenSymbol token={token} size={15} />
-            <Text
-              fontSize="xl"
-              fontWeight="normal"
-              maxW="400px"
-              ml={2}
-              title={token.coinInfo?.id || token.name}>
-              {token.symbol}
-            </Text>
-          </Flex>
-          <Flex direction="column" align="flex-end">
-            <PfxVal pfx="supply" val={totalSupply} />
-            {token.feature !== TokenFeature.LiquidityToken && (
-              <MarketPrice token={token} />
-            )}
-          </Flex>
-        </Flex>
+        <TokenHeader token={token} />
         {token.feature !== TokenFeature.LiquidityToken && (
-          <Flex bgColor={bg} p={3} borderBottomRadius={4}>
+          <Flex bgColor={bg} borderBottomRadius={4}>
             <MintForm token={token} />
           </Flex>
         )}
