@@ -86,7 +86,7 @@ export default function Intro({
 
           <Box flex="2">
             <Box mb={4}>
-              <Heading size="lg">Get started</Heading>
+              <Heading size="lg">💡 Get started</Heading>
               <Text fontSize="md" color="gray.500">
                 some instructions{' '}
               </Text>
@@ -120,30 +120,28 @@ export default function Intro({
               )
             </Text>
             <Text>
-              2. <b>Mint</b> some of those tokens to account. Just use real names as
-              addresses (Mint 10 Eth to &quot;alice&quot;)
+              2. <b>Mint</b> some of those tokens to an account (pick one from the list).
             </Text>
             <Text>
               3. Create a new liquidity pool by <b>depositing</b> two tokens. This action
-              effectively mints new <b>liquidity pair tokens</b> to the provider.
+              will mint new <b>liquidity pair tokens</b> to the account.
             </Text>
             <Text>
               4. choose another account and <b>swap</b> one token for another
             </Text>
-
             <Text>
               5. Change the &quot;real world&quot; market price on tokens to simulate
               arbitrage opportunities
             </Text>
             <Text>
-              6. <b>Withdraw</b> a percentage your position to get back your value + your
+              6. <b>Withdraw</b> a percentage your position to get back the value + a
               share of accrued pool fees.
             </Text>
           </Box>
 
           <Box flex="1">
             <Box mb={4}>
-              <Heading size="lg">Learn</Heading>
+              <Heading size="lg">📖 Learn</Heading>
               <Text fontSize="md" color="gray.500">
                 links to get you started{' '}
               </Text>
