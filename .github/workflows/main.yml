@@ -9,12 +9,25 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: lint
+      - name: increase watchers
+        run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p   
+      - name: setup node
         uses: actions/setup-node@v2
         with:
           node-version: '14'
-      - run: yarn
-      - run: yarn lint
+
+      - name: activate cache
+        uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+
+      - name: install packages
+        run: yarn
+
+      - name: lint
+        run: yarn lint
+
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:

@@ -27,7 +27,7 @@ describe('liquidity form', () => {
       tokens = [eth, dai];
       mount(
         <AddLiquidityForm
-          address="alice"
+          account="alice"
           tokens={tokens}
           pools={[]}
           poolAdded={poolAdded}
