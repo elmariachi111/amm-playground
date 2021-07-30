@@ -15,10 +15,11 @@ export const setField = (setter: (val: string) => void) => {
 };
 
 export const setNumericalField = (setter: (val: number | undefined) => void) => {
-  return (e: any) => {
+  return (e: any): number => {
     e.preventDefault();
     const val = e.target.valueAsNumber;
     setter(val);
+    return val;
   };
 };
 
@@ -46,7 +47,8 @@ export const colorRange = (str: string): string[] => {
   return [color1str, color2str];
 };
 
-export const currency = (val: number, fiat: boolean = false): string => {
+export const currency = (val: number | undefined, fiat: boolean = false): string => {
+  if (!val) return '-';
   return fiat
     ? val.toLocaleString(navigatorLanguage, {
         style: 'currency',

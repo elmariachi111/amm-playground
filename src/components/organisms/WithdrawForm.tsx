@@ -1,96 +1,15 @@
 import { Button } from '@chakra-ui/button';
-import { Input } from '@chakra-ui/input';
-import { Flex, Stack, Text } from '@chakra-ui/layout';
-import { useRadio, UseRadioProps } from '@chakra-ui/radio';
-import { Box, Icon, useColorModeValue, useRadioGroup } from '@chakra-ui/react';
+import { Flex, Stack } from '@chakra-ui/layout';
 import React, { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
-import { ImRadioChecked2, ImRadioUnchecked } from 'react-icons/im';
 
 import { Pool } from '../../lib/Pool';
+import { WithdrawRadioCard } from '../molecules/WithdrawRadioCard';
 import { WithdrawIcon } from './AMM/Icons';
 
-const WithdrawAmount = ({
-  pool,
-  share,
-  balance,
-  onShareChanged,
-}: {
+interface WithdrawAction {
+  percentage: number;
   pool: Pool;
-  share: number;
-  balance: number | undefined;
-  onShareChanged: (n: number) => void;
-}) => {
-  useEffect(() => {}, [pool]);
-
-  const amtToWithdraw = useMemo(() => {
-    if (isNaN(share) || share == 0 || share > 100 || !balance) return '';
-    const val = (share / 100) * balance;
-    return `${val.toFixed(2)} ${pool.poolToken.symbol}`;
-  }, [share, pool, balance]);
-
-  return (
-    <Flex direction="column" align="flex-end">
-      <Flex direction="row" align="center">
-        <Input
-          size="md"
-          textAlign="right"
-          type="number"
-          step="0.1"
-          px={2}
-          height="auto"
-          placeholder="100"
-          value={share}
-          onChange={(e) => {
-            const val = e.target.valueAsNumber;
-            onShareChanged(val);
-          }}
-          onBlur={() => {
-            onShareChanged(share);
-          }}
-        />
-        <Text>%</Text>
-      </Flex>
-      <Text fontSize="xs">{amtToWithdraw}</Text>
-    </Flex>
-  );
-};
-
-const WithdrawRadioCard = (props: UseRadioProps & { pool: Pool; children: any }) => {
-  const { getInputProps, getCheckboxProps, state } = useRadio(props);
-  const input = getInputProps();
-  const checkbox = getCheckboxProps();
-  const { pool, children } = props;
-
-  const bg = useColorModeValue('white', 'gray.700');
-  const border = useColorModeValue('gray.200', 'gray.700');
-
-  return (
-    <Box as="label">
-      <input {...input} />
-      <Flex
-        {...checkbox}
-        bg={bg}
-        px={4}
-        py={state.isChecked ? 4 : 6}
-        borderRadius={4}
-        border="1px solid"
-        borderColor={border}
-        justify="space-between"
-        align="center">
-        <Flex direction="row" align="center">
-          <Icon
-            as={state.isChecked ? ImRadioChecked2 : ImRadioUnchecked}
-            color="green.500"
-            boxSize={5}
-            mr={3}
-          />
-          <Text>{pool.poolToken.symbol}</Text>
-        </Flex>
-        {children}
-      </Flex>
-    </Box>
-  );
-};
+}
 
 export default function WithdrawForm({
   pools,
@@ -101,28 +20,17 @@ export default function WithdrawForm({
 }) {
   const [withdrawablePools, setWithdrawablePools] = useState<Pool[]>([]);
   const [selectedPool, selectPool] = useState<Pool | undefined | null>();
-  const [shareToWithdraw, setShareToWithdraw] = useState<number>(100);
-  const [balances, setBalances] = useState<Record<string, number>>({});
-
-  const { getRootProps, getRadioProps } = useRadioGroup({
-    name: 'pool',
-    defaultValue: undefined,
-    onChange: (symbol) => {
-      const _pool = withdrawablePools.find((p) => p.poolToken.symbol === symbol);
-      if (!_pool) return;
-      selectPool(_pool);
-      setShareToWithdraw(100);
-    },
-  });
+  const [withdrawAction, setWithdrawAction] = useState<WithdrawAction | null>(null);
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
-    if (!selectedPool) {
+    if (!withdrawAction) {
       return;
     }
     const amtToWithdraw =
-      (shareToWithdraw / 100) * selectedPool.poolToken.balanceOf(account);
-    selectedPool.withdrawLiquidity(account, amtToWithdraw);
+      (withdrawAction.percentage / 100) *
+      withdrawAction.pool.poolToken.balanceOf(account);
+    withdrawAction.pool.withdrawLiquidity(account, amtToWithdraw);
   };
 
   const updatePools = useCallback(() => {
@@ -130,18 +38,17 @@ export default function WithdrawForm({
     if (_withdrawablePools.length === 0) {
       selectPool(undefined);
     }
+
     setWithdrawablePools(_withdrawablePools);
-    const _bal: Record<string, number> = {};
-    pools.forEach((p) => (_bal[p.poolToken.symbol] = p.poolToken.balanceOf(account)));
-    setBalances(_bal);
   }, [pools, account]);
 
-  useEffect(() => {
-    selectPool(null);
-    updatePools();
-  }, [account]);
+  // useEffect(() => {
+  //   selectPool(null);
+  //   updatePools();
+  // }, [account]);
 
   useEffect(() => {
+    updatePools();
     const off = pools.flatMap((pool) => [
       pool.on('LiquidityChanged', updatePools),
       pool.on('ReservesChanged', updatePools),
@@ -149,44 +56,45 @@ export default function WithdrawForm({
     return () => {
       off.map((_off) => _off());
     };
-  }, [pools]);
+  }, [pools, account]);
 
   const canSubmit = useMemo(() => {
-    console.log(selectedPool, shareToWithdraw, account);
-    return selectedPool && shareToWithdraw > 0 && shareToWithdraw <= 100;
-  }, [account, selectedPool, shareToWithdraw]);
+    console.log(account, withdrawAction);
+    return (
+      withdrawAction && withdrawAction.percentage > 0 && withdrawAction.percentage <= 100
+    );
+  }, [account, withdrawAction]);
 
-  const group = getRootProps();
+  const onPercentChanged = (perc: number) => {
+    if (selectedPool) {
+      setWithdrawAction({
+        pool: selectedPool,
+        percentage: perc,
+      });
+    } else {
+      setWithdrawAction(null);
+    }
+  };
 
   return (
-    <Flex
-      as="form"
-      direction="column"
-      onSubmit={onSubmit}
-      justify="space-between"
-      h="100%"
-      autoComplete="off">
-      <Stack spacing={-1} direction="column" {...group}>
+    <Flex direction="column" justify="space-between" h="100%" autoComplete="off">
+      <Stack spacing={-1} direction="column">
         {withdrawablePools.map((pool) => {
-          const radio = getRadioProps({
-            value: pool.poolToken.symbol,
-          });
           return (
             <WithdrawRadioCard
               key={`radio-${pool.poolToken.symbol}`}
+              account={account}
               pool={pool}
-              {...radio}>
-              {selectedPool === pool ? (
-                <WithdrawAmount
-                  pool={pool}
-                  share={shareToWithdraw}
-                  onShareChanged={setShareToWithdraw}
-                  balance={balances[pool.poolToken.symbol]}
-                />
-              ) : (
-                <Text>{pool.poolToken.balanceOf(account).toFixed(2)}</Text>
-              )}
-            </WithdrawRadioCard>
+              isSelected={selectedPool === pool}
+              selectPool={(p: Pool) => {
+                selectPool(p);
+                setWithdrawAction({
+                  pool: p,
+                  percentage: 100,
+                });
+              }}
+              onPercentChanged={onPercentChanged}
+            />
           );
         })}
       </Stack>
@@ -199,6 +107,7 @@ export default function WithdrawForm({
         isFullWidth
         leftIcon={<WithdrawIcon color="white" />}
         isDisabled={!canSubmit}
+        onClick={onSubmit}
         type="submit">
         Withdraw
       </Button>
