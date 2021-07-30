@@ -80,10 +80,11 @@ export default function App() {
   };
 
   useEffect(() => {
-    const off = pools.flatMap((p) =>
+    const off = pools.flatMap((p: Pool) =>
       p.poolToken.on('Burnt', () => {
         if (p.poolToken.totalSupply < 1e-10) {
           setPools((old) => old.filter((o) => o.poolToken !== p.poolToken));
+          setAccounts((old) => old.filter((a) => a != p.account));
         }
       }),
     );
@@ -98,7 +99,6 @@ export default function App() {
       t.on('Transferred', (e) => includeAccount(e.to)),
       t.on('Burnt', () => {
         if (t.totalSupply < 1e-10) {
-          console.log('removing token after burn');
           setTokens((old) => old.filter((o) => o.symbol != t.symbol));
         }
       }),

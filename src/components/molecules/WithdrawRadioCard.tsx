@@ -72,7 +72,6 @@ export const WithdrawRadioCard = ({
   const [balance, setBalance] = useState<number>();
 
   const updateBalance = useCallback(() => {
-    console.log('updBalance', account);
     setBalance(pool.poolToken.balanceOf(account));
   }, [account]);
 

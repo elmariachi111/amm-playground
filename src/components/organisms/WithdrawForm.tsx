@@ -37,15 +37,14 @@ export default function WithdrawForm({
     const _withdrawablePools = pools.filter((p) => p.poolToken.balanceOf(account) > 0);
     if (_withdrawablePools.length === 0) {
       selectPool(undefined);
+      setWithdrawAction(null);
     }
-
     setWithdrawablePools(_withdrawablePools);
   }, [pools, account]);
 
-  // useEffect(() => {
-  //   selectPool(null);
-  //   updatePools();
-  // }, [account]);
+  useEffect(() => {
+    setWithdrawAction(null);
+  }, [account]);
 
   useEffect(() => {
     updatePools();
@@ -59,7 +58,6 @@ export default function WithdrawForm({
   }, [pools, account]);
 
   const canSubmit = useMemo(() => {
-    console.log(account, withdrawAction);
     return (
       withdrawAction && withdrawAction.percentage > 0 && withdrawAction.percentage <= 100
     );
@@ -99,18 +97,20 @@ export default function WithdrawForm({
         })}
       </Stack>
 
-      <Button
-        mt={3}
-        size="lg"
-        colorScheme="green"
-        variant="solid"
-        isFullWidth
-        leftIcon={<WithdrawIcon color="white" />}
-        isDisabled={!canSubmit}
-        onClick={onSubmit}
-        type="submit">
-        Withdraw
-      </Button>
+      {withdrawablePools.length > 0 && (
+        <Button
+          mt={3}
+          size="lg"
+          colorScheme="green"
+          variant="solid"
+          isFullWidth
+          leftIcon={<WithdrawIcon color="white" />}
+          isDisabled={!canSubmit}
+          onClick={onSubmit}
+          type="submit">
+          Withdraw
+        </Button>
+      )}
     </Flex>
   );
 }

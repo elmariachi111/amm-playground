@@ -58,7 +58,11 @@ export default function AddLiquidityForm({
       poolAdded(p);
       setPool(p);
     } else {
-      pool.addLiquidity(account, amt1, amt2);
+      if (firstToken === pool.token1) {
+        pool.addLiquidity(account, amt1, amt2);
+      } else {
+        pool.addLiquidity(account, amt2, amt1);
+      }
     }
     updateBalances();
   };
@@ -94,6 +98,7 @@ export default function AddLiquidityForm({
     const off = pool
       ? [
           pool.on('LiquidityChanged', updateBestPrice),
+          pool.on('LiquidityChanged', updateBalances),
           pool.on('ReservesChanged', updateBestPrice),
           firstToken?.on('MarketPriceUpdated', updateBestPrice),
           secondToken?.on('MarketPriceUpdated', updateBestPrice),
@@ -156,13 +161,7 @@ export default function AddLiquidityForm({
       <Stack direction="column" spacing={-1}>
         <TokenValueChooser
           onTokenChanged={(symbol) => {
-            setFirstToken((old) => {
-              const newFirst = tokens.find((t) => t.symbol === symbol);
-              if (secondToken?.symbol === symbol) {
-                setSecondToken(old);
-              }
-              return newFirst;
-            });
+            setFirstToken(tokens.find((t) => t.symbol === symbol));
           }}
           tokens={tokens}
           selected={firstToken}
@@ -186,13 +185,7 @@ export default function AddLiquidityForm({
 
         <TokenValueChooser
           onTokenChanged={(symbol) => {
-            setSecondToken((old) => {
-              const newSecond = tokens.find((t) => t.symbol === symbol);
-              if (firstToken?.symbol === symbol) {
-                setFirstToken(old);
-              }
-              return newSecond;
-            });
+            setSecondToken(tokens.find((t) => t.symbol === symbol));
           }}
           tokens={tokens.filter((t) => t != firstToken)}
           selected={secondToken}>
